@@ -7,7 +7,6 @@ import (
 
 	"github.com/Dreamacro/clash/common/cache"
 	"github.com/Dreamacro/clash/component/trie"
-	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/context"
 	"github.com/Dreamacro/clash/log"
 
