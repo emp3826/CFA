@@ -118,7 +118,6 @@ func updateDNS(c *config.DNS) {
 		Fallback:     c.Fallback,
 		IPv6:         c.IPv6,
 		EnhancedMode: c.EnhancedMode,
-		Pool:         c.FakeIPRange,
 		Hosts:        c.Hosts,
 		FallbackFilter: dns.FallbackFilter{
 			GeoIP:     c.FallbackFilter.GeoIP,
@@ -128,11 +127,6 @@ func updateDNS(c *config.DNS) {
 		},
 		Default: c.DefaultNameserver,
 		Policy:  c.NameServerPolicy,
-	}
-
-	// deprecated warnning
-	if cfg.EnhancedMode == C.DNSMapping {
-		log.Warnln("[DNS] %s is deprecated, please use %s instead", cfg.EnhancedMode.String(), C.DNSFakeIP.String())
 	}
 
 	r := dns.NewResolver(cfg)

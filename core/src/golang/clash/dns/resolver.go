@@ -11,7 +11,6 @@ import (
 
 	"github.com/Dreamacro/clash/common/cache"
 	"github.com/Dreamacro/clash/common/picker"
-	"github.com/Dreamacro/clash/component/fakeip"
 	"github.com/Dreamacro/clash/component/resolver"
 	"github.com/Dreamacro/clash/component/trie"
 	C "github.com/Dreamacro/clash/constant"
@@ -320,7 +319,6 @@ type Config struct {
 	IPv6           bool
 	EnhancedMode   C.DNSMode
 	FallbackFilter FallbackFilter
-	Pool           *fakeip.Pool
 	Hosts          *trie.DomainTrie
 	Policy         map[string]NameServer
 }

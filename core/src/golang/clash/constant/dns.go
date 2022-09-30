@@ -8,13 +8,11 @@ import (
 // DNSModeMapping is a mapping for EnhancedMode enum
 var DNSModeMapping = map[string]DNSMode{
 	DNSNormal.String():  DNSNormal,
-	DNSFakeIP.String():  DNSFakeIP,
 	DNSMapping.String(): DNSMapping,
 }
 
 const (
 	DNSNormal DNSMode = iota
-	DNSFakeIP
 	DNSMapping
 )
 
@@ -60,8 +58,6 @@ func (e DNSMode) String() string {
 	switch e {
 	case DNSNormal:
 		return "normal"
-	case DNSFakeIP:
-		return "fake-ip"
 	case DNSMapping:
 		return "redir-host"
 	default:
