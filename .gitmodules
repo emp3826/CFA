@@ -1,0 +1,6 @@
+[submodule "core/src/golang/clash"]
+	path = core/src/golang/clash
+	url = https://github.com/emp3826/clash-dev
+[submodule "core/src/golang/src"]
+	path = core/src/golang/src
+	url = https://github.com/emp3826/clash-dev
