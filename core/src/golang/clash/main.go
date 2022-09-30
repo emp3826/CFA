@@ -75,16 +75,6 @@ func main() {
 		log.Fatalln("Initial configuration directory error: %s", err.Error())
 	}
 
-	if testConfig {
-		if _, err := executor.Parse(); err != nil {
-			log.Errorln(err.Error())
-			fmt.Printf("configuration file %s test failed\n", C.Path.Config())
-			os.Exit(1)
-		}
-		fmt.Printf("configuration file %s test is successful\n", C.Path.Config())
-		return
-	}
-
 	var options []hub.Option
 	if flagset["ext-ui"] {
 		options = append(options, hub.WithExternalUI(externalUI))
