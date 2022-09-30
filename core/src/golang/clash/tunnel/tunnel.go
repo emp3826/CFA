@@ -165,6 +165,7 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 		return
 	}
 
+	var fAddr net.Addr
 	if err := preHandleMetadata(metadata); err != nil {
 		log.Debugln("[Metadata PreHandle] error: %s", err)
 		return

@@ -133,18 +133,3 @@ func compose(middlewares []middleware, endpoint handler) handler {
 
 	return h
 }
-
-func newHandler(resolver *Resolver, mapper *ResolverEnhancer) handler {
-	middlewares := []middleware{}
-
-	if resolver.hosts != nil {
-		middlewares = append(middlewares, withHosts(resolver.hosts))
-	}
-
-
-	if mapper.mode != C.DNSNormal {
-		middlewares = append(middlewares, withMapping(mapper.mapping))
-	}
-
-	return compose(middlewares, withResolver(resolver))
-}
