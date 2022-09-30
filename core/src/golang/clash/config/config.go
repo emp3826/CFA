@@ -593,13 +593,6 @@ func parseDNS(rawCfg *RawConfig, hosts *trie.DomainTrie) (*DNS, error) {
 		}
 	}
 
-	if cfg.EnhancedMode == C.DNSFakeIP {
-		_, ipnet, err := net.ParseCIDR(cfg.FakeIPRange)
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	dnsCfg.FallbackFilter.GeoIP = cfg.FallbackFilter.GeoIP
 	dnsCfg.FallbackFilter.GeoIPCode = cfg.FallbackFilter.GeoIPCode
 	if fallbackip, err := parseFallbackIPCIDR(cfg.FallbackFilter.IPCIDR); err == nil {
