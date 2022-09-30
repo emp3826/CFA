@@ -112,10 +112,6 @@ func process() {
 	}
 }
 
-func needLookupIP(metadata *C.Metadata) bool {
-	return resolver.MappingEnabled() && metadata.Host == "" && metadata.DstIP != nil
-}
-
 func preHandleMetadata(metadata *C.Metadata) error {
 	// handle IP string on host
 	if ip := net.ParseIP(metadata.Host); ip != nil {
@@ -125,20 +121,6 @@ func preHandleMetadata(metadata *C.Metadata) error {
 			metadata.AddrType = C.AtypIPv4
 		} else {
 			metadata.AddrType = C.AtypIPv6
-		}
-	}
-
-	// preprocess enhanced-mode metadata
-	if needLookupIP(metadata) {
-		host, exist := resolver.FindHostByIP(metadata.DstIP)
-		if exist {
-			metadata.Host = host
-			metadata.AddrType = C.AtypDomainName
-			metadata.DNSMode = C.DNSMapping
-			if node := resolver.DefaultHosts.Search(host); node != nil {
-				// redir-host should lookup the hosts
-				metadata.DstIP = node.Data.(net.IP)
-			}
 		}
 	}
 
