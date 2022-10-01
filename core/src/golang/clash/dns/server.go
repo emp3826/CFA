@@ -6,7 +6,6 @@ import (
 
 	"github.com/Dreamacro/clash/common/sockopt"
 	"github.com/Dreamacro/clash/context"
-	"github.com/Dreamacro/clash/log"
 
 	D "github.com/miekg/dns"
 )
@@ -90,8 +89,6 @@ func ReCreateServer(addr string, resolver *Resolver, mapper *ResolverEnhancer) {
 
 	err = sockopt.UDPReuseaddr(p)
 	if err != nil {
-		log.Warnln("Failed to Reuse UDP Address: %s", err)
-
 		err = nil
 	}
 
@@ -103,6 +100,4 @@ func ReCreateServer(addr string, resolver *Resolver, mapper *ResolverEnhancer) {
 	go func() {
 		server.ActivateAndServe()
 	}()
-
-	log.Infoln("DNS server listening at: %s", p.LocalAddr().String())
 }
