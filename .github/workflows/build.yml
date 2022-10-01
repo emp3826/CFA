@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: app:assembleFossRelease
+          cache-disabled: true
+      - name: prepare
+        run: |
+          APK=$(find . -name '*arm64-v8a-release.apk')
+          echo "APK=$APK" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v3
+        with:
+          name: APK
+          path: ${{ env.APK }}
