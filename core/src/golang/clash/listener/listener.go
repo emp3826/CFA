@@ -12,7 +12,6 @@ import (
 	"github.com/Dreamacro/clash/listener/mixed"
 	"github.com/Dreamacro/clash/listener/redir"
 	"github.com/Dreamacro/clash/listener/socks"
-	"github.com/Dreamacro/clash/listener/tproxy"
 	"github.com/Dreamacro/clash/log"
 )
 
@@ -24,9 +23,6 @@ var (
 	socksUDPListener  *socks.UDPListener
 	httpListener      *http.Listener
 	redirListener     *redir.Listener
-	redirUDPListener  *tproxy.UDPListener
-	tproxyListener    *tproxy.Listener
-	tproxyUDPListener *tproxy.UDPListener
 	mixedListener     *mixed.Listener
 	mixedUDPLister    *socks.UDPListener
 
@@ -42,7 +38,6 @@ type Ports struct {
 	Port       int `json:"port"`
 	SocksPort  int `json:"socks-port"`
 	RedirPort  int `json:"redir-port"`
-	TProxyPort int `json:"tproxy-port"`
 	MixedPort  int `json:"mixed-port"`
 }
 
@@ -175,13 +170,6 @@ func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 		redirListener = nil
 	}
 
-	if redirUDPListener != nil {
-		if redirUDPListener.RawAddress() == addr {
-			return
-		}
-		redirUDPListener.Close()
-		redirUDPListener = nil
-	}
 
 	if portIsZero(addr) {
 		return
@@ -192,58 +180,7 @@ func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 		return
 	}
 
-	redirUDPListener, err = tproxy.NewUDP(addr, udpIn)
-	if err != nil {
-		log.Warnln("Failed to start Redir UDP Listener: %s", err)
-	}
-
 	log.Infoln("Redirect proxy listening at: %s", redirListener.Address())
-}
-
-func ReCreateTProxy(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
-	tproxyMux.Lock()
-	defer tproxyMux.Unlock()
-
-	var err error
-	defer func() {
-		if err != nil {
-			log.Errorln("Start TProxy server error: %s", err.Error())
-		}
-	}()
-
-	addr := genAddr(bindAddress, port, allowLan)
-
-	if tproxyListener != nil {
-		if tproxyListener.RawAddress() == addr {
-			return
-		}
-		tproxyListener.Close()
-		tproxyListener = nil
-	}
-
-	if tproxyUDPListener != nil {
-		if tproxyUDPListener.RawAddress() == addr {
-			return
-		}
-		tproxyUDPListener.Close()
-		tproxyUDPListener = nil
-	}
-
-	if portIsZero(addr) {
-		return
-	}
-
-	tproxyListener, err = tproxy.New(addr, tcpIn)
-	if err != nil {
-		return
-	}
-
-	tproxyUDPListener, err = tproxy.NewUDP(addr, udpIn)
-	if err != nil {
-		log.Warnln("Failed to start TProxy UDP Listener: %s", err)
-	}
-
-	log.Infoln("TProxy server listening at: %s", tproxyListener.Address())
 }
 
 func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
@@ -321,12 +258,6 @@ func GetPorts() *Ports {
 		_, portStr, _ := net.SplitHostPort(redirListener.Address())
 		port, _ := strconv.Atoi(portStr)
 		ports.RedirPort = port
-	}
-
-	if tproxyListener != nil {
-		_, portStr, _ := net.SplitHostPort(tproxyListener.Address())
-		port, _ := strconv.Atoi(portStr)
-		ports.TProxyPort = port
 	}
 
 	if mixedListener != nil {
