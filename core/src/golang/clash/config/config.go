@@ -41,7 +41,6 @@ type Inbound struct {
 	Port           int      `json:"port"`
 	SocksPort      int      `json:"socks-port"`
 	RedirPort      int      `json:"redir-port"`
-	TProxyPort     int      `json:"tproxy-port"`
 	MixedPort      int      `json:"mixed-port"`
 	Authentication []string `json:"authentication"`
 	AllowLan       bool     `json:"allow-lan"`
@@ -131,7 +130,6 @@ type RawConfig struct {
 	Port               int          `yaml:"port" json:"port"`
 	SocksPort          int          `yaml:"socks-port" json:"socks-port"`
 	RedirPort          int          `yaml:"redir-port" json:"redir-port"`
-	TProxyPort         int          `yaml:"tproxy-port" json:"tproxy-port"`
 	MixedPort          int          `yaml:"mixed-port" json:"mixed-port"`
 	Authentication     []string     `yaml:"authentication" json:"authentication"`
 	AllowLan           bool         `yaml:"allow-lan" json:"allow-lan"`
@@ -264,7 +262,6 @@ func parseGeneral(cfg *RawConfig) (*General, error) {
 			Port:        cfg.Port,
 			SocksPort:   cfg.SocksPort,
 			RedirPort:   cfg.RedirPort,
-			TProxyPort:  cfg.TProxyPort,
 			MixedPort:   cfg.MixedPort,
 			AllowLan:    cfg.AllowLan,
 			BindAddress: cfg.BindAddress,
