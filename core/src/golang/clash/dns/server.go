@@ -65,13 +65,6 @@ func ReCreateServer(addr string, resolver *Resolver, mapper *ResolverEnhancer) {
 		return
 	}
 
-	var err error
-	defer func() {
-		if err != nil {
-			log.Errorln("Start DNS server error: %s", err.Error())
-		}
-	}()
-
 	_, port, err := net.SplitHostPort(addr)
 	if port == "0" || port == "" || err != nil {
 		return
