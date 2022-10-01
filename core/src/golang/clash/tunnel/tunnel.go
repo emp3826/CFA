@@ -177,7 +177,6 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 	}
 
 	if err := preHandleMetadata(metadata); err != nil {
-		log.Debugln("[Metadata PreHandle] error: %s", err)
 		return
 	}
 
@@ -216,7 +215,6 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 		pCtx := icontext.NewPacketConnContext(metadata)
 		proxy, rule, err := resolveMetadata(pCtx, metadata)
 		if err != nil {
-			log.Warnln("[UDP] Parse metadata failed: %s", err.Error())
 			return
 		}
 
@@ -257,18 +255,15 @@ func handleTCPConn(connCtx C.ConnContext) {
 
 	metadata := connCtx.Metadata()
 	if !metadata.Valid() {
-		log.Warnln("[Metadata] not valid: %#v", metadata)
 		return
 	}
 
 	if err := preHandleMetadata(metadata); err != nil {
-		log.Debugln("[Metadata PreHandle] error: %s", err)
 		return
 	}
 
 	proxy, rule, err := resolveMetadata(connCtx, metadata)
 	if err != nil {
-		log.Warnln("[Metadata] parse failed: %s", err.Error())
 		return
 	}
 
@@ -348,7 +343,6 @@ func match(metadata *C.Metadata) (C.Proxy, C.Rule, error) {
 			}
 
 			if metadata.NetWork == C.UDP && !adapter.SupportUDP() {
-				log.Debugln("%s UDP is not supported", adapter.Name())
 				continue
 			}
 			return adapter, rule, nil
