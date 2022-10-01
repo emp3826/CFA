@@ -18,8 +18,6 @@ import (
 
 var (
 	flagset            map[string]bool
-	version            bool
-	testConfig         bool
 	homeDir            string
 	configFile         string
 	externalUI         string
@@ -33,7 +31,6 @@ func init() {
 	flag.StringVar(&externalUI, "ext-ui", "", "override external ui directory")
 	flag.StringVar(&externalController, "ext-ctl", "", "override external controller address")
 	flag.StringVar(&secret, "secret", "", "override secret for RESTful API")
-	flag.BoolVar(&version, "v", false, "show current version of clash")
 	flag.BoolVar(&testConfig, "t", false, "test configuration and exit")
 	flag.Parse()
 
@@ -44,11 +41,6 @@ func init() {
 }
 
 func main() {
-	if version {
-		fmt.Printf("Clash %s %s %s with %s %s\n", C.Version, runtime.GOOS, runtime.GOARCH, runtime.Version(), C.BuildTime)
-		return
-	}
-
 	if homeDir != "" {
 		if !filepath.IsAbs(homeDir) {
 			currentDir, _ := os.Getwd()
