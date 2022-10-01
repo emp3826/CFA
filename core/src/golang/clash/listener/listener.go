@@ -23,9 +23,6 @@ var (
 	socksUDPListener  *socks.UDPListener
 	httpListener      *http.Listener
 	redirListener     *redir.Listener
-	redirUDPListener  *tproxy.UDPListener
-	tproxyListener    *tproxy.Listener
-	tproxyUDPListener *tproxy.UDPListener
 	mixedListener     *mixed.Listener
 	mixedUDPLister    *socks.UDPListener
 
@@ -188,11 +185,6 @@ func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 	redirListener, err = redir.New(addr, tcpIn)
 	if err != nil {
 		return
-	}
-
-	redirUDPListener, err = tproxy.NewUDP(addr, udpIn)
-	if err != nil {
-		log.Warnln("Failed to start Redir UDP Listener: %s", err)
 	}
 
 	log.Infoln("Redirect proxy listening at: %s", redirListener.Address())
