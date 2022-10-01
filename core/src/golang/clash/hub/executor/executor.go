@@ -89,7 +89,6 @@ func GetGeneral() *config.General {
 			Port:           ports.Port,
 			SocksPort:      ports.SocksPort,
 			RedirPort:      ports.RedirPort,
-			TProxyPort:     ports.TProxyPort,
 			MixedPort:      ports.MixedPort,
 			Authentication: authenticator,
 			AllowLan:       P.AllowLan(),
@@ -181,7 +180,6 @@ func updateGeneral(general *config.General, force bool) {
 	P.ReCreateHTTP(general.Port, tcpIn)
 	P.ReCreateSocks(general.SocksPort, tcpIn, udpIn)
 	P.ReCreateRedir(general.RedirPort, tcpIn, udpIn)
-	P.ReCreateTProxy(general.TProxyPort, tcpIn, udpIn)
 	P.ReCreateMixed(general.MixedPort, tcpIn, udpIn)
 }
 
