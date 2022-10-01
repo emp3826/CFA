@@ -13,7 +13,6 @@ import (
 	"github.com/Dreamacro/clash/component/dialer"
 	"github.com/Dreamacro/clash/component/resolver"
 	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/transport/gun"
 	"github.com/Dreamacro/clash/transport/vmess"
 
 	"golang.org/x/net/http2"
@@ -301,10 +300,6 @@ func NewVmess(option VmessOption) (*Vmess, error) {
 			return c, nil
 		}
 
-		gunConfig := &gun.Config{
-			ServiceName: v.option.GrpcOpts.GrpcServiceName,
-			Host:        v.option.ServerName,
-		}
 		tlsConfig := &tls.Config{
 			InsecureSkipVerify: v.option.SkipCertVerify,
 			ServerName:         v.option.ServerName,
@@ -315,10 +310,6 @@ func NewVmess(option VmessOption) (*Vmess, error) {
 			tlsConfig.ServerName = host
 			gunConfig.Host = host
 		}
-
-		v.gunTLSConfig = tlsConfig
-		v.gunConfig = gunConfig
-		v.transport = gun.NewHTTP2Client(dialFn, tlsConfig)
 	}
 
 	return v, nil
