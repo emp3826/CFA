@@ -10,7 +10,6 @@ import (
 
 	"github.com/Dreamacro/clash/component/dialer"
 	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/transport/gun"
 	"github.com/Dreamacro/clash/transport/trojan"
 
 	"golang.org/x/net/http2"
@@ -194,13 +193,6 @@ func NewTrojan(option TrojanOption) (*Trojan, error) {
 			MinVersion:         tls.VersionTLS12,
 			InsecureSkipVerify: tOption.SkipCertVerify,
 			ServerName:         tOption.ServerName,
-		}
-
-		t.transport = gun.NewHTTP2Client(dialFn, tlsConfig)
-		t.gunTLSConfig = tlsConfig
-		t.gunConfig = &gun.Config{
-			ServiceName: option.GrpcOpts.GrpcServiceName,
-			Host:        tOption.ServerName,
 		}
 	}
 
