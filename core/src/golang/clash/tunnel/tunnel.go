@@ -15,7 +15,6 @@ import (
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/constant/provider"
 	icontext "github.com/Dreamacro/clash/context"
-	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/tunnel/statistic"
 )
 
@@ -166,7 +165,6 @@ func resolveMetadata(ctx C.PlainContext, metadata *C.Metadata) (proxy C.Proxy, r
 func handleUDPConn(packet *inbound.PacketAdapter) {
 	metadata := packet.Metadata()
 	if !metadata.Valid() {
-		log.Warnln("[Metadata] not valid: %#v", metadata)
 		return
 	}
 
@@ -222,26 +220,10 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 		defer cancel()
 		rawPc, err := proxy.ListenPacketContext(ctx, metadata.Pure())
 		if err != nil {
-			if rule == nil {
-				log.Warnln("[UDP] dial %s to %s error: %s", proxy.Name(), metadata.RemoteAddress(), err.Error())
-			} else {
-				log.Warnln("[UDP] dial %s (match %s/%s) to %s error: %s", proxy.Name(), rule.RuleType().String(), rule.Payload(), metadata.RemoteAddress(), err.Error())
-			}
 			return
 		}
 		pCtx.InjectPacketConn(rawPc)
 		pc := statistic.NewUDPTracker(rawPc, statistic.DefaultManager, metadata, rule)
-
-		switch true {
-		case rule != nil:
-			log.Infoln("[UDP] %s --> %s match %s(%s) using %s", metadata.SourceAddress(), metadata.RemoteAddress(), rule.RuleType().String(), rule.Payload(), rawPc.Chains().String())
-		case mode == Global:
-			log.Infoln("[UDP] %s --> %s using GLOBAL", metadata.SourceAddress(), metadata.RemoteAddress())
-		case mode == Direct:
-			log.Infoln("[UDP] %s --> %s using DIRECT", metadata.SourceAddress(), metadata.RemoteAddress())
-		default:
-			log.Infoln("[UDP] %s --> %s doesn't match any rule using DIRECT", metadata.SourceAddress(), metadata.RemoteAddress())
-		}
 
 		go handleUDPToLocal(packet.UDPPacket, pc, key, fAddr)
 
@@ -271,26 +253,10 @@ func handleTCPConn(connCtx C.ConnContext) {
 	defer cancel()
 	remoteConn, err := proxy.DialContext(ctx, metadata.Pure())
 	if err != nil {
-		if rule == nil {
-			log.Warnln("[TCP] dial %s to %s error: %s", proxy.Name(), metadata.RemoteAddress(), err.Error())
-		} else {
-			log.Warnln("[TCP] dial %s (match %s/%s) to %s error: %s", proxy.Name(), rule.RuleType().String(), rule.Payload(), metadata.RemoteAddress(), err.Error())
-		}
 		return
 	}
 	remoteConn = statistic.NewTCPTracker(remoteConn, statistic.DefaultManager, metadata, rule)
 	defer remoteConn.Close()
-
-	switch true {
-	case rule != nil:
-		log.Infoln("[TCP] %s --> %s match %s(%s) using %s", metadata.SourceAddress(), metadata.RemoteAddress(), rule.RuleType().String(), rule.Payload(), remoteConn.Chains().String())
-	case mode == Global:
-		log.Infoln("[TCP] %s --> %s using GLOBAL", metadata.SourceAddress(), metadata.RemoteAddress())
-	case mode == Direct:
-		log.Infoln("[TCP] %s --> %s using DIRECT", metadata.SourceAddress(), metadata.RemoteAddress())
-	default:
-		log.Infoln("[TCP] %s --> %s doesn't match any rule using DIRECT", metadata.SourceAddress(), metadata.RemoteAddress())
-	}
 
 	handleSocket(connCtx, remoteConn)
 }
@@ -314,26 +280,16 @@ func match(metadata *C.Metadata) (C.Proxy, C.Rule, error) {
 
 	for _, rule := range rules {
 		if !resolved && shouldResolveIP(rule, metadata) {
-			ip, err := resolver.ResolveIP(metadata.Host)
-			if err != nil {
-				log.Debugln("[DNS] resolve %s error: %s", metadata.Host, err.Error())
-			} else {
-				log.Debugln("[DNS] %s --> %s", metadata.Host, ip.String())
-				metadata.DstIP = ip
-			}
+			ip, _ := resolver.ResolveIP(metadata.Host)
+			metadata.DstIP = ip
 			resolved = true
 		}
 
 		if !processFound && rule.ShouldFindProcess() {
 			processFound = true
 
-			path, err := P.FindPackageName(metadata)
-			if err != nil {
-				log.Debugln("[Process] find process %s: %v", metadata.String(), err)
-			} else {
-				log.Debugln("[Process] %s from process %s", metadata.String(), path)
-				metadata.ProcessPath = path
-			}
+			path, _ := P.FindPackageName(metadata)
+			metadata.ProcessPath = path
 		}
 
 		if rule.Match(metadata) {
