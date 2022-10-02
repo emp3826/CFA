@@ -29,34 +29,6 @@ func (e *Event) Type() string {
 	return e.LogLevel.String()
 }
 
-func Infoln(format string, v ...any) {
-	event := newLog(INFO, format, v...)
-	logCh <- event
-	print(event)
-}
-
-func Warnln(format string, v ...any) {
-	event := newLog(WARNING, format, v...)
-	logCh <- event
-	print(event)
-}
-
-func Errorln(format string, v ...any) {
-	event := newLog(ERROR, format, v...)
-	logCh <- event
-	print(event)
-}
-
-func Debugln(format string, v ...any) {
-	event := newLog(DEBUG, format, v...)
-	logCh <- event
-	print(event)
-}
-
-func Fatalln(format string, v ...any) {
-	log.Fatalf(format, v...)
-}
-
 func Subscribe() observable.Subscription {
 	sub, _ := source.Subscribe()
 	return sub
