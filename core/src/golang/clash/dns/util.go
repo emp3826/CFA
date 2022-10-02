@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Dreamacro/clash/common/cache"
-	"github.com/Dreamacro/clash/log"
 
 	D "github.com/miekg/dns"
 )
@@ -21,7 +20,6 @@ func putMsgToCache(c *cache.LruCache, key string, msg *D.Msg) {
 	case len(msg.Extra) != 0:
 		ttl = msg.Extra[0].Header().Ttl
 	default:
-		log.Debugln("[DNS] response msg empty: %#v", msg)
 		return
 	}
 
