@@ -187,7 +187,7 @@ func updateUsers(users []auth.AuthUser) {
 	authenticator := auth.NewAuthenticator(users)
 	authStore.SetAuthenticator(authenticator)
 	if authenticator != nil {
-		log.Infoln("Authentication of local server updated")
+		return
 	}
 }
 
