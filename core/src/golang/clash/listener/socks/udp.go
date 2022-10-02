@@ -7,7 +7,6 @@ import (
 	"github.com/Dreamacro/clash/common/pool"
 	"github.com/Dreamacro/clash/common/sockopt"
 	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/transport/socks5"
 )
 
@@ -37,10 +36,6 @@ func NewUDP(addr string, in chan<- *inbound.PacketAdapter) (*UDPListener, error)
 	l, err := net.ListenPacket("udp", addr)
 	if err != nil {
 		return nil, err
-	}
-
-	if err := sockopt.UDPReuseaddr(l.(*net.UDPConn)); err != nil {
-		log.Warnln("Failed to Reuse UDP Address: %s", err)
 	}
 
 	sl := &UDPListener{

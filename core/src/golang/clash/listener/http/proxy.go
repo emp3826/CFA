@@ -12,7 +12,6 @@ import (
 	N "github.com/Dreamacro/clash/common/net"
 	C "github.com/Dreamacro/clash/constant"
 	authStore "github.com/Dreamacro/clash/listener/auth"
-	"github.com/Dreamacro/clash/log"
 )
 
 func HandleConn(c net.Conn, in chan<- C.ConnContext, cache *cache.Cache) {
@@ -116,8 +115,6 @@ func authenticate(request *http.Request, cache *cache.Cache) *http.Response {
 			cache.Put(credential, authed, time.Minute)
 		}
 		if !authed.(bool) {
-			log.Infoln("Auth failed from %s", request.RemoteAddr)
-
 			return responseWith(request, http.StatusForbidden)
 		}
 	}

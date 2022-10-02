@@ -12,7 +12,6 @@ import (
 	"github.com/Dreamacro/clash/listener/mixed"
 	"github.com/Dreamacro/clash/listener/redir"
 	"github.com/Dreamacro/clash/listener/socks"
-	"github.com/Dreamacro/clash/log"
 )
 
 var (
@@ -61,13 +60,6 @@ func ReCreateHTTP(port int, tcpIn chan<- C.ConnContext) {
 	httpMux.Lock()
 	defer httpMux.Unlock()
 
-	var err error
-	defer func() {
-		if err != nil {
-			log.Errorln("Start HTTP server error: %s", err.Error())
-		}
-	}()
-
 	addr := genAddr(bindAddress, port, allowLan)
 
 	if httpListener != nil {
@@ -86,20 +78,11 @@ func ReCreateHTTP(port int, tcpIn chan<- C.ConnContext) {
 	if err != nil {
 		return
 	}
-
-	log.Infoln("HTTP proxy listening at: %s", httpListener.Address())
 }
 
 func ReCreateSocks(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	socksMux.Lock()
 	defer socksMux.Unlock()
-
-	var err error
-	defer func() {
-		if err != nil {
-			log.Errorln("Start SOCKS server error: %s", err.Error())
-		}
-	}()
 
 	addr := genAddr(bindAddress, port, allowLan)
 
@@ -145,20 +128,11 @@ func ReCreateSocks(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 
 	socksListener = tcpListener
 	socksUDPListener = udpListener
-
-	log.Infoln("SOCKS proxy listening at: %s", socksListener.Address())
 }
 
 func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	redirMux.Lock()
 	defer redirMux.Unlock()
-
-	var err error
-	defer func() {
-		if err != nil {
-			log.Errorln("Start Redir server error: %s", err.Error())
-		}
-	}()
 
 	addr := genAddr(bindAddress, port, allowLan)
 
@@ -179,20 +153,11 @@ func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 	if err != nil {
 		return
 	}
-
-	log.Infoln("Redirect proxy listening at: %s", redirListener.Address())
 }
 
 func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	mixedMux.Lock()
 	defer mixedMux.Unlock()
-
-	var err error
-	defer func() {
-		if err != nil {
-			log.Errorln("Start Mixed(http+socks) server error: %s", err.Error())
-		}
-	}()
 
 	addr := genAddr(bindAddress, port, allowLan)
 
@@ -234,8 +199,6 @@ func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 		mixedListener.Close()
 		return
 	}
-
-	log.Infoln("Mixed(http+socks) proxy listening at: %s", mixedListener.Address())
 }
 
 // GetPorts return the ports of proxy servers
