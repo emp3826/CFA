@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/Dreamacro/clash/common/pool"
-	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/transport/shadowsocks/core"
 )
 
@@ -64,7 +63,6 @@ func (a *authData) putEncryptedData(b *bytes.Buffer, userKey []byte, paddings [2
 	cipherKey := core.Kdf(base64.StdEncoding.EncodeToString(userKey)+salt, 16)
 	block, err := aes.NewCipher(cipherKey)
 	if err != nil {
-		log.Warnln("New cipher error: %s", err.Error())
 		return err
 	}
 	iv := bytes.Repeat([]byte{0}, 16)
