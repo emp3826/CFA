@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/Dreamacro/clash/common/pool"
-	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/transport/ssr/tools"
 )
 
@@ -58,8 +57,6 @@ func (a *authAES128) initUserData() {
 		if userID, err := strconv.ParseUint(params[0], 10, 32); err == nil {
 			binary.LittleEndian.PutUint32(a.userID[:], uint32(userID))
 			a.userKey = a.hashDigest([]byte(params[1]))
-		} else {
-			log.Warnln("Wrong protocol-param for %s, only digits are expected before ':'", a.salt)
 		}
 	}
 	if len(a.userKey) == 0 {
