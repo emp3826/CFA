@@ -334,7 +334,6 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	}
 
 	for _, provider := range providersMap {
-		log.Infoln("Start initial provider %s", provider.Name())
 		if err := provider.Initial(); err != nil {
 			return nil, nil, fmt.Errorf("initial proxy provider %s error: %w", provider.Name(), err)
 		}
@@ -432,11 +431,6 @@ func parseRules(cfg *RawConfig, proxies map[string]C.Proxy) ([]C.Rule, error) {
 
 func parseHosts(cfg *RawConfig) (*trie.DomainTrie, error) {
 	tree := trie.New()
-
-	// add default hosts
-	if err := tree.Insert("localhost", net.IP{127, 0, 0, 1}); err != nil {
-		log.Errorln("insert localhost to host error: %s", err.Error())
-	}
 
 	if len(cfg.Hosts) != 0 {
 		for domain, ipStr := range cfg.Hosts {
