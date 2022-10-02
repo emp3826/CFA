@@ -16,14 +16,6 @@ func (f *Fallback) Providers() []provider.ProxyProvider {
 	return f.providers
 }
 
-func (lb *LoadBalance) Providers() []provider.ProxyProvider {
-	return lb.providers
-}
-
-func (lb *LoadBalance) Now() string {
-	return ""
-}
-
 func (r *Relay) Providers() []provider.ProxyProvider {
 	return r.providers
 }
