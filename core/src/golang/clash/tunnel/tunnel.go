@@ -280,7 +280,7 @@ func match(metadata *C.Metadata) (C.Proxy, C.Rule, error) {
 
 	for _, rule := range rules {
 		if !resolved && shouldResolveIP(rule, metadata) {
-			ip, err := resolver.ResolveIP(metadata.Host)
+			ip, _ := resolver.ResolveIP(metadata.Host)
 			metadata.DstIP = ip
 			resolved = true
 		}
@@ -288,7 +288,7 @@ func match(metadata *C.Metadata) (C.Proxy, C.Rule, error) {
 		if !processFound && rule.ShouldFindProcess() {
 			processFound = true
 
-			path, err := P.FindPackageName(metadata)
+			path, _ := P.FindPackageName(metadata)
 			metadata.ProcessPath = path
 		}
 
