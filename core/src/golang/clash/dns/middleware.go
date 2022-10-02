@@ -10,7 +10,6 @@ import (
 	"github.com/Dreamacro/clash/component/trie"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/context"
-	"github.com/Dreamacro/clash/log"
 
 	D "github.com/miekg/dns"
 )
@@ -151,7 +150,6 @@ func withResolver(resolver *Resolver) handler {
 
 		msg, err := resolver.Exchange(r)
 		if err != nil {
-			log.Debugln("[DNS Server] Exchange %s failed: %v", q.String(), err)
 			return msg, err
 		}
 		msg.SetRcode(r, msg.Rcode)
