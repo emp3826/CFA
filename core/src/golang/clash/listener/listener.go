@@ -59,7 +59,8 @@ func SetBindAddress(host string) {
 func ReCreateHTTP(port int, tcpIn chan<- C.ConnContext) {
 	httpMux.Lock()
 	defer httpMux.Unlock()
-
+	
+	var err error
 	addr := genAddr(bindAddress, port, allowLan)
 
 	if httpListener != nil {
@@ -133,7 +134,8 @@ func ReCreateSocks(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	redirMux.Lock()
 	defer redirMux.Unlock()
-
+	
+	var err error
 	addr := genAddr(bindAddress, port, allowLan)
 
 	if redirListener != nil {
@@ -158,7 +160,8 @@ func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	mixedMux.Lock()
 	defer mixedMux.Unlock()
-
+	
+	var err error
 	addr := genAddr(bindAddress, port, allowLan)
 
 	shouldTCPIgnore := false
