@@ -7,7 +7,6 @@ import (
 
 	"github.com/Dreamacro/clash/component/profile"
 	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
 
 	"go.etcd.io/bbolt"
 )
@@ -41,7 +40,6 @@ func (c *CacheFile) SetSelected(group, selected string) {
 		return bucket.Put([]byte(group), []byte(selected))
 	})
 	if err != nil {
-		log.Warnln("[CacheFile] write cache to %s failed: %s", c.DB.Path(), err.Error())
 		return
 	}
 }
@@ -81,9 +79,6 @@ func (c *CacheFile) PutFakeip(key, value []byte) error {
 		}
 		return bucket.Put(key, value)
 	})
-	if err != nil {
-		log.Warnln("[CacheFile] write cache to %s failed: %s", c.DB.Path(), err.Error())
-	}
 
 	return err
 }
@@ -106,9 +101,6 @@ func (c *CacheFile) DelFakeipPair(ip, host []byte) error {
 		}
 		return err
 	})
-	if err != nil {
-		log.Warnln("[CacheFile] write cache to %s failed: %s", c.DB.Path(), err.Error())
-	}
 
 	return err
 }
@@ -142,14 +134,12 @@ func initCache() {
 	switch err {
 	case bbolt.ErrInvalid, bbolt.ErrChecksum, bbolt.ErrVersionMismatch:
 		if err = os.Remove(C.Path.Cache()); err != nil {
-			log.Warnln("[CacheFile] remove invalid cache file error: %s", err.Error())
 			break
 		}
-		log.Infoln("[CacheFile] remove invalid cache file and create new one")
 		db, err = bbolt.Open(C.Path.Cache(), fileMode, &options)
 	}
 	if err != nil {
-		log.Warnln("[CacheFile] can't open cache file: %s", err.Error())
+		return
 	}
 
 	defaultCache = &CacheFile{
