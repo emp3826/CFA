@@ -8,7 +8,6 @@ import (
 	"time"
 
 	types "github.com/Dreamacro/clash/constant/provider"
-	"github.com/Dreamacro/clash/log"
 )
 
 const (
@@ -66,8 +65,6 @@ func (f *fetcher) Initial() (any, error) {
 		if !isLocal {
 			return nil, err
 		}
-
-		log.Warnln("Initial local provider %s: %s", f.Name(), err.Error())
 
 		// parse local file error, fallback to remote
 		buf, err = f.vehicle.Read()
@@ -155,16 +152,13 @@ func (f *fetcher) pullLoop() {
 
 			elm, same, err := f.Update()
 			if err != nil {
-				log.Warnln("[Provider] %s pull error: %s", f.Name(), err.Error())
 				continue
 			}
 
 			if same {
-				log.Debugln("[Provider] %s's proxies doesn't change", f.Name())
 				continue
 			}
 
-			log.Infoln("[Provider] %s's proxies update", f.Name())
 			if f.onUpdate != nil {
 				f.onUpdate(elm)
 			}
