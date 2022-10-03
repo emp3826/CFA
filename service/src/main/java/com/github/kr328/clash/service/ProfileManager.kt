@@ -158,7 +158,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         val imported = ImportedDao().queryByUUID(uuid)
         val pending = PendingDao().queryByUUID(uuid)
 
-        val active = store.activeProfile
         val name = pending?.name ?: imported?.name ?: return null
         val type = pending?.type ?: imported?.type ?: return null
         val source = pending?.source ?: imported?.source ?: return null
@@ -169,7 +168,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
             name,
             type,
             source,
-            active != null && imported?.uuid == active,
             interval,
             imported != null,
             pending != null
