@@ -13,7 +13,6 @@ import (
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub"
 	"github.com/Dreamacro/clash/hub/executor"
-	"github.com/Dreamacro/clash/log"
 )
 
 var (
@@ -31,7 +30,6 @@ func init() {
 	flag.StringVar(&externalUI, "ext-ui", "", "override external ui directory")
 	flag.StringVar(&externalController, "ext-ctl", "", "override external controller address")
 	flag.StringVar(&secret, "secret", "", "override secret for RESTful API")
-	flag.BoolVar(&testConfig, "t", false, "test configuration and exit")
 	flag.Parse()
 
 	flagset = map[string]bool{}
@@ -61,7 +59,7 @@ func main() {
 	}
 
 	if err := config.Init(C.Path.HomeDir()); err != nil {
-		log.Fatalln("Initial configuration directory error: %s", err.Error())
+		return
 	}
 
 	var options []hub.Option
@@ -76,7 +74,7 @@ func main() {
 	}
 
 	if err := hub.Parse(options...); err != nil {
-		log.Fatalln("Parse config error: %s", err.Error())
+		return
 	}
 
 	sigCh := make(chan os.Signal, 1)
