@@ -193,14 +193,4 @@ class ProfileManager(private val context: Context) : IProfileManager,
 
         s.copyRecursively(t)
     }
-
-    private suspend fun scheduleUpdate(uuid: UUID, startImmediately: Boolean) {
-        val imported = ImportedDao().queryByUUID(uuid) ?: return
-
-        if (startImmediately) {
-            ProfileReceiver.schedule(context, imported)
-        } else {
-            ProfileReceiver.scheduleNext(context, imported)
-        }
-    }
 }
