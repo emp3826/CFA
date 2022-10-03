@@ -12,10 +12,4 @@ class ServiceStore(context: Context) {
             .createSharedPreferencesFromContext(context)
             .asStoreProvider()
     )
-
-    var activeProfile: UUID? by store.typedString(
-        key = "active_profile",
-        from = { if (it.isBlank()) null else UUID.fromString(it) },
-        to = { it?.toString() ?: "" }
-    )
 } 
