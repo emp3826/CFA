@@ -16,7 +16,6 @@ data class Profile(
     val name: String,
     val type: Type,
     val source: String,
-    val active: Boolean,
     val interval: Long,
     val imported: Boolean,
     val pending: Boolean,
