@@ -5,7 +5,6 @@ import android.os.Binder
 import android.os.IBinder
 import com.github.kr328.clash.service.clash.clashRuntime
 import com.github.kr328.clash.service.clash.module.*
-import com.github.kr328.clash.service.store.ServiceStore
 import com.github.kr328.clash.service.util.cancelAndJoinBlocking
 import com.github.kr328.clash.service.util.sendClashStarted
 import com.github.kr328.clash.service.util.sendClashStopped
@@ -21,8 +20,6 @@ class ClashService : BaseService() {
     private var reason: String? = null
 
     private val runtime = clashRuntime {
-        val store = ServiceStore(self)
-
         val close = install(CloseModule(self))
         val config = install(ConfigurationModule(self))
         val network = install(NetworkObserveModule(self))
