@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/Dreamacro/clash/common/cache"
-	"github.com/Dreamacro/clash/component/fakeip"
 	"github.com/Dreamacro/clash/component/trie"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/context"
@@ -138,10 +137,6 @@ func newHandler(resolver *Resolver, mapper *ResolverEnhancer) handler {
 
 	if resolver.hosts != nil {
 		middlewares = append(middlewares, withHosts(resolver.hosts))
-	}
-
-	if mapper.mode == C.DNSFakeIP {
-		middlewares = append(middlewares, withFakeIP(mapper.fakePool))
 	}
 
 	if mapper.mode != C.DNSNormal {
