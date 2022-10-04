@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Dreamacro/clash/common/observable"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -27,15 +25,6 @@ type Event struct {
 
 func (e *Event) Type() string {
 	return e.LogLevel.String()
-}
-
-func Subscribe() observable.Subscription {
-	sub, _ := source.Subscribe()
-	return sub
-}
-
-func UnSubscribe(sub observable.Subscription) {
-	source.UnSubscribe(sub)
 }
 
 func Level() LogLevel {
