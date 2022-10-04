@@ -10,7 +10,6 @@ import (
 
 	C "github.com/Dreamacro/clash/constant"
 	_ "github.com/Dreamacro/clash/constant/mime"
-	"github.com/Dreamacro/clash/log"
 	"github.com/Dreamacro/clash/tunnel/statistic"
 
 	"github.com/go-chi/chi/v5"
@@ -85,13 +84,11 @@ func Start(addr string, secret string) {
 
 	l, err := net.Listen("tcp", addr)
 	if err != nil {
-		log.Errorln("External controller listen error: %s", err)
 		return
 	}
 	serverAddr = l.Addr().String()
-	log.Infoln("RESTful API listening at: %s", serverAddr)
 	if err = http.Serve(l, r); err != nil {
-		log.Errorln("External controller serve error: %s", err)
+		return
 	}
 }
 
