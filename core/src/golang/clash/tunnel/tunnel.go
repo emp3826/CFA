@@ -2,7 +2,6 @@ package tunnel
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"runtime"
 	"sync"
@@ -138,8 +137,6 @@ func preHandleMetadata(metadata *C.Metadata) error {
 				// redir-host should lookup the hosts
 				metadata.DstIP = node.Data.(net.IP)
 			}
-		} else if resolver.IsFakeIP(metadata.DstIP) {
-			return fmt.Errorf("fake DNS record %s missing", metadata.DstIP)
 		}
 	}
 
@@ -167,9 +164,6 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 
 	// make a fAddr if request ip is fakeip
 	var fAddr net.Addr
-	if resolver.IsExistFakeIP(metadata.DstIP) {
-		fAddr = metadata.UDPAddr()
-	}
 
 	if err := preHandleMetadata(metadata); err != nil {
 		return
