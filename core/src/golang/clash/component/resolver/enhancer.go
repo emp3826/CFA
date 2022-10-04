@@ -13,14 +13,6 @@ type Enhancer interface {
 	FindHostByIP(net.IP) (string, bool)
 }
 
-func FakeIPEnabled() bool {
-	if mapper := DefaultHostMapper; mapper != nil {
-		return mapper.FakeIPEnabled()
-	}
-
-	return false
-}
-
 func MappingEnabled() bool {
 	if mapper := DefaultHostMapper; mapper != nil {
 		return mapper.MappingEnabled()
