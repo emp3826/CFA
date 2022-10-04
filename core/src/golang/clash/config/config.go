@@ -13,7 +13,6 @@ import (
 	"github.com/Dreamacro/clash/adapter/outboundgroup"
 	"github.com/Dreamacro/clash/adapter/provider"
 	"github.com/Dreamacro/clash/component/auth"
-	"github.com/Dreamacro/clash/component/fakeip"
 	"github.com/Dreamacro/clash/component/trie"
 	C "github.com/Dreamacro/clash/constant"
 	providerTypes "github.com/Dreamacro/clash/constant/provider"
@@ -64,7 +63,6 @@ type DNS struct {
 	Listen            string           `yaml:"listen"`
 	EnhancedMode      C.DNSMode        `yaml:"enhanced-mode"`
 	DefaultNameserver []dns.NameServer `yaml:"default-nameserver"`
-	FakeIPRange       *fakeip.Pool
 	Hosts             *trie.DomainTrie
 	NameServerPolicy  map[string]dns.NameServer
 }
@@ -80,7 +78,6 @@ type FallbackFilter struct {
 // Profile config
 type Profile struct {
 	StoreSelected bool `yaml:"store-selected"`
-	StoreFakeIP   bool `yaml:"store-fake-ip"`
 }
 
 // Experimental config
@@ -108,8 +105,6 @@ type RawDNS struct {
 	FallbackFilter    RawFallbackFilter `yaml:"fallback-filter" json:"fallback-filter"`
 	Listen            string            `yaml:"listen" json:"listen"`
 	EnhancedMode      C.DNSMode         `yaml:"enhanced-mode" json:"enhanced-mode"`
-	FakeIPRange       string            `yaml:"fake-ip-range" json:"fake-ip-range"`
-	FakeIPFilter      []string          `yaml:"fake-ip-filter" json:"fake-ip-filter"`
 	DefaultNameserver []string          `yaml:"default-nameserver" json:"default-nameserver"`
 	NameServerPolicy  map[string]string `yaml:"nameserver-policy" json:"nameserver-policy"`
 }
@@ -180,7 +175,6 @@ func UnmarshalRawConfig(buf []byte) (*RawConfig, error) {
 		DNS: RawDNS{
 			Enable:      false,
 			UseHosts:    true,
-			FakeIPRange: "198.18.0.1/16",
 			FallbackFilter: RawFallbackFilter{
 				GeoIP:     true,
 				GeoIPCode: "CN",
