@@ -28,7 +28,6 @@ type configSchema struct {
 	Port        *int               `json:"port"`
 	SocksPort   *int               `json:"socks-port"`
 	RedirPort   *int               `json:"redir-port"`
-	TProxyPort  *int               `json:"tproxy-port"`
 	MixedPort   *int               `json:"mixed-port"`
 	AllowLan    *bool              `json:"allow-lan"`
 	BindAddress *string            `json:"bind-address"`
@@ -74,7 +73,6 @@ func patchConfigs(w http.ResponseWriter, r *http.Request) {
 	P.ReCreateHTTP(pointerOrDefault(general.Port, ports.Port), tcpIn)
 	P.ReCreateSocks(pointerOrDefault(general.SocksPort, ports.SocksPort), tcpIn, udpIn)
 	P.ReCreateRedir(pointerOrDefault(general.RedirPort, ports.RedirPort), tcpIn, udpIn)
-	P.ReCreateTProxy(pointerOrDefault(general.TProxyPort, ports.TProxyPort), tcpIn, udpIn)
 	P.ReCreateMixed(pointerOrDefault(general.MixedPort, ports.MixedPort), tcpIn, udpIn)
 
 	if general.Mode != nil {
