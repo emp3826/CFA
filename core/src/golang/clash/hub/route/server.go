@@ -184,13 +184,6 @@ func getLogs(w http.ResponseWriter, r *http.Request) {
 		levelText = "info"
 	}
 
-	level, ok := log.LogLevelMapping[levelText]
-	if !ok {
-		render.Status(r, http.StatusBadRequest)
-		render.JSON(w, r, ErrBadRequest)
-		return
-	}
-
 	var wsConn *websocket.Conn
 	if websocket.IsWebSocketUpgrade(r) {
 		var err error
@@ -205,47 +198,7 @@ func getLogs(w http.ResponseWriter, r *http.Request) {
 		render.Status(r, http.StatusOK)
 	}
 
-	ch := make(chan log.Event, 1024)
-	sub := log.Subscribe()
-	defer log.UnSubscribe(sub)
 	buf := &bytes.Buffer{}
-
-	go func() {
-		for elm := range sub {
-			log := elm.(log.Event)
-			select {
-			case ch <- log:
-			default:
-			}
-		}
-		close(ch)
-	}()
-
-	for log := range ch {
-		if log.LogLevel < level {
-			continue
-		}
-		buf.Reset()
-
-		if err := json.NewEncoder(buf).Encode(Log{
-			Type:    log.Type(),
-			Payload: log.Payload,
-		}); err != nil {
-			break
-		}
-
-		var err error
-		if wsConn == nil {
-			_, err = w.Write(buf.Bytes())
-			w.(http.Flusher).Flush()
-		} else {
-			err = wsConn.WriteMessage(websocket.TextMessage, buf.Bytes())
-		}
-
-		if err != nil {
-			break
-		}
-	}
 }
 
 func version(w http.ResponseWriter, r *http.Request) {
