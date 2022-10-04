@@ -134,10 +134,7 @@ func preHandleMetadata(metadata *C.Metadata) error {
 			metadata.Host = host
 			metadata.AddrType = C.AtypDomainName
 			metadata.DNSMode = C.DNSMapping
-			if resolver.FakeIPEnabled() {
-				metadata.DstIP = nil
-				metadata.DNSMode = C.DNSFakeIP
-			} else if node := resolver.DefaultHosts.Search(host); node != nil {
+			if node := resolver.DefaultHosts.Search(host); node != nil {
 				// redir-host should lookup the hosts
 				metadata.DstIP = node.Data.(net.IP)
 			}

@@ -14,19 +14,11 @@ type ResolverEnhancer struct {
 	mapping  *cache.LruCache
 }
 
-func (h *ResolverEnhancer) FakeIPEnabled() bool {
-	return h.mode == C.DNSFakeIP
-}
-
 func (h *ResolverEnhancer) MappingEnabled() bool {
-	return h.mode == C.DNSFakeIP || h.mode == C.DNSMapping
+	return h.mode == C.DNSMapping
 }
 
 func (h *ResolverEnhancer) IsExistFakeIP(ip net.IP) bool {
-	if !h.FakeIPEnabled() {
-		return false
-	}
-
 	if pool := h.fakePool; pool != nil {
 		return pool.Exist(ip)
 	}
@@ -35,10 +27,6 @@ func (h *ResolverEnhancer) IsExistFakeIP(ip net.IP) bool {
 }
 
 func (h *ResolverEnhancer) IsFakeIP(ip net.IP) bool {
-	if !h.FakeIPEnabled() {
-		return false
-	}
-
 	if pool := h.fakePool; pool != nil {
 		return pool.IPNet().Contains(ip) && !pool.Gateway().Equal(ip)
 	}

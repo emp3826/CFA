@@ -7,19 +7,10 @@ import (
 var DefaultHostMapper Enhancer
 
 type Enhancer interface {
-	FakeIPEnabled() bool
 	MappingEnabled() bool
 	IsFakeIP(net.IP) bool
 	IsExistFakeIP(net.IP) bool
 	FindHostByIP(net.IP) (string, bool)
-}
-
-func FakeIPEnabled() bool {
-	if mapper := DefaultHostMapper; mapper != nil {
-		return mapper.FakeIPEnabled()
-	}
-
-	return false
 }
 
 func MappingEnabled() bool {

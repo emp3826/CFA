@@ -589,34 +589,6 @@ func parseDNS(rawCfg *RawConfig, hosts *trie.DomainTrie) (*DNS, error) {
 		}
 	}
 
-	if cfg.EnhancedMode == C.DNSFakeIP {
-		_, ipnet, err := net.ParseCIDR(cfg.FakeIPRange)
-		if err != nil {
-			return nil, err
-		}
-
-		var host *trie.DomainTrie
-		// fake ip skip host filter
-		if len(cfg.FakeIPFilter) != 0 {
-			host = trie.New()
-			for _, domain := range cfg.FakeIPFilter {
-				host.Insert(domain, true)
-			}
-		}
-
-		pool, err := fakeip.New(fakeip.Options{
-			IPNet:       ipnet,
-			Size:        1000,
-			Host:        host,
-			Persistence: rawCfg.Profile.StoreFakeIP,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		dnsCfg.FakeIPRange = pool
-	}
-
 	dnsCfg.FallbackFilter.GeoIP = cfg.FallbackFilter.GeoIP
 	dnsCfg.FallbackFilter.GeoIPCode = cfg.FallbackFilter.GeoIPCode
 	if fallbackip, err := parseFallbackIPCIDR(cfg.FallbackFilter.IPCIDR); err == nil {
