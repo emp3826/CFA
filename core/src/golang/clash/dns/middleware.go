@@ -101,43 +101,6 @@ func withMapping(mapping *cache.LruCache) middleware {
 	}
 }
 
-func withFakeIP(fakePool *fakeip.Pool) middleware {
-	return func(next handler) handler {
-		return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
-			q := r.Question[0]
-
-			host := strings.TrimRight(q.Name, ".")
-			if fakePool.ShouldSkipped(host) {
-				return next(ctx, r)
-			}
-
-			switch q.Qtype {
-			case D.TypeAAAA, D.TypeSVCB, D.TypeHTTPS:
-				return handleMsgWithEmptyAnswer(r), nil
-			}
-
-			if q.Qtype != D.TypeA {
-				return next(ctx, r)
-			}
-
-			rr := &D.A{}
-			rr.Hdr = D.RR_Header{Name: q.Name, Rrtype: D.TypeA, Class: D.ClassINET, Ttl: dnsDefaultTTL}
-			ip := fakePool.Lookup(host)
-			rr.A = ip
-			msg := r.Copy()
-			msg.Answer = []D.RR{rr}
-
-			ctx.SetType(context.DNSTypeFakeIP)
-			setMsgTTL(msg, 1)
-			msg.SetRcode(r, D.RcodeSuccess)
-			msg.Authoritative = true
-			msg.RecursionAvailable = true
-
-			return msg, nil
-		}
-	}
-}
-
 func withResolver(resolver *Resolver) handler {
 	return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
 		ctx.SetType(context.DNSTypeRaw)
