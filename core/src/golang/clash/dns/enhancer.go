@@ -36,13 +36,11 @@ func NewEnhancer(cfg Config) *ResolverEnhancer {
 	var mapping *cache.LruCache
 
 	if cfg.EnhancedMode != C.DNSNormal {
-		fakePool = cfg.Pool
 		mapping = cache.NewLRUCache(cache.WithSize(4096), cache.WithStale(true))
 	}
 
 	return &ResolverEnhancer{
 		mode:     cfg.EnhancedMode,
-		fakePool: fakePool,
 		mapping:  mapping,
 	}
 }
