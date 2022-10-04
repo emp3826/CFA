@@ -7,7 +7,6 @@ import (
 var DefaultHostMapper Enhancer
 
 type Enhancer interface {
-	FakeIPEnabled() bool
 	MappingEnabled() bool
 	IsFakeIP(net.IP) bool
 	IsExistFakeIP(net.IP) bool
