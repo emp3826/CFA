@@ -9,7 +9,6 @@ import (
 
 var (
 	logCh  = make(chan any)
-	source = observable.NewObservable(logCh)
 	level  = INFO
 )
 
