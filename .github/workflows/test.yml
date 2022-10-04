@@ -1,6 +1,7 @@
 name: Test
 
-on: [push]
+on:
+  push:
 
 jobs:
   build:
@@ -12,4 +13,5 @@ jobs:
           go-version: 1.18
       - name: Test
         run: |
-          go test ./core/src/golang/clash/...
+          cd core/src/golang/clash
+          go test ./...
