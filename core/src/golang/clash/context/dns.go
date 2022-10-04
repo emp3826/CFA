@@ -7,7 +7,6 @@ import (
 
 const (
 	DNSTypeHost   = "host"
-	DNSTypeFakeIP = "fakeip"
 	DNSTypeRaw    = "raw"
 )
 
