@@ -197,8 +197,6 @@ func getLogs(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		render.Status(r, http.StatusOK)
 	}
-
-	buf := &bytes.Buffer{}
 }
 
 func version(w http.ResponseWriter, r *http.Request) {
