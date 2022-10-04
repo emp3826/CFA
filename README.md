@@ -1,17 +1,3 @@
-## Clash for Android
-
-A Graphical user interface of [clash](https://github.com/Dreamacro/clash) for Android
-
-### Feature
-
-Fully feature of [clash](https://github.com/Dreamacro/clash) ~~(Exclude `external-controller`~~
-
-### Requirement
-
-- Android 5.0+ (minimum)
-- Android 7.0+ (recommend)
-- `armeabi-v7a` , `arm64-v8a` Architecture
-
 ### License
 
 See also [LICENSE](./LICENSE) and [NOTICE](./NOTICE)
