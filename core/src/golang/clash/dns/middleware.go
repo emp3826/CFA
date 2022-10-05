@@ -7,7 +7,6 @@ import (
 
 	"github.com/Dreamacro/clash/common/cache"
 	"github.com/Dreamacro/clash/component/trie"
-	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/context"
 
 	D "github.com/miekg/dns"
@@ -132,15 +131,11 @@ func compose(middlewares []middleware, endpoint handler) handler {
 	return h
 }
 
-func newHandler(resolver *Resolver, mapper *ResolverEnhancer) handler {
+func newHandler(resolver *Resolver) handler {
 	middlewares := []middleware{}
 
 	if resolver.hosts != nil {
 		middlewares = append(middlewares, withHosts(resolver.hosts))
-	}
-
-	if mapper.mode != C.DNSNormal {
-		middlewares = append(middlewares, withMapping(mapper.mapping))
 	}
 
 	return compose(middlewares, withResolver(resolver))
