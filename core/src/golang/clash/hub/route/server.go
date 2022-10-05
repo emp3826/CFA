@@ -198,7 +198,3 @@ func getLogs(w http.ResponseWriter, r *http.Request) {
 		render.Status(r, http.StatusOK)
 	}
 }
-
-func version(w http.ResponseWriter, r *http.Request) {
-	render.JSON(w, r, render.M{"version": C.Version})
-}
