@@ -139,9 +139,5 @@ func newHandler(resolver *Resolver) handler {
 		middlewares = append(middlewares, withHosts(resolver.hosts))
 	}
 
-	if mapper.mode != C.DNSNormal {
-		middlewares = append(middlewares, withMapping(mapper.mapping))
-	}
-
 	return compose(middlewares, withResolver(resolver))
 }
