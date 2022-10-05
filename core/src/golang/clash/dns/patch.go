@@ -58,14 +58,14 @@ func UpdateSystemDNS(addr []string) {
 	systemResolver = NewResolver(Config{Main: ns})
 }
 
-func UpdateIsolateHandler(resolver *Resolver, mapper *ResolverEnhancer) {
+func UpdateIsolateHandler(resolver *Resolver) {
 	if resolver == nil {
 		isolateHandler = nil
 
 		return
 	}
 
-	isolateHandler = newHandler(resolver, mapper)
+	isolateHandler = newHandler(resolver)
 }
 
 func newDHCPClient(ifaceName string) *dhcpClient {
