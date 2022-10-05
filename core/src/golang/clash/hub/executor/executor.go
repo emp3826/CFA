@@ -107,7 +107,7 @@ func updateExperimental(c *config.Config) {}
 func updateDNS(c *config.DNS) {
 	if !c.Enable {
 		resolver.DefaultResolver = nil
-		dns.ReCreateServer("", nil, nil)
+		dns.ReCreateServer("", nil)
 		return
 	}
 
