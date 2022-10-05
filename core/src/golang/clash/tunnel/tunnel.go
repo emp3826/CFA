@@ -276,13 +276,6 @@ func match(metadata *C.Metadata) (C.Proxy, C.Rule, error) {
 			resolved = true
 		}
 
-		if !processFound && rule.ShouldFindProcess() {
-			processFound = true
-
-			path, _ := P.FindPackageName(metadata)
-			metadata.ProcessPath = path
-		}
-
 		if rule.Match(metadata) {
 			adapter, ok := proxies[rule.Adapter()]
 			if !ok {
