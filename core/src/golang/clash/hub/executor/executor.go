@@ -107,7 +107,6 @@ func updateExperimental(c *config.Config) {}
 func updateDNS(c *config.DNS) {
 	if !c.Enable {
 		resolver.DefaultResolver = nil
-		resolver.DefaultHostMapper = nil
 		dns.ReCreateServer("", nil, nil)
 		return
 	}
@@ -136,9 +135,8 @@ func updateDNS(c *config.DNS) {
 	}
 
 	resolver.DefaultResolver = r
-	resolver.DefaultHostMapper = m
 
-	dns.ReCreateServer(c.Listen, r, m)
+	dns.ReCreateServer(c.Listen, r)
 }
 
 func updateHosts(tree *trie.DomainTrie) {
