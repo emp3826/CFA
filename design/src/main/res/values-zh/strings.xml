@@ -31,8 +31,6 @@
     <string name="loading">载入中</string>
     <string name="no_profile_selected">没有选择配置文件</string>
     <string name="copied">已复制</string>
-    <string name="service">服务</string>
-    <string name="general">常规</string>
     <string name="dns">DNS</string>
     <string name="error">错误</string>
     <string name="format_elements">%d 个条目</string>
