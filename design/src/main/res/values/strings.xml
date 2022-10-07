@@ -36,7 +36,6 @@
     <string name="duplicate">Duplicate</string>
 
     <string name="raw_cn" translatable="false">cn</string>
-    <string name="disabled">Disabled</string>
     <string name="unavailable">Unavailable</string>
     <string name="empty_name">Empty Name</string>
     <string name="invalid_url">Invalid URL</string>
@@ -60,8 +59,6 @@
 
     <string name="dont_modify">Do not modify</string>
     <string name="empty">Empty</string>
-
-    <string name="enabled">Enabled</string>
 
     <string name="error">Error</string>
 
