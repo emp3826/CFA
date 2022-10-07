@@ -52,7 +52,6 @@
     
     <string name="file_exported">File Exported</string>
 
-    <string name="general">General</string>
     <string name="dns">DNS</string>
 
     <string name="_new">New</string>
@@ -63,8 +62,6 @@
     <string name="error">Error</string>
 
     <string name="clash">Clash</string>
-
-    <string name="service">Service</string>
 
     <string name="no_profile_selected">No profile selected</string>
 
