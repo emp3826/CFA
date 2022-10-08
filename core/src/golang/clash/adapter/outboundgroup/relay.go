@@ -41,7 +41,6 @@ func (r *Relay) DialContext(ctx context.Context, metadata *C.Metadata, opts ...d
 	if err != nil {
 		return nil, fmt.Errorf("%s connect error: %w", first.Addr(), err)
 	}
-	tcpKeepAlive(c)
 
 	var currentMeta *C.Metadata
 	for _, proxy := range proxies[1:] {
