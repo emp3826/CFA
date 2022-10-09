@@ -10,9 +10,6 @@ plugins {
     id("golang-android")
 }
 
-val geoipDatabaseUrl =
-    "https://github.com/Dreamacro/maxmind-geoip/releases/latest/download/Country.mmdb"
-val geoipOutput = buildDir.resolve("intermediates/golang_blob")
 val golangSource = file("src/main/golang/native")
 
 golang {
@@ -56,49 +53,5 @@ dependencies {
 afterEvaluate {
     tasks.withType(GolangBuildTask::class.java).forEach {
         it.inputs.dir(golangSource)
-    }
-}
-
-task("downloadGeoipDatabase") {
-    val databaseFile = geoipOutput.resolve("Country.mmdb")
-    val moduleFile = geoipOutput.resolve("go.mod")
-    val sourceFile = geoipOutput.resolve("blob.go")
-
-    val moduleContent = """
-        module "cfa/blob"
-    """.trimIndent()
-
-    val sourceContent = """
-        package blob
-        
-        import _ "embed"
-        
-        //go:embed Country.mmdb
-        var GeoipDatabase []byte
-    """.trimIndent()
-
-    outputs.dir(geoipOutput)
-
-    doLast {
-        geoipOutput.mkdirs()
-
-        moduleFile.writeText(moduleContent)
-        sourceFile.writeText(sourceContent)
-
-        URL(geoipDatabaseUrl).openConnection().getInputStream().use { input ->
-            FileOutputStream(databaseFile).use { output ->
-                input.copyTo(output)
-            }
-        }
-    }
-}
-
-afterEvaluate {
-    val downloadTask = tasks["downloadGeoipDatabase"]
-
-    tasks.forEach {
-        if (it.name.startsWith("externalGolangBuild")) {
-            it.dependsOn(downloadTask)
-        }
     }
 }
