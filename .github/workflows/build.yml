@@ -18,17 +18,6 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: 1.18
-      - run: |
-          mkdir -p core/golang_blob
-          touch core/golang_blob/go.mod
-          touch core/golang_blob/blob.go
-          echo "mudule \"cfa/blob\"" >> core/golang_blob/go.mod
-          echo "package blob" >> core/golang_blob/blob.go
-          echo "import _ \"embed\"" >> core/golang_blob/blob.go
-          echo "//go:embed Country.mmdb" >> core/golang_blob/blob.go
-          echo "var GeoipDatabase []byte" >> core/golang_blob/blob.go
-          wget -P core/golang_blob https://github.com/Dreamacro/maxmind-geoip/releases/latest/download/Country.mmdb
-         
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: app:assembleFossRelease
