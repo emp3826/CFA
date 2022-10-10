@@ -6,7 +6,7 @@ replace cfa => ../main/golang
 
 replace github.com/Dreamacro/clash => ./clash
 
-replace cfa/blob => ../../build/intermediates/golang_blob
+replace cfa/blob => ../../golang_blob
 
 require cfa v0.0.0-00010101000000-000000000000
 
