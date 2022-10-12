@@ -31,10 +31,8 @@
     <string name="loading">载入中</string>
     <string name="no_profile_selected">没有选择配置文件</string>
     <string name="copied">已复制</string>
-    <string name="dns">DNS</string>
     <string name="error">错误</string>
     <string name="format_elements">%d 个条目</string>
-    <string name="use_built_in">使用内置</string>
     <string name="providers">外部资源</string>
     <string name="unavailable">不可用</string>
     <string name="_new">新建</string>
