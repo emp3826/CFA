@@ -14,7 +14,6 @@ import (
 
 var (
 	flagset            map[string]bool
-	homeDir            string
 	configFile         string
 	externalUI         string
 	externalController string
@@ -22,7 +21,6 @@ var (
 )
 
 func init() {
-	flag.StringVar(&homeDir, "d", "", "set configuration directory")
 	flag.StringVar(&configFile, "f", "", "specify configuration file")
 	flag.StringVar(&externalUI, "ext-ui", "", "override external ui directory")
 	flag.StringVar(&externalController, "ext-ctl", "", "override external controller address")
@@ -36,14 +34,6 @@ func init() {
 }
 
 func main() {
-	if homeDir != "" {
-		if !filepath.IsAbs(homeDir) {
-			currentDir, _ := os.Getwd()
-			homeDir = filepath.Join(currentDir, homeDir)
-		}
-		C.SetHomeDir(homeDir)
-	}
-
 	if configFile != "" {
 		if !filepath.IsAbs(configFile) {
 			currentDir, _ := os.Getwd()
