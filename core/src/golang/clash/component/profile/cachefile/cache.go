@@ -67,63 +67,6 @@ func (c *CacheFile) SelectedMap() map[string]string {
 	return mapping
 }
 
-func (c *CacheFile) PutFakeip(key, value []byte) error {
-	if c.DB == nil {
-		return nil
-	}
-
-	err := c.DB.Batch(func(t *bbolt.Tx) error {
-		bucket, err := t.CreateBucketIfNotExists(bucketFakeip)
-		if err != nil {
-			return err
-		}
-		return bucket.Put(key, value)
-	})
-
-	return err
-}
-
-func (c *CacheFile) DelFakeipPair(ip, host []byte) error {
-	if c.DB == nil {
-		return nil
-	}
-
-	err := c.DB.Batch(func(t *bbolt.Tx) error {
-		bucket, err := t.CreateBucketIfNotExists(bucketFakeip)
-		if err != nil {
-			return err
-		}
-		err = bucket.Delete(ip)
-		if len(host) > 0 {
-			if err := bucket.Delete(host); err != nil {
-				return err
-			}
-		}
-		return err
-	})
-
-	return err
-}
-
-func (c *CacheFile) GetFakeip(key []byte) []byte {
-	if c.DB == nil {
-		return nil
-	}
-
-	tx, err := c.DB.Begin(false)
-	if err != nil {
-		return nil
-	}
-	defer tx.Rollback()
-
-	bucket := tx.Bucket(bucketFakeip)
-	if bucket == nil {
-		return nil
-	}
-
-	return bucket.Get(key)
-}
-
 func (c *CacheFile) Close() error {
 	return c.DB.Close()
 }
