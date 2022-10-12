@@ -4,10 +4,7 @@ import (
 	"flag"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
-
-	C "github.com/Dreamacro/clash/constant"
 )
 
 var (
@@ -32,17 +29,6 @@ func init() {
 }
 
 func main() {
-	if configFile != "" {
-		if !filepath.IsAbs(configFile) {
-			currentDir, _ := os.Getwd()
-			configFile = filepath.Join(currentDir, configFile)
-		}
-		C.SetConfig(configFile)
-	} else {
-		configFile := filepath.Join(C.Path.HomeDir(), C.Path.Config())
-		C.SetConfig(configFile)
-	}
-
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 	<-sigCh
