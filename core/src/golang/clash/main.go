@@ -45,10 +45,6 @@ func main() {
 		C.SetConfig(configFile)
 	}
 
-	if err := config.Init(C.Path.HomeDir()); err != nil {
-		return
-	}
-
 	var options []hub.Option
 	if flagset["ext-ui"] {
 		options = append(options, hub.WithExternalUI(externalUI))
@@ -58,10 +54,6 @@ func main() {
 	}
 	if flagset["secret"] {
 		options = append(options, hub.WithSecret(secret))
-	}
-
-	if err := hub.Parse(options...); err != nil {
-		return
 	}
 
 	sigCh := make(chan os.Signal, 1)
