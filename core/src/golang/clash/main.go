@@ -8,7 +8,6 @@ import (
 	"syscall"
 
 	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/hub"
 )
 
 var (
@@ -42,17 +41,6 @@ func main() {
 	} else {
 		configFile := filepath.Join(C.Path.HomeDir(), C.Path.Config())
 		C.SetConfig(configFile)
-	}
-
-	var options []hub.Option
-	if flagset["ext-ui"] {
-		options = append(options, hub.WithExternalUI(externalUI))
-	}
-	if flagset["ext-ctl"] {
-		options = append(options, hub.WithExternalController(externalController))
-	}
-	if flagset["secret"] {
-		options = append(options, hub.WithSecret(secret))
 	}
 
 	sigCh := make(chan os.Signal, 1)
