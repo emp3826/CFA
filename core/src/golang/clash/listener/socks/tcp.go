@@ -69,8 +69,6 @@ func handleSocks(conn net.Conn, in chan<- C.ConnContext) {
 	}
 
 	switch head[0] {
-	case socks4.Version:
-		HandleSocks4(bufConn, in)
 	case socks5.Version:
 		HandleSocks5(bufConn, in)
 	default:
