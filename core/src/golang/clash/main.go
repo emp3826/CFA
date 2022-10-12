@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/Dreamacro/clash/config"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub"
 )
