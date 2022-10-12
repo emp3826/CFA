@@ -52,8 +52,6 @@
     
     <string name="file_exported">File Exported</string>
 
-    <string name="dns">DNS</string>
-
     <string name="_new">New</string>
 
     <string name="dont_modify">Do not modify</string>
@@ -74,7 +72,6 @@
     <string name="file_name">File Name</string>
     <string name="invalid_file_name">Invalid file name</string>
     
-    <string name="use_built_in">Use Built-in</string>
     <string name="more">More</string>
     <string name="save">Save</string>
     <string name="delay_test">Delay Test</string>
