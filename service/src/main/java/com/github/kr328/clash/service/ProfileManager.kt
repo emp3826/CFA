@@ -106,14 +106,10 @@ class ProfileManager(private val context: Context) : IProfileManager,
         }
     }
 
-    override suspend fun update(uuid: UUID) {
-        scheduleUpdate(uuid, true)
-    }
+    override suspend fun update(uuid: UUID) {}
 
     override suspend fun commit(uuid: UUID, callback: IFetchObserver?) {
         ProfileProcessor.apply(context, uuid, callback)
-
-        scheduleUpdate(uuid, false)
     }
 
     override suspend fun release(uuid: UUID) {
@@ -176,12 +172,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         )
     }
 
-    private fun resolveUpdatedAt(uuid: UUID): Long {
-        return context.pendingDir.resolve(uuid.toString()).directoryLastModified
-            ?: context.importedDir.resolve(uuid.toString()).directoryLastModified
-            ?: -1
-    }
-
     private fun cloneImportedFiles(source: UUID, target: UUID = source) {
         val s = context.importedDir.resolve(source.toString())
         val t = context.pendingDir.resolve(target.toString())
@@ -192,15 +182,5 @@ class ProfileManager(private val context: Context) : IProfileManager,
         t.deleteRecursively()
 
         s.copyRecursively(t)
-    }
-
-    private suspend fun scheduleUpdate(uuid: UUID, startImmediately: Boolean) {
-        val imported = ImportedDao().queryByUUID(uuid) ?: return
-
-        if (startImmediately) {
-            ProfileReceiver.schedule(context, imported)
-        } else {
-            ProfileReceiver.scheduleNext(context, imported)
-        }
     }
 }
