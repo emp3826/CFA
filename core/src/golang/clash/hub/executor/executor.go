@@ -74,7 +74,6 @@ func ApplyConfig(cfg *config.Config, force bool) {
 	updateProfile(cfg)
 	updateGeneral(cfg.General, force)
 	updateDNS(cfg.DNS)
-	updateExperimental(cfg)
 }
 
 func GetGeneral() *config.General {
@@ -101,8 +100,6 @@ func GetGeneral() *config.General {
 
 	return general
 }
-
-func updateExperimental(c *config.Config) {}
 
 func updateDNS(c *config.DNS) {
 	if !c.Enable {
@@ -146,7 +143,6 @@ func updateRules(rules []C.Rule) {
 }
 
 func updateGeneral(general *config.General, force bool) {
-	log.SetLevel(general.LogLevel)
 	tunnel.SetMode(general.Mode)
 	resolver.DisableIPv6 = !general.IPv6
 
