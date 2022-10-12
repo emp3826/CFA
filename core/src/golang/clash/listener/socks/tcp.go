@@ -8,7 +8,6 @@ import (
 	N "github.com/Dreamacro/clash/common/net"
 	C "github.com/Dreamacro/clash/constant"
 	authStore "github.com/Dreamacro/clash/listener/auth"
-	"github.com/Dreamacro/clash/transport/socks4"
 	"github.com/Dreamacro/clash/transport/socks5"
 )
 
@@ -77,15 +76,6 @@ func handleSocks(conn net.Conn, in chan<- C.ConnContext) {
 	default:
 		conn.Close()
 	}
-}
-
-func HandleSocks4(conn net.Conn, in chan<- C.ConnContext) {
-	addr, _, err := socks4.ServerHandshake(conn, authStore.Authenticator())
-	if err != nil {
-		conn.Close()
-		return
-	}
-	in <- inbound.NewSocket(socks5.ParseAddr(addr), conn, C.SOCKS4)
 }
 
 func HandleSocks5(conn net.Conn, in chan<- C.ConnContext) {
