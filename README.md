@@ -1,3 +1,3 @@
 ### License
 
-See also [LICENSE](./LICENSE) and [NOTICE](./NOTICE)
+See also [LICENSE](./LICENSE)
