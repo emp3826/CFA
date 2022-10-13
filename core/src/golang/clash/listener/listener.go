@@ -20,7 +20,6 @@ var (
 	httpListener      *http.Listener
 	redirListener     *redir.Listener
 	mixedListener     *mixed.Listener
-	mixedUDPLister    *socks.UDPListener
 
 	// lock for recreate function
 	httpMux   sync.Mutex
@@ -140,12 +139,6 @@ func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 
 	mixedListener, err = mixed.New(addr, tcpIn)
 	if err != nil {
-		return
-	}
-
-	mixedUDPLister, err = socks.NewUDP(addr, udpIn)
-	if err != nil {
-		mixedListener.Close()
 		return
 	}
 }
