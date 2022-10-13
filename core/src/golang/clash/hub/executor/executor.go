@@ -166,7 +166,6 @@ func updateGeneral(general *config.General, force bool) {
 
 	P.ReCreateHTTP(general.Port, tcpIn)
 	P.ReCreateRedir(general.RedirPort, tcpIn, udpIn)
-	P.ReCreateMixed(general.MixedPort, tcpIn, udpIn)
 }
 
 func updateUsers(users []auth.AuthUser) {
