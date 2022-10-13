@@ -120,14 +120,6 @@ func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 			shouldTCPIgnore = true
 		}
 	}
-	if mixedUDPLister != nil {
-		if mixedUDPLister.RawAddress() != addr {
-			mixedUDPLister.Close()
-			mixedUDPLister = nil
-		} else {
-			shouldUDPIgnore = true
-		}
-	}
 
 	if shouldTCPIgnore && shouldUDPIgnore {
 		return
