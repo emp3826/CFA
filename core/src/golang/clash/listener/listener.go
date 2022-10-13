@@ -11,22 +11,18 @@ import (
 	"github.com/Dreamacro/clash/listener/http"
 	"github.com/Dreamacro/clash/listener/mixed"
 	"github.com/Dreamacro/clash/listener/redir"
-	"github.com/Dreamacro/clash/listener/socks"
 )
 
 var (
 	allowLan    = false
 	bindAddress = "*"
 
-	socksListener     *socks.Listener
-	socksUDPListener  *socks.UDPListener
 	httpListener      *http.Listener
 	redirListener     *redir.Listener
 	mixedListener     *mixed.Listener
 	mixedUDPLister    *socks.UDPListener
 
 	// lock for recreate function
-	socksMux  sync.Mutex
 	httpMux   sync.Mutex
 	redirMux  sync.Mutex
 	tproxyMux sync.Mutex
@@ -89,24 +85,6 @@ func ReCreateSocks(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 
 	shouldTCPIgnore := false
 	shouldUDPIgnore := false
-
-	if socksListener != nil {
-		if socksListener.RawAddress() != addr {
-			socksListener.Close()
-			socksListener = nil
-		} else {
-			shouldTCPIgnore = true
-		}
-	}
-
-	if socksUDPListener != nil {
-		if socksUDPListener.RawAddress() != addr {
-			socksUDPListener.Close()
-			socksUDPListener = nil
-		} else {
-			shouldUDPIgnore = true
-		}
-	}
 
 	if shouldTCPIgnore && shouldUDPIgnore {
 		return
