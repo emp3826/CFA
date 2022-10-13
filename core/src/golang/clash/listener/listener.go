@@ -9,7 +9,6 @@ import (
 	"github.com/Dreamacro/clash/adapter/inbound"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/listener/http"
-	"github.com/Dreamacro/clash/listener/mixed"
 	"github.com/Dreamacro/clash/listener/redir"
 )
 
@@ -19,13 +18,11 @@ var (
 
 	httpListener      *http.Listener
 	redirListener     *redir.Listener
-	mixedListener     *mixed.Listener
 
 	// lock for recreate function
 	httpMux   sync.Mutex
 	redirMux  sync.Mutex
 	tproxyMux sync.Mutex
-	mixedMux  sync.Mutex
 )
 
 type Ports struct {
@@ -97,39 +94,6 @@ func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 	}
 
 	redirListener, err = redir.New(addr, tcpIn)
-	if err != nil {
-		return
-	}
-}
-
-func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
-	mixedMux.Lock()
-	defer mixedMux.Unlock()
-	
-	var err error
-	addr := genAddr(bindAddress, port, allowLan)
-
-	shouldTCPIgnore := false
-	shouldUDPIgnore := false
-
-	if mixedListener != nil {
-		if mixedListener.RawAddress() != addr {
-			mixedListener.Close()
-			mixedListener = nil
-		} else {
-			shouldTCPIgnore = true
-		}
-	}
-
-	if shouldTCPIgnore && shouldUDPIgnore {
-		return
-	}
-
-	if portIsZero(addr) {
-		return
-	}
-
-	mixedListener, err = mixed.New(addr, tcpIn)
 	if err != nil {
 		return
 	}
