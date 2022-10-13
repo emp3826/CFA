@@ -8,7 +8,6 @@ import (
 	N "github.com/Dreamacro/clash/common/net"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/listener/http"
-	"github.com/Dreamacro/clash/listener/socks"
 	"github.com/Dreamacro/clash/transport/socks5"
 )
 
@@ -71,10 +70,5 @@ func handleConn(conn net.Conn, in chan<- C.ConnContext, cache *cache.Cache) {
 		return
 	}
 
-	switch head[0] {
-	case socks5.Version:
-		socks.HandleSocks5(bufConn, in)
-	default:
-		http.HandleConn(bufConn, in, cache)
-	}
+	http.HandleConn(bufConn, in, cache)
 }
