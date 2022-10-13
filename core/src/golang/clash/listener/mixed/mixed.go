@@ -8,8 +8,6 @@ import (
 	N "github.com/Dreamacro/clash/common/net"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/listener/http"
-	"github.com/Dreamacro/clash/listener/socks"
-	"github.com/Dreamacro/clash/transport/socks5"
 )
 
 type Listener struct {
@@ -66,15 +64,6 @@ func handleConn(conn net.Conn, in chan<- C.ConnContext, cache *cache.Cache) {
 	conn.(*net.TCPConn).SetKeepAlive(true)
 
 	bufConn := N.NewBufferedConn(conn)
-	head, err := bufConn.Peek(1)
-	if err != nil {
-		return
-	}
 
-	switch head[0] {
-	case socks5.Version:
-		socks.HandleSocks5(bufConn, in)
-	default:
-		http.HandleConn(bufConn, in, cache)
-	}
+	http.HandleConn(bufConn, in, cache)
 }

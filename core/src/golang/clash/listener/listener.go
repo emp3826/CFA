@@ -11,22 +11,17 @@ import (
 	"github.com/Dreamacro/clash/listener/http"
 	"github.com/Dreamacro/clash/listener/mixed"
 	"github.com/Dreamacro/clash/listener/redir"
-	"github.com/Dreamacro/clash/listener/socks"
 )
 
 var (
 	allowLan    = false
 	bindAddress = "*"
 
-	socksListener     *socks.Listener
-	socksUDPListener  *socks.UDPListener
 	httpListener      *http.Listener
 	redirListener     *redir.Listener
 	mixedListener     *mixed.Listener
-	mixedUDPLister    *socks.UDPListener
 
 	// lock for recreate function
-	socksMux  sync.Mutex
 	httpMux   sync.Mutex
 	redirMux  sync.Mutex
 	tproxyMux sync.Mutex
@@ -81,56 +76,6 @@ func ReCreateHTTP(port int, tcpIn chan<- C.ConnContext) {
 	}
 }
 
-func ReCreateSocks(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
-	socksMux.Lock()
-	defer socksMux.Unlock()
-
-	addr := genAddr(bindAddress, port, allowLan)
-
-	shouldTCPIgnore := false
-	shouldUDPIgnore := false
-
-	if socksListener != nil {
-		if socksListener.RawAddress() != addr {
-			socksListener.Close()
-			socksListener = nil
-		} else {
-			shouldTCPIgnore = true
-		}
-	}
-
-	if socksUDPListener != nil {
-		if socksUDPListener.RawAddress() != addr {
-			socksUDPListener.Close()
-			socksUDPListener = nil
-		} else {
-			shouldUDPIgnore = true
-		}
-	}
-
-	if shouldTCPIgnore && shouldUDPIgnore {
-		return
-	}
-
-	if portIsZero(addr) {
-		return
-	}
-
-	tcpListener, err := socks.New(addr, tcpIn)
-	if err != nil {
-		return
-	}
-
-	udpListener, err := socks.NewUDP(addr, udpIn)
-	if err != nil {
-		tcpListener.Close()
-		return
-	}
-
-	socksListener = tcpListener
-	socksUDPListener = udpListener
-}
-
 func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	redirMux.Lock()
 	defer redirMux.Unlock()
@@ -175,14 +120,6 @@ func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 			shouldTCPIgnore = true
 		}
 	}
-	if mixedUDPLister != nil {
-		if mixedUDPLister.RawAddress() != addr {
-			mixedUDPLister.Close()
-			mixedUDPLister = nil
-		} else {
-			shouldUDPIgnore = true
-		}
-	}
 
 	if shouldTCPIgnore && shouldUDPIgnore {
 		return
@@ -196,12 +133,6 @@ func ReCreateMixed(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.P
 	if err != nil {
 		return
 	}
-
-	mixedUDPLister, err = socks.NewUDP(addr, udpIn)
-	if err != nil {
-		mixedListener.Close()
-		return
-	}
 }
 
 // GetPorts return the ports of proxy servers
@@ -212,12 +143,6 @@ func GetPorts() *Ports {
 		_, portStr, _ := net.SplitHostPort(httpListener.Address())
 		port, _ := strconv.Atoi(portStr)
 		ports.Port = port
-	}
-
-	if socksListener != nil {
-		_, portStr, _ := net.SplitHostPort(socksListener.Address())
-		port, _ := strconv.Atoi(portStr)
-		ports.SocksPort = port
 	}
 
 	if redirListener != nil {
