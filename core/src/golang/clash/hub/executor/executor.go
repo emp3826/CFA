@@ -165,7 +165,6 @@ func updateGeneral(general *config.General, force bool) {
 	udpIn := tunnel.UDPIn()
 
 	P.ReCreateHTTP(general.Port, tcpIn)
-	P.ReCreateSocks(general.SocksPort, tcpIn, udpIn)
 	P.ReCreateRedir(general.RedirPort, tcpIn, udpIn)
 	P.ReCreateMixed(general.MixedPort, tcpIn, udpIn)
 }
