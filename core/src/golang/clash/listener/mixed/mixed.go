@@ -65,9 +65,5 @@ func handleConn(conn net.Conn, in chan<- C.ConnContext, cache *cache.Cache) {
 
 	bufConn := N.NewBufferedConn(conn)
 
-	if err != nil {
-		return
-	}
-
 	http.HandleConn(bufConn, in, cache)
 }
