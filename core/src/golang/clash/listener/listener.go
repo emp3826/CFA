@@ -115,12 +115,6 @@ func GetPorts() *Ports {
 		ports.RedirPort = port
 	}
 
-	if mixedListener != nil {
-		_, portStr, _ := net.SplitHostPort(mixedListener.Address())
-		port, _ := strconv.Atoi(portStr)
-		ports.MixedPort = port
-	}
-
 	return ports
 }
 
