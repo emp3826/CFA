@@ -77,38 +77,6 @@ func ReCreateHTTP(port int, tcpIn chan<- C.ConnContext) {
 	}
 }
 
-func ReCreateSocks(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
-	socksMux.Lock()
-	defer socksMux.Unlock()
-
-	addr := genAddr(bindAddress, port, allowLan)
-
-	shouldTCPIgnore := false
-	shouldUDPIgnore := false
-
-	if shouldTCPIgnore && shouldUDPIgnore {
-		return
-	}
-
-	if portIsZero(addr) {
-		return
-	}
-
-	tcpListener, err := socks.New(addr, tcpIn)
-	if err != nil {
-		return
-	}
-
-	udpListener, err := socks.NewUDP(addr, udpIn)
-	if err != nil {
-		tcpListener.Close()
-		return
-	}
-
-	socksListener = tcpListener
-	socksUDPListener = udpListener
-}
-
 func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
 	redirMux.Lock()
 	defer redirMux.Unlock()
@@ -190,12 +158,6 @@ func GetPorts() *Ports {
 		_, portStr, _ := net.SplitHostPort(httpListener.Address())
 		port, _ := strconv.Atoi(portStr)
 		ports.Port = port
-	}
-
-	if socksListener != nil {
-		_, portStr, _ := net.SplitHostPort(socksListener.Address())
-		port, _ := strconv.Atoi(portStr)
-		ports.SocksPort = port
 	}
 
 	if redirListener != nil {
