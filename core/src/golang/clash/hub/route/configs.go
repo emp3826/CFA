@@ -72,7 +72,6 @@ func patchConfigs(w http.ResponseWriter, r *http.Request) {
 
 	P.ReCreateHTTP(pointerOrDefault(general.Port, ports.Port), tcpIn)
 	P.ReCreateRedir(pointerOrDefault(general.RedirPort, ports.RedirPort), tcpIn, udpIn)
-	P.ReCreateMixed(pointerOrDefault(general.MixedPort, ports.MixedPort), tcpIn, udpIn)
 
 	if general.Mode != nil {
 		tunnel.SetMode(*general.Mode)
