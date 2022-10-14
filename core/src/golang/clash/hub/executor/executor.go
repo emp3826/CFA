@@ -165,7 +165,6 @@ func updateGeneral(general *config.General, force bool) {
 	udpIn := tunnel.UDPIn()
 
 	P.ReCreateHTTP(general.Port, tcpIn)
-	P.ReCreateRedir(general.RedirPort, tcpIn, udpIn)
 }
 
 func updateUsers(users []auth.AuthUser) {
