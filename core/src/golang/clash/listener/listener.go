@@ -21,7 +21,6 @@ var (
 
 	// lock for recreate function
 	httpMux   sync.Mutex
-	redirMux  sync.Mutex
 	tproxyMux sync.Mutex
 )
 
@@ -73,32 +72,6 @@ func ReCreateHTTP(port int, tcpIn chan<- C.ConnContext) {
 	}
 }
 
-func ReCreateRedir(port int, tcpIn chan<- C.ConnContext, udpIn chan<- *inbound.PacketAdapter) {
-	redirMux.Lock()
-	defer redirMux.Unlock()
-	
-	var err error
-	addr := genAddr(bindAddress, port, allowLan)
-
-	if redirListener != nil {
-		if redirListener.RawAddress() == addr {
-			return
-		}
-		redirListener.Close()
-		redirListener = nil
-	}
-
-
-	if portIsZero(addr) {
-		return
-	}
-
-	redirListener, err = redir.New(addr, tcpIn)
-	if err != nil {
-		return
-	}
-}
-
 // GetPorts return the ports of proxy servers
 func GetPorts() *Ports {
 	ports := &Ports{}
@@ -107,12 +80,6 @@ func GetPorts() *Ports {
 		_, portStr, _ := net.SplitHostPort(httpListener.Address())
 		port, _ := strconv.Atoi(portStr)
 		ports.Port = port
-	}
-
-	if redirListener != nil {
-		_, portStr, _ := net.SplitHostPort(redirListener.Address())
-		port, _ := strconv.Atoi(portStr)
-		ports.RedirPort = port
 	}
 
 	return ports
