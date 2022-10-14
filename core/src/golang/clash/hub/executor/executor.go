@@ -162,7 +162,6 @@ func updateGeneral(general *config.General, force bool) {
 	P.SetBindAddress(bindAddress)
 
 	tcpIn := tunnel.TCPIn()
-	udpIn := tunnel.UDPIn()
 
 	P.ReCreateHTTP(general.Port, tcpIn)
 }
