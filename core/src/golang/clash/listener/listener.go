@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/Dreamacro/clash/adapter/inbound"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/listener/http"
 )
@@ -16,7 +15,6 @@ var (
 	bindAddress = "*"
 
 	httpListener      *http.Listener
-	redirListener     *redir.Listener
 
 	// lock for recreate function
 	httpMux   sync.Mutex
