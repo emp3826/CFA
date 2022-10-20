@@ -4,14 +4,6 @@ import (
 	"encoding/json"
 )
 
-var LogLevelMapping = map[string]LogLevel{
-	ERROR.String():   ERROR,
-	WARNING.String(): WARNING,
-	INFO.String():    INFO,
-	DEBUG.String():   DEBUG,
-	SILENT.String():  SILENT,
-}
-
 const (
 	DEBUG LogLevel = iota
 	INFO
