@@ -6,7 +6,7 @@ import (
 
 var (
 	logCh  = make(chan any)
-	level  = INFO
+	level  = SILENT
 )
 
 type Event struct {
