@@ -167,7 +167,7 @@ func UnmarshalRawConfig(buf []byte) (*RawConfig, error) {
 		BindAddress:    "*",
 		Mode:           T.Rule,
 		Authentication: []string{},
-		LogLevel:       log.INFO,
+		LogLevel:       log.SILENT,
 		Hosts:          map[string]string{},
 		Rule:           []string{},
 		Proxy:          []map[string]any{},
