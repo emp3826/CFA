@@ -13,7 +13,6 @@ import (
 	"github.com/Dreamacro/clash/common/picker"
 	"github.com/Dreamacro/clash/component/resolver"
 	"github.com/Dreamacro/clash/component/trie"
-	C "github.com/Dreamacro/clash/constant"
 
 	D "github.com/miekg/dns"
 	"golang.org/x/sync/singleflight"
@@ -317,7 +316,6 @@ type Config struct {
 	Main, Fallback []NameServer
 	Default        []NameServer
 	IPv6           bool
-	EnhancedMode   C.DNSMode
 	FallbackFilter FallbackFilter
 	Hosts          *trie.DomainTrie
 	Policy         map[string]NameServer
