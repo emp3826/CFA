@@ -6,9 +6,6 @@ import (
 
 const (
 	DEBUG LogLevel = iota
-	INFO
-	WARNING
-	ERROR
 	SILENT
 )
 
@@ -23,7 +20,6 @@ func (l *LogLevel) UnmarshalYAML(unmarshal func(any) error) error {
 func (l *LogLevel) UnmarshalJSON(data []byte) error {
 	var tp string
 	json.Unmarshal(data, &tp)
-	*l = level
 	return nil
 }
 
