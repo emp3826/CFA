@@ -8,7 +8,6 @@ import (
 // DNSModeMapping is a mapping for EnhancedMode enum
 var DNSModeMapping = map[string]DNSMode{
 	DNSNormal.String():  DNSNormal,
-	DNSMapping.String(): DNSMapping,
 }
 
 const (
@@ -18,17 +17,11 @@ const (
 
 type DNSMode int
 
-// UnmarshalYAML unserialize EnhancedMode with yaml
 func (e *DNSMode) UnmarshalYAML(unmarshal func(any) error) error {
 	var tp string
 	if err := unmarshal(&tp); err != nil {
 		return err
 	}
-	mode, exist := DNSModeMapping[tp]
-	if !exist {
-		return errors.New("invalid mode")
-	}
-	*e = mode
 	return nil
 }
 
@@ -55,12 +48,5 @@ func (e DNSMode) MarshalJSON() ([]byte, error) {
 }
 
 func (e DNSMode) String() string {
-	switch e {
-	case DNSNormal:
-		return "normal"
-	case DNSMapping:
-		return "redir-host"
-	default:
-		return "unknown"
-	}
+	return "normal"
 }
