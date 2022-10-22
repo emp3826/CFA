@@ -61,7 +61,6 @@ type DNS struct {
 	Fallback          []dns.NameServer `yaml:"fallback"`
 	FallbackFilter    FallbackFilter   `yaml:"fallback-filter"`
 	Listen            string           `yaml:"listen"`
-	EnhancedMode      C.DNSMode        `yaml:"enhanced-mode"`
 	DefaultNameserver []dns.NameServer `yaml:"default-nameserver"`
 	Hosts             *trie.DomainTrie
 	NameServerPolicy  map[string]dns.NameServer
@@ -104,7 +103,6 @@ type RawDNS struct {
 	Fallback          []string          `yaml:"fallback" json:"fallback"`
 	FallbackFilter    RawFallbackFilter `yaml:"fallback-filter" json:"fallback-filter"`
 	Listen            string            `yaml:"listen" json:"listen"`
-	EnhancedMode      C.DNSMode         `yaml:"enhanced-mode" json:"enhanced-mode"`
 	DefaultNameserver []string          `yaml:"default-nameserver" json:"default-nameserver"`
 	NameServerPolicy  map[string]string `yaml:"nameserver-policy" json:"nameserver-policy"`
 }
@@ -551,7 +549,6 @@ func parseDNS(rawCfg *RawConfig, hosts *trie.DomainTrie) (*DNS, error) {
 		Enable:       cfg.Enable,
 		Listen:       cfg.Listen,
 		IPv6:         cfg.IPv6,
-		EnhancedMode: cfg.EnhancedMode,
 		FallbackFilter: FallbackFilter{
 			IPCIDR: []*net.IPNet{},
 		},
