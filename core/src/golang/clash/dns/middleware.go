@@ -3,9 +3,7 @@ package dns
 import (
 	"net"
 	"strings"
-	"time"
 
-	"github.com/Dreamacro/clash/common/cache"
 	"github.com/Dreamacro/clash/component/trie"
 	"github.com/Dreamacro/clash/context"
 
@@ -54,45 +52,6 @@ func withHosts(hosts *trie.DomainTrie) middleware {
 			msg.SetRcode(r, D.RcodeSuccess)
 			msg.Authoritative = true
 			msg.RecursionAvailable = true
-
-			return msg, nil
-		}
-	}
-}
-
-func withMapping(mapping *cache.LruCache) middleware {
-	return func(next handler) handler {
-		return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
-			q := r.Question[0]
-
-			if !isIPRequest(q) {
-				return next(ctx, r)
-			}
-
-			msg, err := next(ctx, r)
-			if err != nil {
-				return nil, err
-			}
-
-			host := strings.TrimRight(q.Name, ".")
-
-			for _, ans := range msg.Answer {
-				var ip net.IP
-				var ttl uint32
-
-				switch a := ans.(type) {
-				case *D.A:
-					ip = a.A
-					ttl = a.Hdr.Ttl
-				case *D.AAAA:
-					ip = a.AAAA
-					ttl = a.Hdr.Ttl
-				default:
-					continue
-				}
-
-				mapping.SetWithExpire(ip.String(), host, time.Now().Add(time.Second*time.Duration(ttl)))
-			}
 
 			return msg, nil
 		}
