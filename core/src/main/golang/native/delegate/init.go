@@ -3,7 +3,7 @@ package delegate
 import (
 	"syscall"
 
-	"cfa/blob"
+	"cfa/native/blob"
 
 	"cfa/native/app"
 
