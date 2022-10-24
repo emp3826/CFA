@@ -1,1 +1,0 @@
-module "cfa/blob"
