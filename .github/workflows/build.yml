@@ -24,10 +24,8 @@ jobs:
           CGO_ENABLED: 1
           CFLAGS: -O3
         run: |
-          mkdir -p lib/arm64-v8a/
           cd core/src/golang
           go build -buildmode c-shared -trimpath -o ../../build/outputs/golang/fossRelease/arm64-v8a/libclash.so -ldflags "-s -w" cfa
-          cp -r ../../build/outputs/golang/fossRelease/arm64-v8a/libclash.so ../../../lib/arm64-v8a/
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: app:assembleFossRelease
