@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+android {
+	signingConfigs {
+		release{
+			keyAlias 'emp3826'
+			keyPassword 'emp3826'
+			storeFile file('../release.keystore')
+			storePassword 'emp3826'
+		}
+	}
+	compileSdkVersion 31
+	defaultConfig {
+		applicationId "com.github.kr328.clash"
+		minSdkVersion 21
+		targetSdkVersion 31
+		versionCode 16418
+		versionName "Custom"
+	}
+	buildTypes {
+		release {
+			minifyEnabled true
+			shrinkResources true
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+			"proguard-rules.pro"
+			signingConfig signingConfigs.release
+			ndk.abiFilters 'arm64-v8a'
+		}
+	}
+	productFlavors {
+		foss {
+			isDefault = true
+		}
+	}
+sourceSets {
+    main {
+        jniLibs.srcDirs = ['libs']
+    }
+}
+	kotlinOptions {
+		jvmTarget = JavaVersion.VERSION_1_8
+	}
+	splits{
+		abi{
+			enable true
+			reset()
+			include 'arm64-v8a'
+			universalApk true
+		}
+	}
+}
+dependencies {
+	implementation project(':core')
+	implementation project(':service')
+	implementation project(':design')
+	implementation project(':common')
+	implementation libs.kotlin.coroutine
+	implementation libs.androidx.core
+	implementation libs.androidx.activity
+	implementation libs.androidx.fragment
+	implementation libs.androidx.appcompat
+	implementation libs.androidx.coordinator
+	implementation libs.androidx.recyclerview
+	implementation libs.google.material
+}
