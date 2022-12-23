@@ -2,7 +2,6 @@ package provider
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/Dreamacro/clash/common/structure"
@@ -54,8 +53,6 @@ func ParseProxyProvider(name string, mapping map[string]any) (types.ProxyProvide
 		vehicle = NewFileVehicle(path)
 	case "http":
 		vehicle = NewHTTPVehicle(schema.URL, path)
-	default:
-		return nil, fmt.Errorf("%w: %s", errVehicleType, schema.Type)
 	}
 
 	interval := time.Duration(uint(schema.Interval)) * time.Second

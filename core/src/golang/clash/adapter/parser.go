@@ -1,8 +1,6 @@
 package adapter
 
 import (
-	"fmt"
-
 	"github.com/Dreamacro/clash/adapter/outbound"
 	"github.com/Dreamacro/clash/common/structure"
 	C "github.com/Dreamacro/clash/constant"
@@ -10,10 +8,7 @@ import (
 
 func ParseProxy(mapping map[string]any) (C.Proxy, error) {
 	decoder := structure.NewDecoder(structure.Option{TagName: "proxy", WeaklyTypedInput: true})
-	proxyType, existType := mapping["type"].(string)
-	if !existType {
-		return nil, fmt.Errorf("missing type")
-	}
+	proxyType, _ := mapping["type"].(string)
 
 	var (
 		proxy C.ProxyAdapter
@@ -53,8 +48,6 @@ func ParseProxy(mapping map[string]any) (C.Proxy, error) {
 			break
 		}
 		proxy, err = outbound.NewTrojan(*trojanOption)
-	default:
-		return nil, fmt.Errorf("unsupport proxy type: %s", proxyType)
 	}
 
 	if err != nil {
