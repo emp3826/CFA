@@ -3,7 +3,6 @@ package provider
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"regexp"
 	"runtime"
 	"time"
@@ -99,7 +98,7 @@ func stopProxyProvider(pd *ProxySetProvider) {
 func NewProxySetProvider(name string, interval time.Duration, filter string, vehicle types.Vehicle, hc *HealthCheck) (*ProxySetProvider, error) {
 	filterReg, err := regexp.Compile(filter)
 	if err != nil {
-		return nil, fmt.Errorf("invalid filter regex: %w", err)
+		return nil, err
 	}
 
 	if hc.auto() {
@@ -134,7 +133,7 @@ func NewProxySetProvider(name string, interval time.Duration, filter string, veh
 			}
 			proxy, err := adapter.ParseProxy(mapping)
 			if err != nil {
-				return nil, fmt.Errorf("proxy %d error: %w", idx, err)
+				return nil, err
 			}
 			proxies = append(proxies, proxy)
 		}

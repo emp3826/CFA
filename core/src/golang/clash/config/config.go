@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"net"
 	"net/url"
 	"strings"
@@ -184,11 +183,11 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	for idx, mapping := range proxiesConfig {
 		proxy, err := adapter.ParseProxy(mapping)
 		if err != nil {
-			return nil, nil, fmt.Errorf("proxy %d: %w", idx, err)
+			return nil, nil, err
 		}
 
 		if _, exist := proxies[proxy.Name()]; exist {
-			return nil, nil, fmt.Errorf("proxy %s is the duplicate name", proxy.Name())
+			return nil, nil, nil
 		}
 		proxies[proxy.Name()] = proxy
 		proxyList = append(proxyList, proxy.Name())
@@ -196,10 +195,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 
 	// keep the original order of ProxyGroups in config file
 	for idx, mapping := range groupsConfig {
-		groupName, existName := mapping["name"].(string)
-		if !existName {
-			return nil, nil, fmt.Errorf("proxy group %d: missing name", idx)
-		}
+		groupName, _ := mapping["name"].(string)
 		proxyList = append(proxyList, groupName)
 	}
 
@@ -211,12 +207,12 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	// parse and initial providers
 	for name, mapping := range providersConfig {
 		if name == provider.ReservedName {
-			return nil, nil, fmt.Errorf("can not defined a provider called `%s`", provider.ReservedName)
+			return nil, nil, nil
 		}
 
 		pd, err := provider.ParseProxyProvider(name, mapping)
 		if err != nil {
-			return nil, nil, fmt.Errorf("parse proxy provider %s error: %w", name, err)
+			return nil, nil, err
 		}
 
 		providersMap[name] = pd
@@ -224,7 +220,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 
 	for _, provider := range providersMap {
 		if err := provider.Initial(); err != nil {
-			return nil, nil, fmt.Errorf("initial proxy provider %s error: %w", provider.Name(), err)
+			return nil, nil, err
 		}
 	}
 
@@ -232,12 +228,12 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	for idx, mapping := range groupsConfig {
 		group, err := outboundgroup.ParseProxyGroup(mapping, proxies, providersMap)
 		if err != nil {
-			return nil, nil, fmt.Errorf("proxy group[%d]: %w", idx, err)
+			return nil, nil, err
 		}
 
 		groupName := group.Name()
 		if _, exist := proxies[groupName]; exist {
-			return nil, nil, fmt.Errorf("proxy group %s: the duplicate name", groupName)
+			return nil, nil, nil
 		}
 
 		proxies[groupName] = adapter.NewProxy(group)
@@ -295,12 +291,6 @@ func parseRules(cfg *RawConfig, proxies map[string]C.Proxy) ([]C.Rule, error) {
 			payload = rule[1]
 			target = rule[2]
 			params = rule[3:]
-		default:
-			return nil, fmt.Errorf("rules[%d] [%s] error: format invalid", idx, line)
-		}
-
-		if _, ok := proxies[target]; !ok {
-			return nil, fmt.Errorf("rules[%d] [%s] error: proxy [%s] not found", idx, line, target)
 		}
 
 		rule = trimArr(rule)
@@ -308,7 +298,7 @@ func parseRules(cfg *RawConfig, proxies map[string]C.Proxy) ([]C.Rule, error) {
 
 		parsed, parseErr := R.ParseRule(rule[0], payload, target, params)
 		if parseErr != nil {
-			return nil, fmt.Errorf("rules[%d] [%s] error: %s", idx, line, parseErr.Error())
+			return nil, parseErr
 		}
 
 		rules = append(rules, parsed)
@@ -323,9 +313,6 @@ func parseHosts(cfg *RawConfig) (*trie.DomainTrie, error) {
 	if len(cfg.Hosts) != 0 {
 		for domain, ipStr := range cfg.Hosts {
 			ip := net.ParseIP(ipStr)
-			if ip == nil {
-				return nil, fmt.Errorf("%s is not a valid IP", ipStr)
-			}
 			tree.Insert(domain, ip)
 		}
 	}
@@ -360,7 +347,7 @@ func parseNameServer(servers []string) ([]dns.NameServer, error) {
 		}
 		u, err := url.Parse(server)
 		if err != nil {
-			return nil, fmt.Errorf("DNS NameServer[%d] format error: %s", idx, err.Error())
+			return nil, err
 		}
 
 		var addr, dnsNetType string
@@ -378,12 +365,10 @@ func parseNameServer(servers []string) ([]dns.NameServer, error) {
 			clearURL := url.URL{Scheme: "https", Host: u.Host, Path: u.Path}
 			addr = clearURL.String()
 			dnsNetType = "https" // DNS over HTTPS
-		default:
-			return nil, fmt.Errorf("DNS NameServer[%d] unsupport scheme: %s", idx, u.Scheme)
 		}
 
 		if err != nil {
-			return nil, fmt.Errorf("DNS NameServer[%d] format error: %s", idx, err.Error())
+			return nil, err
 		}
 
 		nameservers = append(
@@ -403,7 +388,7 @@ func parseFallbackIPCIDR(ips []string) ([]*net.IPNet, error) {
 	for idx, ip := range ips {
 		_, ipnet, err := net.ParseCIDR(ip)
 		if err != nil {
-			return nil, fmt.Errorf("DNS FallbackIP[%d] format error: %s", idx, err.Error())
+			return nil, err
 		}
 		ipNets = append(ipNets, ipnet)
 	}
@@ -413,9 +398,6 @@ func parseFallbackIPCIDR(ips []string) ([]*net.IPNet, error) {
 
 func parseDNS(rawCfg *RawConfig, hosts *trie.DomainTrie) (*DNS, error) {
 	cfg := rawCfg.DNS
-	if cfg.Enable && len(cfg.NameServer) == 0 {
-		return nil, fmt.Errorf("if DNS configuration is turned on, NameServer cannot be empty")
-	}
 
 	dnsCfg := &DNS{
 		Enable:       cfg.Enable,
