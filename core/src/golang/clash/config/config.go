@@ -180,7 +180,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	proxyList = append(proxyList, "DIRECT", "REJECT")
 
 	// parse proxy
-	for idx, mapping := range proxiesConfig {
+	for _, mapping := range proxiesConfig {
 		proxy, err := adapter.ParseProxy(mapping)
 		if err != nil {
 			return nil, nil, err
@@ -194,7 +194,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	}
 
 	// keep the original order of ProxyGroups in config file
-	for idx, mapping := range groupsConfig {
+	for _, mapping := range groupsConfig {
 		groupName, _ := mapping["name"].(string)
 		proxyList = append(proxyList, groupName)
 	}
@@ -225,7 +225,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 	}
 
 	// parse proxy group
-	for idx, mapping := range groupsConfig {
+	for _, mapping := range groupsConfig {
 		group, err := outboundgroup.ParseProxyGroup(mapping, proxies, providersMap)
 		if err != nil {
 			return nil, nil, err
@@ -273,7 +273,7 @@ func parseRules(cfg *RawConfig, proxies map[string]C.Proxy) ([]C.Rule, error) {
 	rulesConfig := cfg.Rule
 
 	// parse rules
-	for idx, line := range rulesConfig {
+	for _, line := range rulesConfig {
 		rule := trimArr(strings.Split(line, ","))
 		var (
 			payload string
@@ -340,7 +340,7 @@ func hostWithDefaultPort(host string, defPort string) (string, error) {
 func parseNameServer(servers []string) ([]dns.NameServer, error) {
 	nameservers := []dns.NameServer{}
 
-	for idx, server := range servers {
+	for _, server := range servers {
 		// parse without scheme .e.g 8.8.8.8:53
 		if !strings.Contains(server, "://") {
 			server = "udp://" + server
@@ -385,7 +385,7 @@ func parseNameServer(servers []string) ([]dns.NameServer, error) {
 func parseFallbackIPCIDR(ips []string) ([]*net.IPNet, error) {
 	ipNets := []*net.IPNet{}
 
-	for idx, ip := range ips {
+	for _, ip := range ips {
 		_, ipnet, err := net.ParseCIDR(ip)
 		if err != nil {
 			return nil, err
