@@ -65,12 +65,9 @@ func parseHTTPAddr(request *http.Request) *C.Metadata {
 	return metadata
 }
 
-func parseAddr(addr string) (net.IP, string, error) {
-	host, port, err := net.SplitHostPort(addr)
-	if err != nil {
-		return nil, "", err
-	}
+func parseAddr(addr string) (net.IP, string) {
+	host, port, _ := net.SplitHostPort(addr)
 
 	ip := net.ParseIP(host)
-	return ip, port, nil
+	return ip, port
 }

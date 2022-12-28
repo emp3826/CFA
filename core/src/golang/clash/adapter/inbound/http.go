@@ -13,10 +13,9 @@ func NewHTTP(target socks5.Addr, rawSrc, rawDst net.Addr, conn net.Conn) *contex
 	metadata := parseSocksAddr(target)
 	metadata.NetWork = C.TCP
 	metadata.Type = C.HTTP
-	if ip, port, err := parseAddr(rawSrc.String()); err == nil {
-		metadata.SrcIP = ip
-		metadata.SrcPort = port
-	}
+	ip, port := parseAddr(rawSrc.String())
+	metadata.SrcIP = ip
+	metadata.SrcPort = port
 
 	metadata.RawSrcAddr = rawSrc
 	metadata.RawDstAddr = rawDst

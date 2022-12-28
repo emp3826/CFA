@@ -24,10 +24,9 @@ func NewPacket(target socks5.Addr, packet C.UDPPacket, source C.Type) *PacketAda
 	metadata := parseSocksAddr(target)
 	metadata.NetWork = C.UDP
 	metadata.Type = source
-	if ip, port, err := parseAddr(packet.LocalAddr().String()); err == nil {
-		metadata.SrcIP = ip
-		metadata.SrcPort = port
-	}
+	ip, port := parseAddr(packet.LocalAddr().String())
+	metadata.SrcIP = ip
+	metadata.SrcPort = port
 
 	if port, err := strconv.Atoi(metadata.DstPort); err == nil {
 		metadata.RawSrcAddr = packet.LocalAddr()
