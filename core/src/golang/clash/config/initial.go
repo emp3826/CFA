@@ -4,17 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Dreamacro/clash/component/mmdb"
 	C "github.com/Dreamacro/clash/constant"
 )
 
 func initMMDB() error {
-	if !mmdb.Verify() {
-		if err := os.Remove(C.Path.MMDB()); err != nil {
-			return fmt.Errorf("can't remove invalid MMDB: %s", err.Error())
-		}
+	if err := os.Remove(C.Path.MMDB()); err != nil {
+		return fmt.Errorf("can't remove invalid MMDB: %s", err.Error())
 	}
-
 	return nil
 }
 

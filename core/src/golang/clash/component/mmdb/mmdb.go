@@ -19,14 +19,6 @@ func LoadFromBytes(buffer []byte) {
 	})
 }
 
-func Verify() bool {
-	instance, err := geoip2.Open(C.Path.MMDB())
-	if err == nil {
-		instance.Close()
-	}
-	return err == nil
-}
-
 func DefaultInstance() *geoip2.Reader {
 	once.Do(func() {
 		mmdb, _ = geoip2.Open(C.Path.MMDB())
