@@ -19,8 +19,6 @@ const (
 	HTTPCONNECT
 	SOCKS4
 	SOCKS5
-	REDIR
-	TPROXY
 )
 
 type NetWork int
@@ -48,10 +46,6 @@ func (t Type) String() string {
 		return "Socks4"
 	case SOCKS5:
 		return "Socks5"
-	case REDIR:
-		return "Redir"
-	case TPROXY:
-		return "TProxy"
 	default:
 		return "Unknown"
 	}
