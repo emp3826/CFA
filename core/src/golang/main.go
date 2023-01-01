@@ -1,5 +1,5 @@
 package golang
 
 import (
-	_ "cfa/native/all"
+	_ "cfa/all"
 )

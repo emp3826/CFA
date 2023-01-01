@@ -5,16 +5,11 @@ import (
 )
 
 var processors = []processor{
-	patchOverride,
 	patchDns,
 	patchProviders,
 }
 
 type processor func(cfg *config.RawConfig, profileDir string) error
-
-func patchOverride(cfg *config.RawConfig, _ string) error {
-	return nil
-}
 
 func patchDns(cfg *config.RawConfig, _ string) error {
 	if !cfg.DNS.Enable {
