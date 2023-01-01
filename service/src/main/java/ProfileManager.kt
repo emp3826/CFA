@@ -27,8 +27,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
     init {
         launch {
             Database.database //.init
-
-            ProfileReceiver.rescheduleAll(context)
         }
     }
 

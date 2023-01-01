@@ -62,15 +62,6 @@ class ProfileWorker : BaseService() {
                     jobs.add(job)
                 }
             }
-            Intents.ACTION_PROFILE_SCHEDULE_UPDATES -> {
-                val job = launch {
-                    ProfileReceiver.rescheduleAll(service)
-
-                    delay(TimeUnit.SECONDS.toMillis(30))
-                }
-
-                jobs.add(job)
-            }
         }
 
         return START_NOT_STICKY
@@ -85,8 +76,6 @@ class ProfileWorker : BaseService() {
             }
 
             completed(imported.uuid, imported.name)
-
-            ProfileReceiver.scheduleNext(this, imported)
         } catch (e: Exception) {
             failed(imported.uuid, imported.name, e.message ?: "Unknown")
         }
