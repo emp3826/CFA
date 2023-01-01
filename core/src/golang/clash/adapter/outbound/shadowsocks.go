@@ -70,7 +70,6 @@ func (ss *ShadowSocks) DialContext(ctx context.Context, metadata *C.Metadata, op
 	if err != nil {
 		return nil, err
 	}
-	tcpKeepAlive(c)
 
 	defer safeConnClose(c, err)
 

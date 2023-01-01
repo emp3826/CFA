@@ -205,7 +205,6 @@ func (v *Vmess) DialContext(ctx context.Context, metadata *C.Metadata, opts ...d
 	if err != nil {
 		return nil, err
 	}
-	tcpKeepAlive(c)
 	defer safeConnClose(c, err)
 
 	c, err = v.StreamConn(c, metadata)
@@ -238,7 +237,6 @@ func (v *Vmess) ListenPacketContext(ctx context.Context, metadata *C.Metadata, o
 		if err != nil {
 			return nil, err
 		}
-		tcpKeepAlive(c)
 		defer safeConnClose(c, err)
 
 		c, err = v.StreamConn(c, metadata)
@@ -294,7 +292,6 @@ func NewVmess(option VmessOption) (*Vmess, error) {
 			if err != nil {
 				return nil, err
 			}
-			tcpKeepAlive(c)
 			return c, nil
 		}
 

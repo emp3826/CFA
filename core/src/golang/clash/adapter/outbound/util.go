@@ -10,13 +10,6 @@ import (
 	"github.com/Dreamacro/clash/transport/socks5"
 )
 
-func tcpKeepAlive(c net.Conn) {
-	//if tcp, ok := c.(*net.TCPConn); ok {
-	//	tcp.SetKeepAlive(true)
-	//	tcp.SetKeepAlivePeriod(20 * time.Minute)
-	//}
-}
-
 func serializesSocksAddr(metadata *C.Metadata) []byte {
 	var buf [][]byte
 	aType := uint8(metadata.AddrType)

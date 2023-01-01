@@ -106,7 +106,6 @@ func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata, opts ...
 	if err != nil {
 		return nil, err
 	}
-	tcpKeepAlive(c)
 
 	defer safeConnClose(c, err)
 
@@ -135,7 +134,6 @@ func (t *Trojan) ListenPacketContext(ctx context.Context, metadata *C.Metadata, 
 			return nil, err
 		}
 		defer safeConnClose(c, err)
-		tcpKeepAlive(c)
 		c, err = t.plainStream(c)
 		if err != nil {
 			return nil, err
@@ -182,7 +180,6 @@ func NewTrojan(option TrojanOption) (*Trojan, error) {
 			if err != nil {
 				return nil, err
 			}
-			tcpKeepAlive(c)
 			return c, nil
 		}
 

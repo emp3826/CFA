@@ -18,7 +18,6 @@ func (d *Direct) DialContext(ctx context.Context, metadata *C.Metadata, opts ...
 	if err != nil {
 		return nil, err
 	}
-	tcpKeepAlive(c)
 	return NewConn(c, d), nil
 }
 
