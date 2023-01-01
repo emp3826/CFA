@@ -23,11 +23,6 @@ func configRouter() http.Handler {
 }
 
 type configSchema struct {
-	Port        *int               `json:"port"`
-	SocksPort   *int               `json:"socks-port"`
-	RedirPort   *int               `json:"redir-port"`
-	MixedPort   *int               `json:"mixed-port"`
-	BindAddress *string            `json:"bind-address"`
 	Mode        *tunnel.TunnelMode `json:"mode"`
 	IPv6        *bool              `json:"ipv6"`
 }

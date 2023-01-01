@@ -3,16 +3,12 @@ package proxy
 import (
 	"net"
 	"strconv"
-	"sync"
 
 	"github.com/Dreamacro/clash/listener/http"
 )
 
 var (
 	httpListener      *http.Listener
-
-	// lock for recreate function
-	httpMux   sync.Mutex
 )
 
 type Ports struct {
@@ -30,12 +26,4 @@ func GetPorts() *Ports {
 	}
 
 	return ports
-}
-
-func portIsZero(addr string) bool {
-	_, port, err := net.SplitHostPort(addr)
-	if port == "0" || port == "" || err != nil {
-		return true
-	}
-	return false
 }
