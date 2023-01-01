@@ -8,7 +8,6 @@ import (
 	"github.com/Dreamacro/clash/config"
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
-	P "github.com/Dreamacro/clash/listener"
 	"github.com/Dreamacro/clash/tunnel"
 
 	"github.com/go-chi/chi/v5"
@@ -53,16 +52,6 @@ func patchConfigs(w http.ResponseWriter, r *http.Request) {
 		render.JSON(w, r, ErrBadRequest)
 		return
 	}
-
-	if general.BindAddress != nil {
-		P.SetBindAddress(*general.BindAddress)
-	}
-
-	ports := P.GetPorts()
-
-	tcpIn := tunnel.TCPIn()
-
-	P.ReCreateHTTP(pointerOrDefault(general.Port, ports.Port), tcpIn)
 
 	if general.Mode != nil {
 		tunnel.SetMode(*general.Mode)
