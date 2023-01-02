@@ -74,10 +74,7 @@ class ProfileWorker : BaseService() {
             processing(imported.name) {
                 ProfileProcessor.update(this, imported.uuid, null)
             }
-
-            completed(imported.uuid, imported.name)
         } catch (e: Exception) {
-            failed(imported.uuid, imported.name, e.message ?: "Unknown")
         }
     }
 
@@ -151,33 +148,6 @@ class ProfileWorker : BaseService() {
             .setContentIntent(intent)
             .setAutoCancel(true)
             .setGroup(RESULT_CHANNEL)
-    }
-
-    private fun completed(uuid: UUID, name: String) {
-        val id = UndefinedIds.next()
-
-        val notification = resultBuilder(id, uuid)
-            .setContentTitle(getString(R.string.update_successfully))
-            .setContentText(getString(R.string.format_update_complete, name))
-            .build()
-
-        NotificationManagerCompat.from(this)
-            .notify(id, notification)
-    }
-
-    private fun failed(uuid: UUID, name: String, reason: String) {
-        val id = UndefinedIds.next()
-
-        val content = getString(R.string.format_update_failure, name, reason)
-
-        val notification = resultBuilder(id, uuid)
-            .setContentTitle(getString(R.string.update_failure))
-            .setContentText(content)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
-            .build()
-
-        NotificationManagerCompat.from(this)
-            .notify(id, notification)
     }
 
     companion object {
