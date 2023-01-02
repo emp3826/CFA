@@ -45,21 +45,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@id/add_view">
-
-                    <ImageView
-                        android:id="@+id/update_view"
-                        android:layout_width="@dimen/item_tailing_component_size"
-                        android:layout_height="@dimen/item_tailing_component_size"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginStart="@dimen/item_tailing_margin"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:contentDescription="@string/_new"
-                        android:focusable="true"
-                        android:onClick="@{() -> self.requestUpdateAll()}"
-                        android:padding="@dimen/toolbar_image_action_padding"
-                        android:src="@drawable/ic_baseline_sync"
-                        android:visibility="gone" />
                 </FrameLayout>
 
                 <ImageView

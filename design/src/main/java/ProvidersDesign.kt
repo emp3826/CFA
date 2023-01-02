@@ -47,12 +47,4 @@ class ProvidersDesign(
         binding.mainList.recyclerList.bindAppBarElevation(binding.activityBarLayout)
         binding.mainList.recyclerList.applyLinearAdapter(context, adapter)
     }
-
-    fun requestUpdateAll() {
-        adapter.states.filter { !it.updating }.forEachIndexed { index, state ->
-            state.updating = true
-
-            requests.trySend(Request.Update(index, state.provider))
-        }
-    }
 }

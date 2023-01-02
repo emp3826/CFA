@@ -40,10 +40,6 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
         val updatable = withContext(Dispatchers.Default) {
             profiles.any { it.imported && it.type != Profile.Type.File }
         }
-
-        withContext(Dispatchers.Main) {
-            binding.updateView.visibility = if (updatable) View.VISIBLE else View.GONE
-        }
     }
 
     init {
@@ -71,10 +67,6 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
         dialog.show()
     }
 
-    fun requestUpdateAll() {
-        requests.trySend(Request.UpdateAll)
-    }
-
     fun requestCreate() {
         requests.trySend(Request.Create)
     }
@@ -91,12 +83,6 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
 
     fun requestEdit(dialog: Dialog, profile: Profile) {
         requests.trySend(Request.Edit(profile))
-
-        dialog.dismiss()
-    }
-
-    fun requestDuplicate(dialog: Dialog, profile: Profile) {
-        requests.trySend(Request.Duplicate(profile))
 
         dialog.dismiss()
     }
