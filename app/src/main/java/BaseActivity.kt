@@ -11,7 +11,6 @@ import com.github.kr328.clash.common.compat.isLightNavigationBarCompat
 import com.github.kr328.clash.common.compat.isLightStatusBarsCompat
 import com.github.kr328.clash.common.compat.isSystemBarsTranslucentCompat
 import com.github.kr328.clash.design.Design
-import com.github.kr328.clash.design.model.DarkMode
 import com.github.kr328.clash.design.store.UiStore
 import com.github.kr328.clash.design.ui.DayNight
 import com.github.kr328.clash.design.util.resolveThemedBoolean

@@ -4,7 +4,6 @@ import android.content.Context
 import com.github.kr328.clash.common.store.Store
 import com.github.kr328.clash.common.store.asStoreProvider
 import com.github.kr328.clash.core.model.ProxySort
-import com.github.kr328.clash.design.model.DarkMode
 
 class UiStore(context: Context) {
     private val store = Store(
