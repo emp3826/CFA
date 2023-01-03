@@ -27,18 +27,6 @@ class ProvidersDesign(
         requests.trySend(Request.Update(index, provider))
     }
 
-    suspend fun notifyUpdated(index: Int) {
-        withContext(Dispatchers.Main) {
-            adapter.notifyUpdated(index)
-        }
-    }
-
-    suspend fun notifyChanged(index: Int) {
-        withContext(Dispatchers.Main) {
-            adapter.notifyChanged(index)
-        }
-    }
-
     init {
         binding.self = this
 

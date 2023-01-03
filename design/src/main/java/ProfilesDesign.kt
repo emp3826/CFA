@@ -36,10 +36,6 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
         adapter.apply {
             patchDataSet(this::profiles, profiles, id = { it.uuid })
         }
-
-        val updatable = withContext(Dispatchers.Default) {
-            profiles.any { it.imported && it.type != Profile.Type.File }
-        }
     }
 
     init {

@@ -40,8 +40,6 @@ class ProvidersActivity : BaseActivity<ProvidersDesign>() {
                                 withClash {
                                     updateProvider(it.provider.type, it.provider.name)
                                 }
-
-                                design.notifyChanged(it.index)
                             }
                         }
                     }
