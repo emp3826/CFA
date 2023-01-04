@@ -123,23 +123,12 @@ class ProxyDesign(
 
                         updateUrlTestButtonStatus()
                     }
-
-                    override fun onPageSelected(position: Int) {
-                        uiStore.proxyLastGroup = groupNames[position]
-                    }
                 })
             }
 
             TabLayoutMediator(binding.tabLayoutView, binding.pagesView) { tab, index ->
                 tab.text = groupNames[index]
             }.attach()
-
-            val initialPosition = groupNames.indexOf(uiStore.proxyLastGroup)
-
-            binding.pagesView.post {
-                if (initialPosition > 0)
-                    binding.pagesView.setCurrentItem(initialPosition, false)
-            }
         }
     }
 

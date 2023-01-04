@@ -28,11 +28,6 @@ class UiStore(context: Context) {
         values = ProxySort.values()
     )
 
-    var proxyLastGroup: String by store.string(
-        key = "proxy_last_group",
-        defaultValue = ""
-    )
-
     companion object {
         private const val PREFERENCE_NAME = "ui"
     }
