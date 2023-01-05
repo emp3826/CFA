@@ -60,9 +60,6 @@ func ListenPacket(ctx context.Context, network, address string, options ...Optio
 		}
 		address = addr
 	}
-	if cfg.addrReuse {
-		addrReuseToListenConfig(lc)
-	}
 
 	return lc.ListenPacket(ctx, network, address)
 }
