@@ -27,7 +27,7 @@ func DialContext(ctx context.Context, network, address string, options ...Option
 			return nil, err
 		}
 
-		return dialContext(ctx, network, ip, port, options)
+		return dialContext(ctx, network, ip, port)
 	case "tcp", "udp":
 		return dualStackDialContext(ctx, network, address, options)
 	default:
@@ -45,7 +45,7 @@ func ListenPacket(ctx context.Context, network, address string, options ...Optio
 	return lc.ListenPacket(ctx, network, address)
 }
 
-func dialContext(ctx context.Context, network string, destination net.IP, port string, options []Option) (net.Conn, error) {
+func dialContext(ctx context.Context, network string, destination net.IP, port string) (net.Conn, error) {
 	if DefaultSocketHook != nil {
 		return dialContextHooked(ctx, network, destination, port)
 	}
@@ -97,7 +97,7 @@ func dualStackDialContext(ctx context.Context, network, address string, options 
 		}
 		result.resolved = true
 
-		result.Conn, result.error = dialContext(ctx, network, ip, port, options)
+		result.Conn, result.error = dialContext(ctx, network, ip, port)
 	}
 
 	go startRacer(ctx, network+"4", host, false)
