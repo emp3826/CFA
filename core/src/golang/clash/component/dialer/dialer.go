@@ -40,18 +40,6 @@ func ListenPacket(ctx context.Context, network, address string, options ...Optio
 		return listenPacketHooked(ctx, network, address)
 	}
 
-	cfg := &option{
-		interfaceName: DefaultInterface.Load(),
-	}
-
-	for _, o := range DefaultOptions {
-		o(cfg)
-	}
-
-	for _, o := range options {
-		o(cfg)
-	}
-
 	lc := &net.ListenConfig{}
 
 	return lc.ListenPacket(ctx, network, address)
@@ -60,18 +48,6 @@ func ListenPacket(ctx context.Context, network, address string, options ...Optio
 func dialContext(ctx context.Context, network string, destination net.IP, port string, options []Option) (net.Conn, error) {
 	if DefaultSocketHook != nil {
 		return dialContextHooked(ctx, network, destination, port)
-	}
-
-	opt := &option{
-		interfaceName: DefaultInterface.Load(),
-	}
-
-	for _, o := range DefaultOptions {
-		o(opt)
-	}
-
-	for _, o := range options {
-		o(opt)
 	}
 
 	dialer := &net.Dialer{}
