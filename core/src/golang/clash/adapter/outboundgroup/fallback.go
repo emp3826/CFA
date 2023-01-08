@@ -26,7 +26,7 @@ func (f *Fallback) Now() string {
 // DialContext implements C.ProxyAdapter
 func (f *Fallback) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.Conn, error) {
 	proxy := f.findAliveProxy(true)
-	c, err := proxy.DialContext(ctx, metadata, f.Base.DialOptions(opts...)...)
+	c, err := proxy.DialContext(ctx, metadata)
 	if err == nil {
 		c.AppendToChains(f)
 	}
@@ -36,7 +36,7 @@ func (f *Fallback) DialContext(ctx context.Context, metadata *C.Metadata, opts .
 // ListenPacketContext implements C.ProxyAdapter
 func (f *Fallback) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.PacketConn, error) {
 	proxy := f.findAliveProxy(true)
-	pc, err := proxy.ListenPacketContext(ctx, metadata, f.Base.DialOptions(opts...)...)
+	pc, err := proxy.ListenPacketContext(ctx, metadata)
 	if err == nil {
 		pc.AppendToChains(f)
 	}

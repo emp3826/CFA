@@ -28,15 +28,15 @@ func (r *Relay) DialContext(ctx context.Context, metadata *C.Metadata, opts ...d
 
 	switch len(proxies) {
 	case 0:
-		return outbound.NewDirect().DialContext(ctx, metadata, r.Base.DialOptions(opts...)...)
+		return outbound.NewDirect().DialContext(ctx, metadata)
 	case 1:
-		return proxies[0].DialContext(ctx, metadata, r.Base.DialOptions(opts...)...)
+		return proxies[0].DialContext(ctx, metadata)
 	}
 
 	first := proxies[0]
 	last := proxies[len(proxies)-1]
 
-	c, err := dialer.DialContext(ctx, "tcp", first.Addr(), r.Base.DialOptions(opts...)...)
+	c, err := dialer.DialContext(ctx, "tcp", first.Addr())
 	if err != nil {
 		return nil, err
 	}

@@ -22,7 +22,7 @@ type Selector struct {
 
 // DialContext implements C.ProxyAdapter
 func (s *Selector) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.Conn, error) {
-	c, err := s.selectedProxy(true).DialContext(ctx, metadata, s.Base.DialOptions(opts...)...)
+	c, err := s.selectedProxy(true).DialContext(ctx, metadata)
 	if err == nil {
 		c.AppendToChains(s)
 	}
@@ -31,7 +31,7 @@ func (s *Selector) DialContext(ctx context.Context, metadata *C.Metadata, opts .
 
 // ListenPacketContext implements C.ProxyAdapter
 func (s *Selector) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.PacketConn, error) {
-	pc, err := s.selectedProxy(true).ListenPacketContext(ctx, metadata, s.Base.DialOptions(opts...)...)
+	pc, err := s.selectedProxy(true).ListenPacketContext(ctx, metadata)
 	if err == nil {
 		pc.AppendToChains(s)
 	}

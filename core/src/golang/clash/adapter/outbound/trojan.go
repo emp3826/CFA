@@ -102,7 +102,7 @@ func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata, opts ...
 		return NewConn(c, t), nil
 	}
 
-	c, err := dialer.DialContext(ctx, "tcp", t.addr, t.Base.DialOptions(opts...)...)
+	c, err := dialer.DialContext(ctx, "tcp", t.addr)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ func (t *Trojan) ListenPacketContext(ctx context.Context, metadata *C.Metadata, 
 		}
 		defer safeConnClose(c, err)
 	} else {
-		c, err = dialer.DialContext(ctx, "tcp", t.addr, t.Base.DialOptions(opts...)...)
+		c, err = dialer.DialContext(ctx, "tcp", t.addr)
 		if err != nil {
 			return nil, err
 		}
@@ -176,7 +176,7 @@ func NewTrojan(option TrojanOption) (*Trojan, error) {
 
 	if option.Network == "grpc" {
 		dialFn := func(network, addr string) (net.Conn, error) {
-			c, err := dialer.DialContext(context.Background(), "tcp", t.addr, t.Base.DialOptions()...)
+			c, err := dialer.DialContext(context.Background(), "tcp", t.addr)
 			if err != nil {
 				return nil, err
 			}

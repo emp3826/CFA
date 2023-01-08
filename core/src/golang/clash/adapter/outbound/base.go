@@ -60,11 +60,6 @@ func (b *Base) Unwrap(metadata *C.Metadata) C.Proxy {
 	return nil
 }
 
-// DialOptions return []dialer.Option from struct
-func (b *Base) DialOptions(opts ...dialer.Option) []dialer.Option {
-	return opts
-}
-
 type BasicOption struct {
 	Interface   string `proxy:"interface-name,omitempty" group:"interface-name,omitempty"`
 }

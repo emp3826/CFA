@@ -59,7 +59,7 @@ func (ssr *ShadowSocksR) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn,
 
 // DialContext implements C.ProxyAdapter
 func (ssr *ShadowSocksR) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (_ C.Conn, err error) {
-	c, err := dialer.DialContext(ctx, "tcp", ssr.addr, ssr.Base.DialOptions(opts...)...)
+	c, err := dialer.DialContext(ctx, "tcp", ssr.addr)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (ssr *ShadowSocksR) DialContext(ctx context.Context, metadata *C.Metadata, 
 
 // ListenPacketContext implements C.ProxyAdapter
 func (ssr *ShadowSocksR) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.PacketConn, error) {
-	pc, err := dialer.ListenPacket(ctx, "udp", "", ssr.Base.DialOptions(opts...)...)
+	pc, err := dialer.ListenPacket(ctx, "udp", "")
 	if err != nil {
 		return nil, err
 	}

@@ -201,7 +201,7 @@ func (v *Vmess) DialContext(ctx context.Context, metadata *C.Metadata, opts ...d
 		return NewConn(c, v), nil
 	}
 
-	c, err := dialer.DialContext(ctx, "tcp", v.addr, v.Base.DialOptions(opts...)...)
+	c, err := dialer.DialContext(ctx, "tcp", v.addr)
 	if err != nil {
 		return nil, err
 	}
@@ -233,7 +233,7 @@ func (v *Vmess) ListenPacketContext(ctx context.Context, metadata *C.Metadata, o
 
 		c, err = v.client.StreamConn(c, parseVmessAddr(metadata))
 	} else {
-		c, err = dialer.DialContext(ctx, "tcp", v.addr, v.Base.DialOptions(opts...)...)
+		c, err = dialer.DialContext(ctx, "tcp", v.addr)
 		if err != nil {
 			return nil, err
 		}
@@ -288,7 +288,7 @@ func NewVmess(option VmessOption) (*Vmess, error) {
 		}
 	case "grpc":
 		dialFn := func(network, addr string) (net.Conn, error) {
-			c, err := dialer.DialContext(context.Background(), "tcp", v.addr, v.Base.DialOptions()...)
+			c, err := dialer.DialContext(context.Background(), "tcp", v.addr)
 			if err != nil {
 				return nil, err
 			}
