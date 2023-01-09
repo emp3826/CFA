@@ -8,7 +8,7 @@ import (
 	"github.com/Dreamacro/clash/component/resolver"
 )
 
-func DialContext(ctx context.Context, network, address string, options ...Option) (net.Conn, error) {
+func DialContext(ctx context.Context, network, address string) (net.Conn, error) {
 	switch network {
 	case "tcp4", "tcp6", "udp4", "udp6":
 		host, port, err := net.SplitHostPort(address)
@@ -29,13 +29,13 @@ func DialContext(ctx context.Context, network, address string, options ...Option
 
 		return dialContext(ctx, network, ip, port)
 	case "tcp", "udp":
-		return dualStackDialContext(ctx, network, address, options)
+		return dualStackDialContext(ctx, network, address)
 	default:
 		return nil, errors.New("network invalid")
 	}
 }
 
-func ListenPacket(ctx context.Context, network, address string, options ...Option) (net.PacketConn, error) {
+func ListenPacket(ctx context.Context, network, address string) (net.PacketConn, error) {
 	if DefaultSocketHook != nil {
 		return listenPacketHooked(ctx, network, address)
 	}
@@ -55,7 +55,7 @@ func dialContext(ctx context.Context, network string, destination net.IP, port s
 	return dialer.DialContext(ctx, network, net.JoinHostPort(destination.String(), port))
 }
 
-func dualStackDialContext(ctx context.Context, network, address string, options []Option) (net.Conn, error) {
+func dualStackDialContext(ctx context.Context, network, address string) (net.Conn, error) {
 	host, port, err := net.SplitHostPort(address)
 	if err != nil {
 		return nil, err

@@ -45,9 +45,7 @@ func (c *client) ExchangeContext(ctx context.Context, m *D.Msg) (*D.Msg, error) 
 		network = "tcp"
 	}
 
-	options := []dialer.Option{}
-
-	conn, err := dialer.DialContext(ctx, network, net.JoinHostPort(ip.String(), c.port), options...)
+	conn, err := dialer.DialContext(ctx, network, net.JoinHostPort(ip.String(), c.port))
 	if err != nil {
 		return nil, err
 	}

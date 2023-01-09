@@ -7,7 +7,6 @@ import (
 
 	"github.com/Dreamacro/clash/adapter/outbound"
 	"github.com/Dreamacro/clash/common/singledo"
-	"github.com/Dreamacro/clash/component/dialer"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/constant/provider"
 )
@@ -21,7 +20,7 @@ type Selector struct {
 }
 
 // DialContext implements C.ProxyAdapter
-func (s *Selector) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.Conn, error) {
+func (s *Selector) DialContext(ctx context.Context, metadata *C.Metadata) (C.Conn, error) {
 	c, err := s.selectedProxy(true).DialContext(ctx, metadata)
 	if err == nil {
 		c.AppendToChains(s)
@@ -30,7 +29,7 @@ func (s *Selector) DialContext(ctx context.Context, metadata *C.Metadata, opts .
 }
 
 // ListenPacketContext implements C.ProxyAdapter
-func (s *Selector) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.PacketConn, error) {
+func (s *Selector) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (C.PacketConn, error) {
 	pc, err := s.selectedProxy(true).ListenPacketContext(ctx, metadata)
 	if err == nil {
 		pc.AppendToChains(s)

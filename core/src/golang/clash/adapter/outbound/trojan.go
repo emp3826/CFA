@@ -86,9 +86,9 @@ func (t *Trojan) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) 
 }
 
 // DialContext implements C.ProxyAdapter
-func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (_ C.Conn, err error) {
+func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Conn, err error) {
 	// gun transport
-	if t.transport != nil && len(opts) == 0 {
+	if t.transport != nil {
 		c, err := gun.StreamGunWithTransport(t.transport, t.gunConfig)
 		if err != nil {
 			return nil, err
@@ -118,11 +118,11 @@ func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata, opts ...
 }
 
 // ListenPacketContext implements C.ProxyAdapter
-func (t *Trojan) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (_ C.PacketConn, err error) {
+func (t *Trojan) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (_ C.PacketConn, err error) {
 	var c net.Conn
 
 	// grpc transport
-	if t.transport != nil && len(opts) == 0 {
+	if t.transport != nil {
 		c, err = gun.StreamGunWithTransport(t.transport, t.gunConfig)
 		if err != nil {
 			return nil, err

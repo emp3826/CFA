@@ -6,7 +6,6 @@ import (
 	"errors"
 	"net"
 
-	"github.com/Dreamacro/clash/component/dialer"
 	C "github.com/Dreamacro/clash/constant"
 )
 
@@ -34,7 +33,7 @@ func (b *Base) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 }
 
 // ListenPacketContext implements C.ProxyAdapter
-func (b *Base) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.PacketConn, error) {
+func (b *Base) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (C.PacketConn, error) {
 	return nil, errors.New("no support")
 }
 

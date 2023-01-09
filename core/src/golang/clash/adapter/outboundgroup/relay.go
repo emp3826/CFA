@@ -18,7 +18,7 @@ type Relay struct {
 }
 
 // DialContext implements C.ProxyAdapter
-func (r *Relay) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.Conn, error) {
+func (r *Relay) DialContext(ctx context.Context, metadata *C.Metadata) (C.Conn, error) {
 	var proxies []C.Proxy
 	for _, proxy := range r.proxies(metadata, true) {
 		if proxy.Type() != C.Direct {

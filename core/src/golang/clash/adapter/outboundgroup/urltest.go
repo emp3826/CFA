@@ -7,7 +7,6 @@ import (
 
 	"github.com/Dreamacro/clash/adapter/outbound"
 	"github.com/Dreamacro/clash/common/singledo"
-	"github.com/Dreamacro/clash/component/dialer"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/constant/provider"
 )
@@ -35,7 +34,7 @@ func (u *URLTest) Now() string {
 }
 
 // DialContext implements C.ProxyAdapter
-func (u *URLTest) DialContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (c C.Conn, err error) {
+func (u *URLTest) DialContext(ctx context.Context, metadata *C.Metadata) (c C.Conn, err error) {
 	c, err = u.fast(true).DialContext(ctx, metadata)
 	if err == nil {
 		c.AppendToChains(u)
@@ -44,7 +43,7 @@ func (u *URLTest) DialContext(ctx context.Context, metadata *C.Metadata, opts ..
 }
 
 // ListenPacketContext implements C.ProxyAdapter
-func (u *URLTest) ListenPacketContext(ctx context.Context, metadata *C.Metadata, opts ...dialer.Option) (C.PacketConn, error) {
+func (u *URLTest) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (C.PacketConn, error) {
 	pc, err := u.fast(true).ListenPacketContext(ctx, metadata)
 	if err == nil {
 		pc.AppendToChains(u)
