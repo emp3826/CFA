@@ -17,7 +17,6 @@ var (
 	defaultCache *CacheFile
 
 	bucketSelected = []byte("selected")
-	bucketFakeip   = []byte("fakeip")
 )
 
 // CacheFile store and update the cache file
