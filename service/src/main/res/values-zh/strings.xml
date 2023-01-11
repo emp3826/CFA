@@ -10,6 +10,4 @@
     <string name="provider_files">外部资源文件列表</string>
     <string name="loading">载入中</string>
     <string name="profile_process_status">配置文件处理状态</string>
-    <string name="update_successfully">更新成功</string>
-    <string name="update_failure">更新失败</string>
 </resources>
