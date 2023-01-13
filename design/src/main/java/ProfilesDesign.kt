@@ -21,7 +21,6 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
         data class Active(val profile: Profile) : Request()
         data class Update(val profile: Profile) : Request()
         data class Edit(val profile: Profile) : Request()
-        data class Duplicate(val profile: Profile) : Request()
         data class Delete(val profile: Profile) : Request()
     }
 

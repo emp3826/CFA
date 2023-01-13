@@ -49,11 +49,6 @@ class ProfilesActivity : BaseActivity<ProfilesDesign>() {
                                     setActive(it.profile)
                             }
                         }
-                        is ProfilesDesign.Request.Duplicate -> {
-                            val uuid = withProfile { clone(it.profile.uuid) }
-
-                            startActivity(PropertiesActivity::class.intent.setUUID(uuid))
-                        }
                     }
                 }
             }
