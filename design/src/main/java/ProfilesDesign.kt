@@ -16,7 +16,6 @@ import kotlinx.coroutines.withContext
 
 class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context) {
     sealed class Request {
-        object UpdateAll : Request()
         object Create : Request()
         data class Active(val profile: Profile) : Request()
         data class Update(val profile: Profile) : Request()

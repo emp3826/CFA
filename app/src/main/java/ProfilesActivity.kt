@@ -30,13 +30,6 @@ class ProfilesActivity : BaseActivity<ProfilesDesign>() {
                     when (it) {
                         ProfilesDesign.Request.Create ->
                             startActivity(NewProfileActivity::class.intent)
-                        ProfilesDesign.Request.UpdateAll ->
-                            withProfile {
-                                queryAll().forEach { p ->
-                                    if (p.imported && p.type != Profile.Type.File)
-                                        update(p.uuid)
-                                }
-                            }
                         is ProfilesDesign.Request.Update ->
                             withProfile { update(it.profile.uuid) }
                         is ProfilesDesign.Request.Delete ->
