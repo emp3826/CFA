@@ -15,7 +15,7 @@ class NewProfileDesign(context: Context) : Design<NewProfileDesign.Request>(cont
 
     private val binding = DesignNewProfileBinding
         .inflate(context.layoutInflater, context.root, false)
-    private val adapter = ProfileProviderAdapter(context, this::requestCreate, this::requestDetail)
+    private val adapter = ProfileProviderAdapter(context, this::requestCreate)
 
     override val root: View
         get() = binding.root
@@ -39,13 +39,5 @@ class NewProfileDesign(context: Context) : Design<NewProfileDesign.Request>(cont
 
     private fun requestCreate(provider: ProfileProvider) {
         requests.trySend(Request.Create(provider))
-    }
-
-    private fun requestDetail(provider: ProfileProvider): Boolean {
-        if (provider !is ProfileProvider.External) return false
-
-        requests.trySend(Request.OpenDetail(provider))
-
-        return true
     }
 }

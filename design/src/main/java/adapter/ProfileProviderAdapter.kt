@@ -10,7 +10,6 @@ import com.github.kr328.clash.design.util.layoutInflater
 class ProfileProviderAdapter(
     private val context: Context,
     private val select: (ProfileProvider) -> Unit,
-    private val detail: (ProfileProvider) -> Boolean,
 ) : RecyclerView.Adapter<ProfileProviderAdapter.Holder>() {
     class Holder(val binding: AdapterProfileProviderBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -35,9 +34,6 @@ class ProfileProviderAdapter(
         binding.root.apply {
             setOnClickListener {
                 select(current)
-            }
-            setOnLongClickListener {
-                detail(current)
             }
         }
     }
