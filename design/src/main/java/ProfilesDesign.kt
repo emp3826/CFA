@@ -18,7 +18,6 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
     sealed class Request {
         object Create : Request()
         data class Active(val profile: Profile) : Request()
-        data class Update(val profile: Profile) : Request()
         data class Edit(val profile: Profile) : Request()
         data class Delete(val profile: Profile) : Request()
     }
