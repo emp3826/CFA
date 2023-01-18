@@ -61,8 +61,7 @@
                             android:contentDescription="@string/delay_test"
                             android:focusable="true"
                             android:onClick="@{() -> self.requestUrlTesting()}"
-                            android:padding="@dimen/toolbar_image_action_padding"
-                            android:src="@drawable/ic_baseline_flash_on" />
+                            android:padding="@dimen/toolbar_image_action_padding" />
 
                         <ProgressBar
                             android:id="@+id/url_test_progress_view"
@@ -117,8 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/item_tailing_margin"
                 android:contentDescription="@string/delay_test"
-                android:onClick="@{() -> self.requestUrlTesting()}"
-                android:src="@drawable/ic_baseline_flash_on" />
+                android:onClick="@{() -> self.requestUrlTesting()}" />
         </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
