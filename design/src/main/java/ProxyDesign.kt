@@ -149,10 +149,8 @@ class ProxyDesign(
 
         if (urlTesting) {
             binding.urlTestView.visibility = View.GONE
-            binding.urlTestProgressView.visibility = View.VISIBLE
         } else {
             binding.urlTestView.visibility = View.VISIBLE
-            binding.urlTestProgressView.visibility = View.GONE
         }
     }
 }
