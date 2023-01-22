@@ -77,7 +77,7 @@ func (hc *HealthCheck) close() {
 	hc.done <- struct{}{}
 }
 
-func NewHealthCheck(proxies []C.Proxy, url string, interval uint, lazy bool) *HealthCheck {
+func NewHealthCheck(proxies []C.Proxy, url string, interval uint) *HealthCheck {
 	if url == "" {
 		url = defaultURLTestURL
 	}
@@ -86,7 +86,6 @@ func NewHealthCheck(proxies []C.Proxy, url string, interval uint, lazy bool) *He
 		proxies:   proxies,
 		url:       url,
 		interval:  interval,
-		lazy:      lazy,
 		lastTouch: atomic.NewInt64(0),
 		done:      make(chan struct{}, 8),
 	}
