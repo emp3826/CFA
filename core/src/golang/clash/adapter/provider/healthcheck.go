@@ -24,7 +24,6 @@ type HealthCheck struct {
 	url       string
 	proxies   []C.Proxy
 	interval  uint
-	lazy      bool
 	lastTouch *atomic.Int64
 	done      chan struct{}
 }
@@ -37,7 +36,7 @@ func (hc *HealthCheck) process() {
 		select {
 		case <-ticker.C:
 			now := time.Now().Unix()
-			if !suspended && !hc.lazy || now-hc.lastTouch.Load() < int64(hc.interval) {
+			if !suspended || now-hc.lastTouch.Load() < int64(hc.interval) {
 				hc.check()
 			}
 		case <-hc.done:
