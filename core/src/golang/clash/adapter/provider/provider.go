@@ -39,7 +39,6 @@ func (pp *proxySetProvider) MarshalJSON() ([]byte, error) {
 		"type":        pp.Type().String(),
 		"vehicleType": pp.VehicleType().String(),
 		"proxies":     pp.Proxies(),
-		"updatedAt":   pp.updatedAt,
 	})
 }
 

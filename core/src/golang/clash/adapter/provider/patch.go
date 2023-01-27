@@ -10,10 +10,6 @@ type UpdatableProvider interface {
 	UpdatedAt() time.Time
 }
 
-func (f *fetcher) UpdatedAt() time.Time {
-	return f.updatedAt
-}
-
 func (pp *proxySetProvider) Close() error {
 	pp.healthCheck.close()
 	pp.fetcher.Destroy()

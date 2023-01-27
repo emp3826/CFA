@@ -24,7 +24,6 @@ type parser = func([]byte) (any, error)
 type fetcher struct {
 	name      string
 	vehicle   types.Vehicle
-	updatedAt time.Time
 	interval  time.Duration
 	done      chan struct{}
 	hash      [16]byte
@@ -46,14 +45,11 @@ func (f *fetcher) Initial() (any, error) {
 		err     error
 		isLocal bool
 	)
-	if stat, fErr := os.Stat(f.vehicle.Path()); fErr == nil {
+	if _, fErr := os.Stat(f.vehicle.Path()); fErr == nil {
 		buf, err = os.ReadFile(f.vehicle.Path())
-		modTime := stat.ModTime()
-		f.updatedAt = modTime
 		isLocal = true
 	} else {
 		buf, err = f.vehicle.Read()
-		f.updatedAt = time.Now()
 	}
 
 	if err != nil {
@@ -102,11 +98,8 @@ func (f *fetcher) Update() (any, bool, error) {
 		return nil, false, err
 	}
 
-	now := time.Now()
 	hash := md5.Sum(buf)
 	if bytes.Equal(f.hash[:], hash[:]) {
-		f.updatedAt = now
-
 		os.Chtimes(f.vehicle.Path(), time.Now(), time.Now())
 
 		return nil, true, nil
@@ -123,7 +116,6 @@ func (f *fetcher) Update() (any, bool, error) {
 		}
 	}
 
-	f.updatedAt = now
 	f.hash = hash
 
 	return proxies, false, nil
@@ -137,7 +129,7 @@ func (f *fetcher) Destroy() error {
 }
 
 func (f *fetcher) pullLoop() {
-	initialInterval := f.interval - time.Since(f.updatedAt)
+	initialInterval := f.interval
 	if initialInterval < minInterval {
 		initialInterval = minInterval
 	}
