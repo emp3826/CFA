@@ -28,7 +28,6 @@ type fetcher struct {
 	done      chan struct{}
 	hash      [16]byte
 	parser    parser
-	onUpdate  func(any)
 }
 
 func (f *fetcher) Name() string {
@@ -142,7 +141,7 @@ func (f *fetcher) pullLoop() {
 		case <-timer.C:
 			timer.Reset(f.interval)
 
-			elm, same, err := f.Update()
+			_, same, err := f.Update()
 			if err != nil {
 				continue
 			}
@@ -151,9 +150,6 @@ func (f *fetcher) pullLoop() {
 				continue
 			}
 
-			if f.onUpdate != nil {
-				f.onUpdate(elm)
-			}
 		case <-f.done:
 			return
 		}
@@ -179,6 +175,5 @@ func newFetcher(name string, interval time.Duration, vehicle types.Vehicle, pars
 		vehicle:  vehicle,
 		parser:   parser,
 		done:     make(chan struct{}, 8),
-		onUpdate: onUpdate,
 	}
 }
