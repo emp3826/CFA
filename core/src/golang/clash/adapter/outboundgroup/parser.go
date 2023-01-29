@@ -26,7 +26,6 @@ type GroupCommonOption struct {
 	Use        []string `group:"use,omitempty"`
 	URL        string   `group:"url,omitempty"`
 	Interval   int      `group:"interval,omitempty"`
-	Lazy       bool     `group:"lazy,omitempty"`
 	DisableUDP bool     `group:"disable-udp,omitempty"`
 }
 
@@ -34,7 +33,6 @@ func ParseProxyGroup(config map[string]any, proxyMap map[string]C.Proxy, provide
 	decoder := structure.NewDecoder(structure.Option{TagName: "group", WeaklyTypedInput: true})
 
 	groupOption := &GroupCommonOption{
-		Lazy: true,
 	}
 	if err := decoder.Decode(config, groupOption); err != nil {
 		return nil, errFormat
