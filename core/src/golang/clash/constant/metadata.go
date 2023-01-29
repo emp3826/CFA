@@ -17,7 +17,6 @@ const (
 
 	HTTP Type = iota
 	HTTPCONNECT
-	SOCKS4
 	SOCKS5
 )
 
@@ -42,8 +41,6 @@ func (t Type) String() string {
 		return "HTTP"
 	case HTTPCONNECT:
 		return "HTTP Connect"
-	case SOCKS4:
-		return "Socks4"
 	case SOCKS5:
 		return "Socks5"
 	default:
