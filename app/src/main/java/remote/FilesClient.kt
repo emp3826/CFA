@@ -19,7 +19,6 @@ class FilesClient(private val context: Context) {
             val idIndex = cursor.getColumnIndex(DC.Document.COLUMN_DOCUMENT_ID)
             val nameIndex = cursor.getColumnIndex(DC.Document.COLUMN_DISPLAY_NAME)
             val sizeIndex = cursor.getColumnIndex(DC.Document.COLUMN_SIZE)
-            val lastModified = cursor.getColumnIndex(DC.Document.COLUMN_LAST_MODIFIED)
             val mimeTypeIndex = cursor.getColumnIndex(DC.Document.COLUMN_MIME_TYPE)
 
             cursor.moveToFirst()
@@ -29,7 +28,6 @@ class FilesClient(private val context: Context) {
                     id = cursor.getString(idIndex),
                     name = cursor.getString(nameIndex),
                     size = cursor.getLong(sizeIndex),
-                    lastModified = cursor.getLong(lastModified),
                     isDirectory = cursor.getString(mimeTypeIndex) == DC.Document.MIME_TYPE_DIR,
                 ).also {
                     cursor.moveToNext()
