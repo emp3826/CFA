@@ -18,14 +18,6 @@ class ProviderAdapter(
 
     val states = providers.map { ProviderState(it, it.updatedAt, false) }
 
-    fun notifyUpdated(index: Int) {
-        states[index].apply {
-            updating = false
-        }
-
-        notifyItemChanged(index)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             AdapterProviderBinding
