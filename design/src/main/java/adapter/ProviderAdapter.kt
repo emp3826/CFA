@@ -18,10 +18,9 @@ class ProviderAdapter(
 
     val states = providers.map { ProviderState(it, it.updatedAt, false) }
 
-    fun notifyChanged(index: Int) {
+    fun notifyUpdated(index: Int) {
         states[index].apply {
             updating = false
-            updatedAt = System.currentTimeMillis()
         }
 
         notifyItemChanged(index)
