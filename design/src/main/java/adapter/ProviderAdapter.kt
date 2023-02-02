@@ -30,11 +30,6 @@ class ProviderAdapter(
 
         holder.binding.provider = state.provider
         holder.binding.state = state
-        holder.binding.update = View.OnClickListener {
-            state.updating = true
-
-            requestUpdate(position, state.provider)
-        }
     }
 
     override fun getItemCount(): Int {
