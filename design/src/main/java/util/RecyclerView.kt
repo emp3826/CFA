@@ -7,7 +7,6 @@ import androidx.databinding.Observable
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.kr328.clash.design.BR
 import com.github.kr328.clash.design.ui.Surface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -73,14 +72,6 @@ fun RecyclerView.bindInsets(surface: Surface, top: Int = 0, bottom: Int = 0) {
 
         setPaddingRelative(0, t, 0, b)
     }
-
-    surface.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            if (propertyId == BR.insets) {
-                applyInsets()
-            }
-        }
-    })
 
     applyInsets()
 }
