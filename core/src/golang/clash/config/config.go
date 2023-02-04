@@ -23,13 +23,11 @@ import (
 // General config
 type General struct {
 	Mode        T.TunnelMode `json:"mode"`
-	IPv6        bool         `json:"ipv6"`
 }
 
 // DNS config
 type DNS struct {
 	Enable            bool             `yaml:"enable"`
-	IPv6              bool             `yaml:"ipv6"`
 	NameServer        []dns.NameServer `yaml:"nameserver"`
 	Fallback          []dns.NameServer `yaml:"fallback"`
 	Listen            string           `yaml:"listen"`
@@ -48,7 +46,6 @@ type Config struct {
 
 type RawDNS struct {
 	Enable            bool              `yaml:"enable" json:"enable"`
-	IPv6              bool              `yaml:"ipv6" json:"ipv6"`
 	UseHosts          bool              `yaml:"use-hosts" json:"use-hosts"`
 	NameServer        []string          `yaml:"nameserver" json:"nameserver"`
 	Fallback          []string          `yaml:"fallback" json:"fallback"`
@@ -71,7 +68,6 @@ type RawClashForAndroid struct {
 
 type RawConfig struct {
 	Mode               T.TunnelMode `yaml:"mode" json:"mode"`
-	IPv6               bool         `yaml:"ipv6" json:"ipv6"`
 
 	ProxyProvider map[string]map[string]any `yaml:"proxy-providers" json:"proxy-providers"`
 	Hosts         map[string]string         `yaml:"hosts" json:"hosts"`
@@ -163,7 +159,6 @@ func ParseRawConfig(rawCfg *RawConfig) (*Config, error) {
 func parseGeneral(cfg *RawConfig) (*General, error) {
 	return &General{
 		Mode:        cfg.Mode,
-		IPv6:        cfg.IPv6,
 	}, nil
 }
 
@@ -401,7 +396,6 @@ func parseDNS(rawCfg *RawConfig, hosts *trie.DomainTrie) (*DNS, error) {
 	dnsCfg := &DNS{
 		Enable:       cfg.Enable,
 		Listen:       cfg.Listen,
-		IPv6:         cfg.IPv6,
 	}
 	var err error
 	if dnsCfg.NameServer, err = parseNameServer(cfg.NameServer); err != nil {
