@@ -47,7 +47,6 @@ type v2rayObfsOption struct {
 	TLS            bool              `obfs:"tls,omitempty"`
 	Headers        map[string]string `obfs:"headers,omitempty"`
 	SkipCertVerify bool              `obfs:"skip-cert-verify,omitempty"`
-	Mux            bool              `obfs:"mux,omitempty"`
 }
 
 // StreamConn implements C.ProxyAdapter
