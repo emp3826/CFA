@@ -1,7 +1,6 @@
 package com.github.kr328.clash.design.model
 
 import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
 import com.github.kr328.clash.core.model.Provider
 
 class ProviderState(
