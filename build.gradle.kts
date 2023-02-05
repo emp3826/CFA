@@ -1,6 +1,4 @@
-import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import java.util.*
 
 buildscript {
     repositories {
