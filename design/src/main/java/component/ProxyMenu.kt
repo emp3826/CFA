@@ -27,7 +27,6 @@ class ProxyMenu(
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         item.isChecked = !item.isChecked
-        uiStore.proxySingleLine = false
         updateConfig()
         uiStore.proxySort = ProxySort.Default
         requests.trySend(ProxyDesign.Request.ReloadAll)

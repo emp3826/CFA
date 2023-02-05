@@ -12,16 +12,6 @@ class UiStore(context: Context) {
             .asStoreProvider()
     )
 
-    var proxyExcludeNotSelectable by store.boolean(
-        key = "proxy_exclude_not_selectable",
-        defaultValue = false,
-    )
-
-    var proxySingleLine: Boolean by store.boolean(
-        key = "proxy_single_line",
-        defaultValue = false
-    )
-
     var proxySort: ProxySort by store.enum(
         key = "proxy_sort",
         defaultValue = ProxySort.Default,

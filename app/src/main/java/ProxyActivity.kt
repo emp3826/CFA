@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 class ProxyActivity : BaseActivity<ProxyDesign>() {
     override suspend fun main() {
-        val names = withClash { queryProxyGroupNames(uiStore.proxyExcludeNotSelectable) }
+        val names = withClash { queryProxyGroupNames(false) }
         val states = List(names.size) { ProxyState("?") }
         val unorderedStates = names.indices.map { names[it] to states[it] }.toMap()
         val reloadLock = Semaphore(10)

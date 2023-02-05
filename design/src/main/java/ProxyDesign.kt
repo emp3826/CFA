@@ -41,11 +41,11 @@ class ProxyDesign(
     private val binding = DesignProxyBinding
         .inflate(context.layoutInflater, context.root, false)
 
-    private val config = ProxyViewConfig(context, uiStore.proxySingleLine)
+    private val config = ProxyViewConfig(context, false)
 
     private val menu: ProxyMenu by lazy {
         ProxyMenu(context, binding.menuView, uiStore, requests) {
-            config.singleLine = uiStore.proxySingleLine
+            config.singleLine = false
         }
     }
 
