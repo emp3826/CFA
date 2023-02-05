@@ -47,9 +47,6 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
                                 }
                             }
                         }
-                        Event.ServiceRecreated -> {
-                            finish()
-                        }
                         else -> Unit
                     }
                 }

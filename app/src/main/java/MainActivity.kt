@@ -31,7 +31,6 @@ class MainActivity : BaseActivity<MainDesign>() {
                 events.onReceive {
                     when (it) {
                         Event.ActivityStart,
-                        Event.ServiceRecreated,
                         Event.ClashStop, Event.ClashStart,
                         Event.ProfileLoaded, Event.ProfileChanged -> design.fetch()
                         else -> Unit

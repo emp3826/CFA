@@ -9,7 +9,6 @@ import com.github.kr328.clash.common.constants.Intents
 
 class Broadcasts(private val context: Application) {
     interface Observer {
-        fun onServiceRecreated()
         fun onStarted()
         fun onStopped(cause: String?)
         fun onProfileChanged()
@@ -26,13 +25,6 @@ class Broadcasts(private val context: Application) {
                 return
 
             when (intent?.action) {
-                Intents.ACTION_SERVICE_RECREATED -> {
-                    clashRunning = false
-
-                    receivers.forEach {
-                        it.onServiceRecreated()
-                    }
-                }
                 Intents.ACTION_CLASH_STARTED -> {
                     clashRunning = true
 

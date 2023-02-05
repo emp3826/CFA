@@ -31,7 +31,6 @@ abstract class BaseActivity<D : Design<*>> :
     CoroutineScope by MainScope(),
     Broadcasts.Observer {
     enum class Event {
-        ServiceRecreated,
         ActivityStart,
         ActivityStop,
         ClashStop,
@@ -177,10 +176,6 @@ abstract class BaseActivity<D : Design<*>> :
 
     override fun onProfileLoaded() {
         events.trySend(Event.ProfileLoaded)
-    }
-
-    override fun onServiceRecreated() {
-        events.trySend(Event.ServiceRecreated)
     }
 
     override fun onStarted() {
