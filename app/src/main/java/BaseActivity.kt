@@ -160,10 +160,6 @@ abstract class BaseActivity<D : Design<*>> :
         }
     }
 
-    open fun shouldDisplayHomeAsUpEnabled(): Boolean {
-        return true
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         this.onBackPressed()
 
