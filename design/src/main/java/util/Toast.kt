@@ -9,7 +9,6 @@ suspend fun Design<*>.showExceptionToast(message: CharSequence) {
     showToast(message, ToastDuration.Long) {
         setAction(R.string.detail) {
             MaterialAlertDialogBuilder(it.context)
-                .setTitle(R.string.error)
                 .setMessage(message)
                 .setCancelable(true)
                 .setPositiveButton(R.string.ok) { _, _ -> }

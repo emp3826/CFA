@@ -10,10 +10,6 @@
     <string name="profiles">Profiles</string>
     <string name="not_selected">Not selected</string>
 
-    <string name="copied">Copied</string>
-
-    <string name="format_elements">%d elements</string>
-
     <string name="create_profile">Create Profile</string>
     <string name="file">File</string>
     <string name="import_from_file">Import from File</string>
@@ -39,7 +35,6 @@
     <string name="unavailable">Unavailable</string>
     <string name="empty_name">Empty Name</string>
     <string name="invalid_url">Invalid URL</string>
-    <string name="loading">Loading</string>
 
     <string name="new_profile">New Profile</string>
 
@@ -52,9 +47,6 @@
     <string name="_new">New</string>
 
     <string name="dont_modify">Do not modify</string>
-    <string name="empty">Empty</string>
-
-    <string name="error">Error</string>
 
     <string name="clash">Clash</string>
 
@@ -68,10 +60,8 @@
     <string name="rename">Rename</string>
     <string name="file_name">File Name</string>
     <string name="invalid_file_name">Invalid file name</string>
-    
-    <string name="more">More</string>
+
     <string name="save">Save</string>
-    <string name="delay_test">Delay Test</string>
 
     <string name="format_provider_type">%1$s(%2$s)</string>
 
