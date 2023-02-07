@@ -2,7 +2,6 @@ package tunnel
 
 import (
 	"encoding/json"
-	"errors"
 	"strings"
 )
 
@@ -26,9 +25,6 @@ func (m *TunnelMode) UnmarshalJSON(data []byte) error {
 	var tp string
 	json.Unmarshal(data, &tp)
 	mode, exist := ModeMapping[strings.ToLower(tp)]
-	if !exist {
-		return errors.New("invalid mode")
-	}
 	*m = mode
 	return nil
 }
@@ -38,9 +34,6 @@ func (m *TunnelMode) UnmarshalYAML(unmarshal func(any) error) error {
 	var tp string
 	unmarshal(&tp)
 	mode, exist := ModeMapping[strings.ToLower(tp)]
-	if !exist {
-		return errors.New("invalid mode")
-	}
 	*m = mode
 	return nil
 }
