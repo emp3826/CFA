@@ -160,12 +160,6 @@ abstract class BaseActivity<D : Design<*>> :
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        this.onBackPressed()
-
-        return true
-    }
-
     override fun onProfileChanged() {
         events.trySend(Event.ProfileChanged)
     }
