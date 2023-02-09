@@ -2,7 +2,6 @@ package com.github.kr328.clash.service
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.github.kr328.clash.common.constants.Authorities
 import rikka.preference.PreferenceProvider
 
 class PreferenceProvider : PreferenceProvider() {
