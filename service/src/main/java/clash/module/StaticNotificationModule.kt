@@ -62,19 +62,5 @@ class StaticNotificationModule(service: Service) : Module<Unit>(service) {
                 ).setName(service.getText(R.string.clash_service_status_channel)).build()
             )
         }
-
-        fun notifyLoadingNotification(service: Service) {
-            val notification =
-                NotificationCompat.Builder(service, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_logo_service)
-                    .setOngoing(true)
-                    .setColor(service.getColorCompat(R.color.color_clash))
-                    .setOnlyAlertOnce(true)
-                    .setShowWhen(false)
-                    .setContentTitle(service.getText(R.string.loading))
-                    .build()
-
-            service.startForeground(R.id.nf_clash_status, notification)
-        }
     }
 }

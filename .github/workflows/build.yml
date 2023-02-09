@@ -18,7 +18,7 @@ jobs:
           go-version: 1.18
       - name: libcore
         env:
-          CC: /usr/local/lib/android/sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
+          CC: /usr/local/lib/android/sdk/ndk/25.2.9519653/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang
           GOOS: android
           GOARCH: arm64
           CGO_ENABLED: 1

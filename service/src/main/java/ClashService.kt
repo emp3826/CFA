@@ -64,8 +64,6 @@ class ClashService : BaseService() {
         StatusProvider.serviceRunning = true
 
         StaticNotificationModule.createNotificationChannel(this)
-        StaticNotificationModule.notifyLoadingNotification(this)
-
         runtime.launch()
     }
 

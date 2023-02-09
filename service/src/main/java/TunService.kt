@@ -77,8 +77,6 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
         StatusProvider.serviceRunning = true
 
         StaticNotificationModule.createNotificationChannel(this)
-        StaticNotificationModule.notifyLoadingNotification(this)
-
         runtime.launch()
     }
 
