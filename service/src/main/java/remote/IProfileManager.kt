@@ -11,7 +11,6 @@ interface IProfileManager {
     suspend fun release(uuid: UUID)
     suspend fun delete(uuid: UUID)
     suspend fun patch(uuid: UUID, name: String, source: String, interval: Long)
-    suspend fun update(uuid: UUID)
     suspend fun queryByUUID(uuid: UUID): Profile?
     suspend fun queryAll(): List<Profile>
     suspend fun setActive(profile: Profile)

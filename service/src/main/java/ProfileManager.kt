@@ -83,8 +83,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         }
     }
 
-    override suspend fun update(uuid: UUID) {}
-
     override suspend fun commit(uuid: UUID, callback: IFetchObserver?) {
         ProfileProcessor.apply(context, uuid, callback)
     }
