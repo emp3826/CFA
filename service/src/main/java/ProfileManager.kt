@@ -54,27 +54,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         return uuid
     }
 
-    override suspend fun clone(uuid: UUID): UUID {
-        val newUUID = generateProfileUUID()
-
-        val imported = ImportedDao().queryByUUID(uuid)
-            ?: throw FileNotFoundException("profile $uuid not found")
-
-        val pending = Pending(
-            uuid = newUUID,
-            name = imported.name,
-            type = Profile.Type.File,
-            source = imported.source,
-            interval = imported.interval,
-        )
-
-        cloneImportedFiles(uuid, newUUID)
-
-        PendingDao().insert(pending)
-
-        return newUUID
-    }
-
     override suspend fun patch(uuid: UUID, name: String, source: String, interval: Long) {
         val pending = PendingDao().queryByUUID(uuid)
 
