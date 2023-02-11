@@ -90,45 +90,6 @@ object ProfileProcessor {
         }
     }
 
-    suspend fun update(context: Context, uuid: UUID, callback: IFetchObserver?) {
-        withContext(NonCancellable) {
-            processLock.withLock {
-                val snapshot = profileLock.withLock {
-                    val imported = ImportedDao().queryByUUID(uuid)
-                        ?: throw IllegalArgumentException("profile $uuid not found")
-
-                    context.processingDir.deleteRecursively()
-                    context.processingDir.mkdirs()
-
-                    context.importedDir.resolve(imported.uuid.toString())
-                        .copyRecursively(context.processingDir, overwrite = true)
-
-                    imported
-                }
-
-                var cb = callback
-
-                Clash.fetchAndValid(context.processingDir, snapshot.source, true) {
-                    try {
-                        cb?.updateStatus(it)
-                    } catch (e: Exception) {
-                        cb = null
-                    }
-                }.await()
-
-                profileLock.withLock {
-                    if (ImportedDao().exists(snapshot.uuid)) {
-                        context.importedDir.resolve(snapshot.uuid.toString()).deleteRecursively()
-                        context.processingDir
-                            .copyRecursively(context.importedDir.resolve(snapshot.uuid.toString()))
-
-                        context.sendProfileChanged(snapshot.uuid)
-                    }
-                }
-            }
-        }
-    }
-
     suspend fun delete(context: Context, uuid: UUID) {
         withContext(NonCancellable) {
             profileLock.withLock {

@@ -36,8 +36,3 @@ func (pc *PacketConnContext) Metadata() *C.Metadata {
 func (pc *PacketConnContext) PacketConn() net.PacketConn {
 	return pc.packetConn
 }
-
-// InjectPacketConn injectPacketConn manually
-func (pc *PacketConnContext) InjectPacketConn(pconn C.PacketConn) {
-	pc.packetConn = pconn
-}

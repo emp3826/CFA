@@ -198,7 +198,6 @@ func handleUDPConn(packet *inbound.PacketAdapter) {
 		if err != nil {
 			return
 		}
-		pCtx.InjectPacketConn(rawPc)
 		pc := statistic.NewUDPTracker(rawPc, statistic.DefaultManager, metadata, rule)
 
 		go handleUDPToLocal(packet.UDPPacket, pc, key, fAddr)

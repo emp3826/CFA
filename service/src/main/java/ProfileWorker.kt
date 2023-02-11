@@ -69,13 +69,6 @@ class ProfileWorker : BaseService() {
 
     private suspend fun run(uuid: UUID) {
         val imported = ImportedDao().queryByUUID(uuid) ?: return
-
-        try {
-            processing(imported.name) {
-                ProfileProcessor.update(this, imported.uuid, null)
-            }
-        } catch (e: Exception) {
-        }
     }
 
     private fun createChannels() {
