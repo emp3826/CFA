@@ -30,7 +30,7 @@ jobs:
           cp -r ../../build/outputs/golang/fossRelease/arm64-v8a/libclash.so ../../../app/libs/arm64-v8a/
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: app:assembleFossRelease
+          arguments: app:assembleRelease
           cache-disabled: true
       - name: prepare
         run: |
