@@ -110,17 +110,3 @@ var Window.isLightNavigationBarCompat: Boolean
             }
         }
     }
-
-var Window.isAllowForceDarkCompat: Boolean
-    get() {
-        return if (Build.VERSION.SDK_INT >= 29) {
-            decorView.isForceDarkAllowed
-        } else {
-            false
-        }
-    }
-    set(value) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            decorView.isForceDarkAllowed = value
-        }
-    }

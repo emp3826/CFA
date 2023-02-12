@@ -8,7 +8,6 @@ import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
-import com.github.kr328.clash.common.compat.isAllowForceDarkCompat
 import com.github.kr328.clash.common.compat.isSystemBarsTranslucentCompat
 import com.github.kr328.clash.design.R
 import com.github.kr328.clash.design.ui.Insets
@@ -29,7 +28,6 @@ class AppBottomSheetDialog(context: Context) : BottomSheetDialog(context) {
 
         window!!.apply {
             isSystemBarsTranslucentCompat = true
-            isAllowForceDarkCompat = false
         }
 
         findViewById<ViewGroup>(com.google.android.material.R.id.container)?.apply {

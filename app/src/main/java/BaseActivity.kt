@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
-import com.github.kr328.clash.common.compat.isAllowForceDarkCompat
 import com.github.kr328.clash.common.compat.isLightNavigationBarCompat
 import com.github.kr328.clash.common.compat.isLightStatusBarsCompat
 import com.github.kr328.clash.common.compat.isSystemBarsTranslucentCompat
@@ -195,7 +194,6 @@ abstract class BaseActivity<D : Design<*>> :
             }
         }
 
-        window.isAllowForceDarkCompat = false
         window.isSystemBarsTranslucentCompat = true
 
         window.statusBarColor = resolveThemedColor(android.R.attr.statusBarColor)
