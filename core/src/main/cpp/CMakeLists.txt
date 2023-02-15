@@ -5,9 +5,9 @@ project(clash-bridge C)
 set(CMAKE_POSITION_INDEPENDENT_CODE on)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 
-set(GO_OUTPUT_BASE ${GO_OUTPUT}/${FLAVOR_NAME})
+set(GO_OUTPUT_BASE ${GO_OUTPUT})
 
-set(GO_OUTPUT_BASE "${GO_OUTPUT_BASE}Release")
+set(GO_OUTPUT_BASE "${GO_OUTPUT_BASE}/release")
 
 include_directories("${GO_OUTPUT_BASE}/${CMAKE_ANDROID_ARCH_ABI}")
 include_directories("${GO_SOURCE}")

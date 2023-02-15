@@ -50,15 +50,6 @@ subprojects {
 
         compileSdkVersion(defaultConfig.targetSdk!!)
 
-        productFlavors {
-            flavorDimensions("feature")
-
-            create("foss") {
-                isDefault = true
-                dimension = flavorDimensionList[0]
-            }
-        }
-
         buildFeatures.apply {
             dataBinding {
                 isEnabled = name != "hideapi"
