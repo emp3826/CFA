@@ -66,8 +66,6 @@ type GrpcOptions struct {
 type WSOptions struct {
 	Path                string            `proxy:"path,omitempty"`
 	Headers             map[string]string `proxy:"headers,omitempty"`
-	MaxEarlyData        int               `proxy:"max-early-data,omitempty"`
-	EarlyDataHeaderName string            `proxy:"early-data-header-name,omitempty"`
 }
 
 // StreamConn implements C.ProxyAdapter
@@ -80,8 +78,6 @@ func (v *Vmess) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 			Host:                host,
 			Port:                port,
 			Path:                v.option.WSOpts.Path,
-			MaxEarlyData:        v.option.WSOpts.MaxEarlyData,
-			EarlyDataHeaderName: v.option.WSOpts.EarlyDataHeaderName,
 		}
 
 		if len(v.option.WSOpts.Headers) != 0 {
