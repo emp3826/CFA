@@ -43,17 +43,6 @@ jstring jni_new_string(JNIEnv *env, const char *str) {
     return (jstring) (*env)->NewObject(env, c_string, m_new_string, array);
 }
 
-int jni_catch_exception(JNIEnv *env) {
-    int result = (*env)->ExceptionCheck(env);
-
-    if (result) {
-        (*env)->ExceptionDescribe(env);
-        (*env)->ExceptionClear(env);
-    }
-
-    return result;
-}
-
 void jni_attach_thread(struct _scoped_jni *jni) {
     JavaVM *vm = global_java_vm();
 
