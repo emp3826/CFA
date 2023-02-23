@@ -33,8 +33,6 @@ type WebsocketConfig struct {
 	Headers             http.Header
 	TLS                 bool
 	TLSConfig           *tls.Config
-	MaxEarlyData        int
-	EarlyDataHeaderName string
 }
 
 // Read implements net.Conn.Read()
@@ -145,14 +143,6 @@ func streamWebsocketConn(conn net.Conn, c *WebsocketConfig, earlyData *bytes.Buf
 		}
 	}
 
-	if earlyData != nil {
-		if c.EarlyDataHeaderName == "" {
-			uri.Path += earlyData.String()
-		} else {
-			headers.Set(c.EarlyDataHeaderName, earlyData.String())
-		}
-	}
-
 	wsConn, resp, err := dialer.Dial(uri.String(), headers)
 	if err != nil {
 		reason := err.Error()
@@ -171,9 +161,7 @@ func streamWebsocketConn(conn net.Conn, c *WebsocketConfig, earlyData *bytes.Buf
 func StreamWebsocketConn(conn net.Conn, c *WebsocketConfig) (net.Conn, error) {
 	if u, err := url.Parse(c.Path); err == nil {
 		if q := u.Query(); q.Get("ed") != "" {
-			if ed, err := strconv.Atoi(q.Get("ed")); err == nil {
-				c.MaxEarlyData = ed
-				c.EarlyDataHeaderName = "Sec-WebSocket-Protocol"
+			if _, err := strconv.Atoi(q.Get("ed")); err == nil {
 				q.Del("ed")
 				u.RawQuery = q.Encode()
 				c.Path = u.String()
