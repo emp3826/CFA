@@ -29,7 +29,6 @@ type result struct {
 }
 
 type Resolver struct {
-	ipv6                  bool
 	hosts                 *trie.DomainTrie
 	main                  []dnsClient
 	fallback              []dnsClient
@@ -296,7 +295,6 @@ func NewResolver(config Config) *Resolver {
 	}
 
 	r := &Resolver{
-		ipv6:     config.IPv6,
 		main:     transform(config.Main, defaultResolver),
 		lruCache: cache.NewLRUCache(cache.WithSize(4096), cache.WithStale(true)),
 		hosts:    config.Hosts,

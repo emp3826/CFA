@@ -64,7 +64,7 @@ func withResolver(resolver *Resolver) handler {
 		q := r.Question[0]
 
 		// return a empty AAAA msg when ipv6 disabled
-		if !resolver.ipv6 && q.Qtype == D.TypeAAAA {
+		if q.Qtype == D.TypeAAAA {
 			return handleMsgWithEmptyAnswer(r), nil
 		}
 
