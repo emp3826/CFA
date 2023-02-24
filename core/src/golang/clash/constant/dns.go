@@ -2,7 +2,6 @@ package constant
 
 import (
 	"encoding/json"
-	"errors"
 )
 
 // DNSModeMapping is a mapping for EnhancedMode enum
