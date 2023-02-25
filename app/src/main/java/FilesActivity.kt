@@ -112,16 +112,6 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                     }
                                 }
                             }
-                            is FilesDesign.Request.ExportFile -> {
-                                val uri: Uri? = startActivityForResult(
-                                    ActivityResultContracts.CreateDocument(),
-                                    it.file.name
-                                )
-
-                                if (uri != null) {
-                                    client.copyDocument(uri, it.file.id)
-                                }
-                            }
                         }
                     } catch (e: Exception) {
                         design.showExceptionToast(e)

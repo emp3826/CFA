@@ -20,7 +20,6 @@ class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
         data class RenameFile(val file: File) : Request()
         data class DeleteFile(val file: File) : Request()
         data class ImportFile(val file: File?) : Request()
-        data class ExportFile(val file: File) : Request()
 
         object PopStack : Request()
     }
@@ -82,12 +81,6 @@ class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
 
     fun requestImport(dialog: Dialog, file: File) {
         requests.trySend(Request.ImportFile(file))
-
-        dialog.dismiss()
-    }
-
-    fun requestExport(dialog: Dialog, file: File) {
-        requests.trySend(Request.ExportFile(file))
 
         dialog.dismiss()
     }
