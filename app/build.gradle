@@ -3,10 +3,10 @@ apply plugin: 'kotlin-android'
 android {
 	signingConfigs {
 		release{
-			keyAlias 'emp3826'
-			keyPassword 'emp3826'
+			keyAlias 'clash'
+			keyPassword '123456'
 			storeFile file('../release.keystore')
-			storePassword 'emp3826'
+			storePassword '123456'
 		}
 	}
 	compileSdkVersion 31
