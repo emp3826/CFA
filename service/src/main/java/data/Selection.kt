@@ -12,8 +12,7 @@ import java.util.*
         entity = Imported::class,
         childColumns = ["uuid"],
         parentColumns = ["uuid"],
-        onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE
+        onDelete = ForeignKey.CASCADE
     )],
     primaryKeys = ["uuid", "proxy"]
 )
