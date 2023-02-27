@@ -107,11 +107,6 @@ func NewProxySetProvider(name string, interval time.Duration, filter string, veh
 		healthCheck: hc,
 	}
 
-	onUpdate := func(elm any) {
-		ret := elm.([]C.Proxy)
-		pd.setProxies(ret)
-	}
-
 	proxiesParseAndFilter := func(buf []byte) (any, error) {
 		schema := &ProxySchema{}
 
@@ -145,7 +140,7 @@ func NewProxySetProvider(name string, interval time.Duration, filter string, veh
 		return proxies, nil
 	}
 
-	fetcher := newFetcher(name, interval, vehicle, proxiesParseAndFilter, onUpdate)
+	fetcher := newFetcher(name, interval, vehicle, proxiesParseAndFilter)
 	pd.fetcher = fetcher
 
 	wrapper := &ProxySetProvider{pd}

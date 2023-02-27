@@ -168,7 +168,7 @@ func safeWrite(path string, buf []byte) error {
 	return os.WriteFile(path, buf, fileMode)
 }
 
-func newFetcher(name string, interval time.Duration, vehicle types.Vehicle, parser parser, onUpdate func(any)) *fetcher {
+func newFetcher(name string, interval time.Duration, vehicle types.Vehicle, parser parser) *fetcher {
 	return &fetcher{
 		name:     name,
 		interval: interval,
