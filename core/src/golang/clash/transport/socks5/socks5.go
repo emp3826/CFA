@@ -10,13 +10,6 @@ import (
 	"strconv"
 )
 
-// Error represents a SOCKS error
-type Error byte
-
-func (err Error) Error() string {
-	return "SOCKS error: " + strconv.Itoa(int(err))
-}
-
 // Command is request commands as defined in RFC 1928 section 4.
 type Command = uint8
 
@@ -83,26 +76,6 @@ func (a Addr) UDPAddr() *net.UDPAddr {
 	return nil
 }
 
-// SOCKS errors as defined in RFC 1928 section 6.
-const (
-	ErrGeneralFailure       = Error(1)
-	ErrConnectionNotAllowed = Error(2)
-	ErrNetworkUnreachable   = Error(3)
-	ErrHostUnreachable      = Error(4)
-	ErrConnectionRefused    = Error(5)
-	ErrTTLExpired           = Error(6)
-	ErrCommandNotSupported  = Error(7)
-	ErrAddressNotSupported  = Error(8)
-)
-
-// Auth errors used to return a specific "Auth failed" error
-var ErrAuth = errors.New("auth failed")
-
-type User struct {
-	Username string
-	Password string
-}
-
 // ServerHandshake fast-tracks SOCKS initialization to get target address to connect on server side.
 func ServerHandshake(rw net.Conn) (addr Addr, command Command, err error) {
 	// Read RFC 1928 for request and reply structure and sizes.
@@ -134,32 +107,20 @@ func ServerHandshake(rw net.Conn) (addr Addr, command Command, err error) {
 	case CmdConnect, CmdUDPAssociate:
 		// Acquire server listened address info
 		localAddr := ParseAddr(rw.LocalAddr().String())
-		if localAddr == nil {
-			err = ErrAddressNotSupported
-		} else {
 			// write VER REP RSV ATYP BND.ADDR BND.PORT
-			_, err = rw.Write(bytes.Join([][]byte{{5, 0, 0}, localAddr}, []byte{}))
-		}
-	case CmdBind:
-		fallthrough
-	default:
-		err = ErrCommandNotSupported
+		_, err = rw.Write(bytes.Join([][]byte{{5, 0, 0}, localAddr}, []byte{}))
 	}
 
 	return
 }
 
 // ClientHandshake fast-tracks SOCKS initialization to get target address to connect on client side.
-func ClientHandshake(rw io.ReadWriter, addr Addr, command Command, user *User) (Addr, error) {
+func ClientHandshake(rw io.ReadWriter, addr Addr, command Command) (Addr, error) {
 	buf := make([]byte, MaxAddrLen)
 	var err error
 
 	// VER, NMETHODS, METHODS
-	if user != nil {
-		_, err = rw.Write([]byte{5, 1, 2})
-	} else {
-		_, err = rw.Write([]byte{5, 1, 0})
-	}
+	_, err = rw.Write([]byte{5, 1, 0})
 	if err != nil {
 		return nil, err
 	}
@@ -174,17 +135,10 @@ func ClientHandshake(rw io.ReadWriter, addr Addr, command Command, user *User) (
 	}
 
 	if buf[1] == 2 {
-		if user == nil {
-			return nil, ErrAuth
-		}
 
 		// password protocol version
 		authMsg := &bytes.Buffer{}
 		authMsg.WriteByte(1)
-		authMsg.WriteByte(uint8(len(user.Username)))
-		authMsg.WriteString(user.Username)
-		authMsg.WriteByte(uint8(len(user.Password)))
-		authMsg.WriteString(user.Password)
 
 		if _, err := rw.Write(authMsg.Bytes()); err != nil {
 			return nil, err
@@ -240,7 +194,7 @@ func ReadAddr(r io.Reader, b []byte) (Addr, error) {
 		return b[:1+net.IPv6len+2], err
 	}
 
-	return nil, ErrAddressNotSupported
+	return nil, nil
 }
 
 // SplitAddr slices a SOCKS address from beginning of b. Returns nil if failed.
