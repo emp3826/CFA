@@ -427,14 +427,7 @@ func (c *Conn) WriteControl(messageType int, data []byte, deadline time.Time) er
 	buf := make([]byte, 0, maxFrameHeaderSize+maxControlFramePayloadSize)
 	buf = append(buf, b0, b1)
 
-	if c.isServer {
-		buf = append(buf, data...)
-	} else {
-		key := newMaskKey()
-		buf = append(buf, key[:]...)
-		buf = append(buf, data...)
-		maskBytes(key, 0, buf[6:])
-	}
+	buf = append(buf, data...)
 
 	d := 1000 * time.Hour
 	if !deadline.IsZero() {
@@ -598,15 +591,6 @@ func (w *messageWriter) flushFrame(final bool, extra []byte) error {
 		framePos += 8
 		c.writeBuf[framePos] = b0
 		c.writeBuf[framePos+1] = b1 | byte(length)
-	}
-
-	if !c.isServer {
-		key := newMaskKey()
-		copy(c.writeBuf[maxFrameHeaderSize-4:], key[:])
-		maskBytes(key, 0, c.writeBuf[maxFrameHeaderSize:w.pos])
-		if len(extra) > 0 {
-			return w.endMessage(c.writeFatal(errors.New("websocket: internal error, extra used in client mode")))
-		}
 	}
 
 	// Write the buffers to the connection with best-effort detection of
@@ -938,9 +922,6 @@ func (c *Conn) advanceFrame() (int, error) {
 		if err != nil {
 			return noFrame, err
 		}
-		if c.isServer {
-			maskBytes(c.readMaskKey, 0, payload)
-		}
 	}
 
 	// 7. Process control frame payload.
@@ -1049,9 +1030,6 @@ func (r *messageReader) Read(b []byte) (int, error) {
 			}
 			n, err := c.br.Read(b)
 			c.readErr = hideTempErr(err)
-			if c.isServer {
-				c.readMaskPos = maskBytes(c.readMaskKey, c.readMaskPos, b[:n])
-			}
 			rem := c.readRemaining
 			rem -= int64(n)
 			c.setReadRemaining(rem)
