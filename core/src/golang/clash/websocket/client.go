@@ -305,7 +305,7 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 		}
 	}
 
-	hostPort, hostNoPort := hostPortNoPort(u)
+	hostPort, _ := hostPortNoPort(u)
 	trace := httptrace.ContextClientTrace(ctx)
 	if trace != nil && trace.GetConn != nil {
 		trace.GetConn(hostPort)
@@ -326,29 +326,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 			netConn.Close()
 		}
 	}()
-
-	if u.Scheme == "https" && d.NetDialTLSContext == nil {
-		// If NetDialTLSContext is set, assume that the TLS handshake has already been done
-
-		cfg := cloneTLSConfig(d.TLSClientConfig)
-		if cfg.ServerName == "" {
-			cfg.ServerName = hostNoPort
-		}
-		tlsConn := tls.Client(netConn, cfg)
-		netConn = tlsConn
-
-		if trace != nil && trace.TLSHandshakeStart != nil {
-			trace.TLSHandshakeStart()
-		}
-		err := doHandshake(ctx, tlsConn, cfg)
-		if trace != nil && trace.TLSHandshakeDone != nil {
-			trace.TLSHandshakeDone(tlsConn.ConnectionState(), err)
-		}
-
-		if err != nil {
-			return nil, nil, err
-		}
-	}
 
 	conn := newConn(netConn, false, d.ReadBufferSize, d.WriteBufferSize, d.WriteBufferPool, nil, nil)
 
