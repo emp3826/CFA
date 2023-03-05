@@ -21,7 +21,6 @@ type websocketConn struct {
 	reader     io.Reader
 	remoteAddr net.Addr
 
-	// https://godoc.org/github.com/gorilla/websocket#hdr-Concurrency
 	rMux sync.Mutex
 	wMux sync.Mutex
 }
