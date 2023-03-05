@@ -125,26 +125,6 @@ func (u *Upgrader) selectSubprotocol(r *http.Request, responseHeader http.Header
 func (u *Upgrader) Upgrade(w http.ResponseWriter, r *http.Request, responseHeader http.Header) (*Conn, error) {
 	const badHandshake = "websocket: the client is not using the websocket protocol: "
 
-	if !tokenListContainsValue(r.Header, "Connection", "upgrade") {
-		return u.returnError(w, r, http.StatusBadRequest, badHandshake+"'upgrade' token not found in 'Connection' header")
-	}
-
-	if !tokenListContainsValue(r.Header, "Upgrade", "websocket") {
-		return u.returnError(w, r, http.StatusBadRequest, badHandshake+"'websocket' token not found in 'Upgrade' header")
-	}
-
-	if r.Method != http.MethodGet {
-		return u.returnError(w, r, http.StatusMethodNotAllowed, badHandshake+"request method is not GET")
-	}
-
-	if !tokenListContainsValue(r.Header, "Sec-Websocket-Version", "13") {
-		return u.returnError(w, r, http.StatusBadRequest, "websocket: unsupported version: 13 not found in 'Sec-Websocket-Version' header")
-	}
-
-	if _, ok := responseHeader["Sec-Websocket-Extensions"]; ok {
-		return u.returnError(w, r, http.StatusInternalServerError, "websocket: application specific 'Sec-WebSocket-Extensions' headers are unsupported")
-	}
-
 	checkOrigin := u.CheckOrigin
 	if checkOrigin == nil {
 		checkOrigin = checkSameOrigin
