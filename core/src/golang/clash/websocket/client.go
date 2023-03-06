@@ -290,21 +290,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 		}
 	}
 
-	// If needed, wrap the dial function to connect through a proxy.
-	if d.Proxy != nil {
-		proxyURL, err := d.Proxy(req)
-		if err != nil {
-			return nil, nil, err
-		}
-		if proxyURL != nil {
-			dialer, err := proxy_FromURL(proxyURL, netDialerFunc(netDial))
-			if err != nil {
-				return nil, nil, err
-			}
-			netDial = dialer.Dial
-		}
-	}
-
 	hostPort, _ := hostPortNoPort(u)
 	trace := httptrace.ContextClientTrace(ctx)
 	if trace != nil && trace.GetConn != nil {
