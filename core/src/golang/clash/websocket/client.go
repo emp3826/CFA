@@ -346,15 +346,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 		}
 	}
 
-	for _, ext := range parseExtensions(resp.Header) {
-		if ext[""] != "permessage-deflate" {
-			continue
-		}
-		conn.newCompressionWriter = compressNoContextTakeover
-		conn.newDecompressionReader = decompressNoContextTakeover
-		break
-	}
-
 	resp.Body = ioutil.NopCloser(bytes.NewReader([]byte{}))
 	conn.subprotocol = resp.Header.Get("Sec-Websocket-Protocol")
 
