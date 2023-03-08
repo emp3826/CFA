@@ -80,12 +80,8 @@ func (pm *PreparedMessage) frame(key prepareKey) (int, []byte, error) {
 			conn:                   &nc,
 			mu:                     mu,
 			isServer:               key.isServer,
-			compressionLevel:       key.compressionLevel,
 			enableWriteCompression: true,
 			writeBuf:               make([]byte, defaultWriteBufferSize+maxFrameHeaderSize),
-		}
-		if key.compress {
-			c.newCompressionWriter = compressNoContextTakeover
 		}
 		err = c.WriteMessage(pm.messageType, pm.data)
 		frame.data = nc.buf.Bytes()

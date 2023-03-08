@@ -315,7 +315,6 @@ func newConn(conn net.Conn, isServer bool, readBufferSize, writeBufferSize int, 
 		writePool:              writeBufferPool,
 		writeBufSize:           writeBufferSize,
 		enableWriteCompression: true,
-		compressionLevel:       defaultCompressionLevel,
 	}
 	c.SetCloseHandler(nil)
 	c.SetPingHandler(nil)
