@@ -140,18 +140,6 @@ func (u *Upgrader) Upgrade(w http.ResponseWriter, r *http.Request, responseHeade
 
 	subprotocol := u.selectSubprotocol(r, responseHeader)
 
-	// Negotiate PMCE
-	var compress bool
-	if u.EnableCompression {
-		for _, ext := range parseExtensions(r.Header) {
-			if ext[""] != "permessage-deflate" {
-				continue
-			}
-			compress = true
-			break
-		}
-	}
-
 	h, ok := w.(http.Hijacker)
 	if !ok {
 		return u.returnError(w, r, http.StatusInternalServerError, "websocket: response does not implement http.Hijacker")
@@ -198,9 +186,6 @@ func (u *Upgrader) Upgrade(w http.ResponseWriter, r *http.Request, responseHeade
 		p = append(p, "Sec-WebSocket-Protocol: "...)
 		p = append(p, c.subprotocol...)
 		p = append(p, "\r\n"...)
-	}
-	if compress {
-		p = append(p, "Sec-WebSocket-Extensions: permessage-deflate; server_no_context_takeover; client_no_context_takeover\r\n"...)
 	}
 	for k, vs := range responseHeader {
 		if k == "Sec-Websocket-Protocol" {
