@@ -190,13 +190,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 	}
 	req = req.WithContext(ctx)
 
-	// Set the cookies present in the cookie jar of the dialer
-	if d.Jar != nil {
-		for _, cookie := range d.Jar.Cookies(u) {
-			req.AddCookie(cookie)
-		}
-	}
-
 	// Set the request headers using the capitalization for names and values in
 	// RFC examples. Although the capitalization shouldn't matter, there are
 	// servers that depend on it. The Header.Set method is not used because the
@@ -226,10 +219,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 		default:
 			req.Header[k] = vs
 		}
-	}
-
-	if d.EnableCompression {
-		req.Header["Sec-WebSocket-Extensions"] = []string{"permessage-deflate; server_no_context_takeover; client_no_context_takeover"}
 	}
 
 	if d.HandshakeTimeout != 0 {
@@ -340,23 +329,10 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 		return nil, nil, err
 	}
 
-	if d.Jar != nil {
-		if rc := resp.Cookies(); len(rc) > 0 {
-			d.Jar.SetCookies(u, rc)
-		}
-	}
-
 	resp.Body = ioutil.NopCloser(bytes.NewReader([]byte{}))
 	conn.subprotocol = resp.Header.Get("Sec-Websocket-Protocol")
 
 	netConn.SetDeadline(time.Time{})
 	netConn = nil // to avoid close in defer.
 	return conn, resp, nil
-}
-
-func cloneTLSConfig(cfg *tls.Config) *tls.Config {
-	if cfg == nil {
-		return &tls.Config{}
-	}
-	return cfg.Clone()
 }
