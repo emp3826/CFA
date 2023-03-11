@@ -26,8 +26,6 @@ type PreparedMessage struct {
 // prepareKey defines a unique set of options to cache prepared frames in PreparedMessage.
 type prepareKey struct {
 	isServer         bool
-	compress         bool
-	compressionLevel int
 }
 
 // preparedFrame contains data in wire representation.
@@ -48,7 +46,7 @@ func NewPreparedMessage(messageType int, data []byte) (*PreparedMessage, error) 
 	}
 
 	// Prepare a plain server frame.
-	_, frameData, err := pm.frame(prepareKey{isServer: true, compress: false})
+	_, frameData, err := pm.frame(prepareKey{isServer: true})
 	if err != nil {
 		return nil, err
 	}
