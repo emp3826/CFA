@@ -124,10 +124,6 @@ func streamWebsocketConn(conn net.Conn, c *WebsocketConfig, earlyData *bytes.Buf
 	}
 
 	scheme := "ws"
-	if c.TLS {
-		scheme = "wss"
-		dialer.TLSClientConfig = c.TLSConfig
-	}
 
 	uri := url.URL{
 		Scheme: scheme,

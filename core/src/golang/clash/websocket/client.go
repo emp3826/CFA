@@ -7,9 +7,7 @@ package websocket
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -65,12 +63,6 @@ type Dialer struct {
 	// If Proxy is nil or returns a nil *URL, no proxy is used.
 	Proxy func(*http.Request) (*url.URL, error)
 
-	// TLSClientConfig specifies the TLS configuration to use with tls.Client.
-	// If nil, the default configuration is used.
-	// If either NetDialTLS or NetDialTLSContext are set, Dial assumes the TLS handshake
-	// is done there and TLSClientConfig is ignored.
-	TLSClientConfig *tls.Config
-
 	// HandshakeTimeout specifies the duration for the handshake to complete.
 	HandshakeTimeout time.Duration
 
@@ -92,12 +84,6 @@ type Dialer struct {
 
 	// Subprotocols specifies the client's requested subprotocols.
 	Subprotocols []string
-
-	// EnableCompression specifies if the client should attempt to negotiate
-	// per message compression (RFC 7692). Setting this value to true does not
-	// guarantee that compression will be supported. Currently only "no context
-	// takeover" modes are supported.
-	EnableCompression bool
 
 	// Jar specifies the cookie jar.
 	// If Jar is nil, cookies are not sent in requests and ignored
@@ -315,17 +301,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 
 	resp, err := http.ReadResponse(conn.br, req)
 	if err != nil {
-		if d.TLSClientConfig != nil {
-			for _, proto := range d.TLSClientConfig.NextProtos {
-				if proto != "http/1.1" {
-					return nil, nil, fmt.Errorf(
-						"websocket: protocol %q was given but is not supported;"+
-							"sharing tls.Config with net/http Transport can cause this error: %w",
-						proto, err,
-					)
-				}
-			}
-		}
 		return nil, nil, err
 	}
 
