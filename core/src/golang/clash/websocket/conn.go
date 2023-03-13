@@ -256,10 +256,6 @@ type Conn struct {
 	writeErrMu sync.Mutex
 	writeErr   error
 
-	enableWriteCompression bool
-	compressionLevel       int
-	newCompressionWriter   func(io.WriteCloser, int) io.WriteCloser
-
 	// Read fields
 	reader  io.ReadCloser // the current reader returned to the application
 	readErr error
@@ -314,7 +310,6 @@ func newConn(conn net.Conn, isServer bool, readBufferSize, writeBufferSize int, 
 		writeBuf:               writeBuf,
 		writePool:              writeBufferPool,
 		writeBufSize:           writeBufferSize,
-		enableWriteCompression: true,
 	}
 	c.SetCloseHandler(nil)
 	c.SetPingHandler(nil)
@@ -513,11 +508,6 @@ func (c *Conn) NextWriter(messageType int) (io.WriteCloser, error) {
 		return nil, err
 	}
 	c.writer = &mw
-	if c.newCompressionWriter != nil && c.enableWriteCompression && isData(messageType) {
-		w := c.newCompressionWriter(c.writer, c.compressionLevel)
-		mw.compress = true
-		c.writer = w
-	}
 	return c.writer, nil
 }
 
@@ -737,20 +727,6 @@ func (c *Conn) WritePreparedMessage(pm *PreparedMessage) error {
 // WriteMessage is a helper method for getting a writer using NextWriter,
 // writing the message and closing the writer.
 func (c *Conn) WriteMessage(messageType int, data []byte) error {
-
-	if c.isServer && (c.newCompressionWriter == nil || !c.enableWriteCompression) {
-		// Fast path with no allocations and single frame.
-
-		var mw messageWriter
-		if err := c.beginMessage(&mw, messageType); err != nil {
-			return err
-		}
-		n := copy(c.writeBuf[mw.pos:], data)
-		mw.pos += n
-		data = data[n:]
-		return mw.flushFrame(true, data)
-	}
-
 	w, err := c.NextWriter(messageType)
 	if err != nil {
 		return err

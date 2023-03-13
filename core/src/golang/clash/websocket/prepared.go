@@ -78,7 +78,6 @@ func (pm *PreparedMessage) frame(key prepareKey) (int, []byte, error) {
 			conn:                   &nc,
 			mu:                     mu,
 			isServer:               key.isServer,
-			enableWriteCompression: true,
 			writeBuf:               make([]byte, defaultWriteBufferSize+maxFrameHeaderSize),
 		}
 		err = c.WriteMessage(pm.messageType, pm.data)
