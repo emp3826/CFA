@@ -273,9 +273,6 @@ type Conn struct {
 	handleClose   func(int, string) error
 	readErrCount  int
 	messageReader *messageReader // the current low-level reader
-
-	readDecompress         bool // whether last read frame had RSV1 set
-	newDecompressionReader func(io.Reader) io.ReadCloser
 }
 
 func newConn(conn net.Conn, isServer bool, readBufferSize, writeBufferSize int, writeBufferPool BufferPool, br *bufio.Reader, writeBuf []byte) *Conn {
@@ -776,13 +773,8 @@ func (c *Conn) advanceFrame() (int, error) {
 	mask := p[1]&maskBit != 0
 	c.setReadRemaining(int64(p[1] & 0x7f))
 
-	c.readDecompress = false
 	if rsv1 {
-		if c.newDecompressionReader != nil {
-			c.readDecompress = true
-		} else {
-			errors = append(errors, "RSV1 set")
-		}
+		errors = append(errors, "RSV1 set")
 	}
 
 	if rsv2 {
@@ -969,9 +961,6 @@ func (c *Conn) NextReader() (messageType int, r io.Reader, err error) {
 		if frameType == TextMessage || frameType == BinaryMessage {
 			c.messageReader = &messageReader{c}
 			c.reader = c.messageReader
-			if c.readDecompress {
-				c.reader = c.newDecompressionReader(c.reader)
-			}
 			return frameType, c.reader, nil
 		}
 	}
