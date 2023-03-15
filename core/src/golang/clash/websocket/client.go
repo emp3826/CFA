@@ -84,11 +84,6 @@ type Dialer struct {
 
 	// Subprotocols specifies the client's requested subprotocols.
 	Subprotocols []string
-
-	// Jar specifies the cookie jar.
-	// If Jar is nil, cookies are not sent in requests and ignored
-	// in responses.
-	Jar http.CookieJar
 }
 
 // Dial creates a new client connection by calling DialContext with a background context.
