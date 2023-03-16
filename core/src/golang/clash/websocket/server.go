@@ -66,12 +66,6 @@ type Upgrader struct {
 	// A CheckOrigin function should carefully validate the request origin to
 	// prevent cross-site request forgery.
 	CheckOrigin func(r *http.Request) bool
-
-	// EnableCompression specify if the server should attempt to negotiate per
-	// message compression (RFC 7692). Setting this value to true does not
-	// guarantee that compression will be supported. Currently only "no context
-	// takeover" modes are supported.
-	EnableCompression bool
 }
 
 func (u *Upgrader) returnError(w http.ResponseWriter, r *http.Request, status int, reason string) (*Conn, error) {
