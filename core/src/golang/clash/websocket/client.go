@@ -51,12 +51,6 @@ type Dialer struct {
 	// NetDialContext is nil, NetDial is used.
 	NetDialContext func(ctx context.Context, network, addr string) (net.Conn, error)
 
-	// NetDialTLSContext specifies the dial function for creating TLS/TCP connections. If
-	// NetDialTLSContext is nil, NetDialContext is used.
-	// If NetDialTLSContext is set, Dial assumes the TLS handshake is done there and
-	// TLSClientConfig is ignored.
-	NetDialTLSContext func(ctx context.Context, network, addr string) (net.Conn, error)
-
 	// Proxy specifies a function to return a proxy for a given
 	// Request. If the function returns a non-nil error, the
 	// request is aborted with the provided error.
@@ -99,14 +93,7 @@ func hostPortNoPort(u *url.URL) (hostPort, hostNoPort string) {
 	if i := strings.LastIndex(u.Host, ":"); i > strings.LastIndex(u.Host, "]") {
 		hostNoPort = hostNoPort[:i]
 	} else {
-		switch u.Scheme {
-		case "wss":
-			hostPort += ":443"
-		case "https":
-			hostPort += ":443"
-		default:
-			hostPort += ":80"
-		}
+		hostPort += ":80"
 	}
 	return hostPort, hostNoPort
 }
@@ -144,20 +131,6 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 	u, err := url.Parse(urlStr)
 	if err != nil {
 		return nil, nil, err
-	}
-
-	switch u.Scheme {
-	case "ws":
-		u.Scheme = "http"
-	case "wss":
-		u.Scheme = "https"
-	default:
-		return nil, nil, errMalformedURL
-	}
-
-	if u.User != nil {
-		// User name and password are not allowed in websocket URIs.
-		return nil, nil, errMalformedURL
 	}
 
 	req := &http.Request{
@@ -211,29 +184,12 @@ func (d *Dialer) DialContext(ctx context.Context, urlStr string, requestHeader h
 	// Get network dial function.
 	var netDial func(network, add string) (net.Conn, error)
 
-	switch u.Scheme {
-	case "http":
-		if d.NetDialContext != nil {
-			netDial = func(network, addr string) (net.Conn, error) {
-				return d.NetDialContext(ctx, network, addr)
-			}
-		} else if d.NetDial != nil {
-			netDial = d.NetDial
+	if d.NetDialContext != nil {
+		netDial = func(network, addr string) (net.Conn, error) {
+			return d.NetDialContext(ctx, network, addr)
 		}
-	case "https":
-		if d.NetDialTLSContext != nil {
-			netDial = func(network, addr string) (net.Conn, error) {
-				return d.NetDialTLSContext(ctx, network, addr)
-			}
-		} else if d.NetDialContext != nil {
-			netDial = func(network, addr string) (net.Conn, error) {
-				return d.NetDialContext(ctx, network, addr)
-			}
-		} else if d.NetDial != nil {
-			netDial = d.NetDial
-		}
-	default:
-		return nil, nil, errMalformedURL
+	} else if d.NetDial != nil {
+		netDial = d.NetDial
 	}
 
 	if netDial == nil {
