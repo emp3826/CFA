@@ -107,8 +107,6 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                         val name = design.requestFileName(uri.fileName ?: "File")
 
                                         client.importDocument(stack.last(), uri, name)
-                                    } else {
-                                        client.copyDocument(it.file!!.id, uri)
                                     }
                                 }
                             }

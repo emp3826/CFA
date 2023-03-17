@@ -58,24 +58,6 @@ class FilesClient(private val context: Context) {
         context.contentResolver.copyContentTo(source, target)
     }
 
-    suspend fun copyDocument(
-        documentId: String,
-        source: Uri
-    ) {
-        val target = buildDocumentUri(documentId)
-
-        context.contentResolver.copyContentTo(source, target)
-    }
-
-    suspend fun copyDocument(
-        target: Uri,
-        documentId: String
-    ) {
-        val source = buildDocumentUri(documentId)
-
-        context.contentResolver.copyContentTo(source, target)
-    }
-
     fun buildDocumentUri(documentId: String): Uri {
         return DC.buildDocumentUri(Authorities.FILES_PROVIDER, documentId)
     }
