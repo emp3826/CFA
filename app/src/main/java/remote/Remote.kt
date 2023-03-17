@@ -38,8 +38,4 @@ object Remote {
             }
         }
     }
-
-    private fun getLastUpdated(context: Context): Long {
-        return context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
-    }
 }
