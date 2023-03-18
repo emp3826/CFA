@@ -110,69 +110,6 @@ type CloseError struct {
 	Text string
 }
 
-func (e *CloseError) Error() string {
-	s := []byte("websocket: close ")
-	s = strconv.AppendInt(s, int64(e.Code), 10)
-	switch e.Code {
-	case CloseNormalClosure:
-		s = append(s, " (normal)"...)
-	case CloseGoingAway:
-		s = append(s, " (going away)"...)
-	case CloseProtocolError:
-		s = append(s, " (protocol error)"...)
-	case CloseUnsupportedData:
-		s = append(s, " (unsupported data)"...)
-	case CloseNoStatusReceived:
-		s = append(s, " (no status)"...)
-	case CloseAbnormalClosure:
-		s = append(s, " (abnormal closure)"...)
-	case CloseInvalidFramePayloadData:
-		s = append(s, " (invalid payload data)"...)
-	case ClosePolicyViolation:
-		s = append(s, " (policy violation)"...)
-	case CloseMessageTooBig:
-		s = append(s, " (message too big)"...)
-	case CloseMandatoryExtension:
-		s = append(s, " (mandatory extension missing)"...)
-	case CloseInternalServerErr:
-		s = append(s, " (internal server error)"...)
-	case CloseTLSHandshake:
-		s = append(s, " (TLS handshake error)"...)
-	}
-	if e.Text != "" {
-		s = append(s, ": "...)
-		s = append(s, e.Text...)
-	}
-	return string(s)
-}
-
-// IsCloseError returns boolean indicating whether the error is a *CloseError
-// with one of the specified codes.
-func IsCloseError(err error, codes ...int) bool {
-	if e, ok := err.(*CloseError); ok {
-		for _, code := range codes {
-			if e.Code == code {
-				return true
-			}
-		}
-	}
-	return false
-}
-
-// IsUnexpectedCloseError returns boolean indicating whether the error is a
-// *CloseError with a code not in the list of expected codes.
-func IsUnexpectedCloseError(err error, expectedCodes ...int) bool {
-	if e, ok := err.(*CloseError); ok {
-		for _, code := range expectedCodes {
-			if e.Code == code {
-				return false
-			}
-		}
-		return true
-	}
-	return false
-}
-
 var (
 	errWriteTimeout        = &netError{msg: "websocket: write timeout", timeout: true, temporary: true}
 	errUnexpectedEOF       = &CloseError{Code: CloseAbnormalClosure, Text: io.ErrUnexpectedEOF.Error()}
@@ -360,9 +297,6 @@ func (c *Conn) writeFatal(err error) error {
 
 func (c *Conn) read(n int) ([]byte, error) {
 	p, err := c.br.Peek(n)
-	if err == io.EOF {
-		err = errUnexpectedEOF
-	}
 	c.br.Discard(len(p))
 	return p, err
 }
@@ -916,7 +850,7 @@ func (c *Conn) advanceFrame() (int, error) {
 		if err := c.handleClose(closeCode, closeText); err != nil {
 			return noFrame, err
 		}
-		return noFrame, &CloseError{Code: closeCode, Text: closeText}
+		return noFrame, nil
 	}
 
 	return frameType, nil
@@ -995,9 +929,6 @@ func (r *messageReader) Read(b []byte) (int, error) {
 			rem := c.readRemaining
 			rem -= int64(n)
 			c.setReadRemaining(rem)
-			if c.readRemaining > 0 && c.readErr == io.EOF {
-				c.readErr = errUnexpectedEOF
-			}
 			return n, c.readErr
 		}
 
@@ -1016,9 +947,6 @@ func (r *messageReader) Read(b []byte) (int, error) {
 	}
 
 	err := c.readErr
-	if err == io.EOF && c.messageReader == r {
-		err = errUnexpectedEOF
-	}
 	return 0, err
 }
 
