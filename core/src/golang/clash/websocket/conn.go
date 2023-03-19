@@ -13,10 +13,8 @@ import (
 	"math/rand"
 	"net"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
-	"unicode/utf8"
 )
 
 const (
@@ -44,19 +42,6 @@ const (
 // Close codes defined in RFC 6455, section 11.7.
 const (
 	CloseNormalClosure           = 1000
-	CloseGoingAway               = 1001
-	CloseProtocolError           = 1002
-	CloseUnsupportedData         = 1003
-	CloseNoStatusReceived        = 1005
-	CloseAbnormalClosure         = 1006
-	CloseInvalidFramePayloadData = 1007
-	ClosePolicyViolation         = 1008
-	CloseMessageTooBig           = 1009
-	CloseMandatoryExtension      = 1010
-	CloseInternalServerErr       = 1011
-	CloseServiceRestart          = 1012
-	CloseTryAgainLater           = 1013
-	CloseTLSHandshake            = 1015
 )
 
 // The message types are defined in RFC 6455, section 11.8.
@@ -112,7 +97,6 @@ type CloseError struct {
 
 var (
 	errWriteTimeout        = &netError{msg: "websocket: write timeout", timeout: true, temporary: true}
-	errUnexpectedEOF       = &CloseError{Code: CloseAbnormalClosure, Text: io.ErrUnexpectedEOF.Error()}
 	errBadWriteOpCode      = errors.New("websocket: bad write message type")
 	errWriteClosed         = errors.New("websocket: write closed")
 	errInvalidControlFrame = errors.New("websocket: invalid control frame")
@@ -142,19 +126,6 @@ var validReceivedCloseCodes = map[int]bool{
 	// see http://www.iana.org/assignments/websocket/websocket.xhtml#close-code-number
 
 	CloseNormalClosure:           true,
-	CloseGoingAway:               true,
-	CloseProtocolError:           true,
-	CloseUnsupportedData:         true,
-	CloseNoStatusReceived:        false,
-	CloseAbnormalClosure:         false,
-	CloseInvalidFramePayloadData: true,
-	ClosePolicyViolation:         true,
-	CloseMessageTooBig:           true,
-	CloseMandatoryExtension:      true,
-	CloseInternalServerErr:       true,
-	CloseServiceRestart:          true,
-	CloseTryAgainLater:           true,
-	CloseTLSHandshake:            false,
 }
 
 func isValidReceivedCloseCode(code int) bool {
@@ -745,10 +716,6 @@ func (c *Conn) advanceFrame() (int, error) {
 		errors = append(errors, "bad MASK")
 	}
 
-	if len(errors) > 0 {
-		return noFrame, c.handleProtocolError(strings.Join(errors, ", "))
-	}
-
 	// 3. Read and parse frame length as per
 	// https://tools.ietf.org/html/rfc6455#section-5.2
 	//
@@ -804,11 +771,6 @@ func (c *Conn) advanceFrame() (int, error) {
 			return noFrame, ErrReadLimit
 		}
 
-		if c.readLimit > 0 && c.readLength > c.readLimit {
-			c.WriteControl(CloseMessage, FormatCloseMessage(CloseMessageTooBig, ""), time.Now().Add(writeWait))
-			return noFrame, ErrReadLimit
-		}
-
 		return frameType, nil
 	}
 
@@ -834,35 +796,9 @@ func (c *Conn) advanceFrame() (int, error) {
 		if err := c.handlePing(string(payload)); err != nil {
 			return noFrame, err
 		}
-	case CloseMessage:
-		closeCode := CloseNoStatusReceived
-		closeText := ""
-		if len(payload) >= 2 {
-			closeCode = int(binary.BigEndian.Uint16(payload))
-			if !isValidReceivedCloseCode(closeCode) {
-				return noFrame, c.handleProtocolError("bad close code " + strconv.Itoa(closeCode))
-			}
-			closeText = string(payload[2:])
-			if !utf8.ValidString(closeText) {
-				return noFrame, c.handleProtocolError("invalid utf8 payload in close frame")
-			}
-		}
-		if err := c.handleClose(closeCode, closeText); err != nil {
-			return noFrame, err
-		}
-		return noFrame, nil
 	}
 
 	return frameType, nil
-}
-
-func (c *Conn) handleProtocolError(message string) error {
-	data := FormatCloseMessage(CloseProtocolError, message)
-	if len(data) > maxControlFramePayloadSize {
-		data = data[:maxControlFramePayloadSize]
-	}
-	c.WriteControl(CloseMessage, data, time.Now().Add(writeWait))
-	return errors.New("websocket: " + message)
 }
 
 // NextReader returns the next data message received from the peer. The
@@ -1074,12 +1010,6 @@ func (c *Conn) UnderlyingConn() net.Conn {
 // FormatCloseMessage formats closeCode and text as a WebSocket close message.
 // An empty message is returned for code CloseNoStatusReceived.
 func FormatCloseMessage(closeCode int, text string) []byte {
-	if closeCode == CloseNoStatusReceived {
-		// Return empty message because it's illegal to send
-		// CloseNoStatusReceived. Return non-nil value in case application
-		// checks for nil.
-		return []byte{}
-	}
 	buf := make([]byte, 2+len(text))
 	binary.BigEndian.PutUint16(buf, uint16(closeCode))
 	copy(buf[2:], text)
