@@ -22,27 +22,8 @@ class NetworkObserveModule(service: Service) : Module<Network?>(service) {
         addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
     }.build()
-    private val callback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            actions.trySendBlocking(Action(Action.Type.Available, network))
-        }
-
-        override fun onLost(network: Network) {
-            actions.trySendBlocking(Action(Action.Type.Lost, network))
-        }
-
-        override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
-            actions.trySendBlocking(Action(Action.Type.Changed, network))
-        }
-    }
 
     override suspend fun run() {
-        try {
-            connectivity.registerNetworkCallback(request, callback)
-        } catch (e: Exception) {
-            return
-        }
-
         try {
             val networks = mutableSetOf<Network>()
 
@@ -78,10 +59,6 @@ class NetworkObserveModule(service: Service) : Module<Network?>(service) {
         } finally {
             withContext(NonCancellable) {
                 enqueueEvent(null)
-
-                runCatching {
-                    connectivity.unregisterNetworkCallback(callback)
-                }
             }
         }
     }
