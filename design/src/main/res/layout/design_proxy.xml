@@ -61,12 +61,6 @@
                             android:focusable="true"
                             android:onClick="@{() -> self.requestUrlTesting()}"
                             android:padding="@dimen/toolbar_image_action_padding" />
-
-                        <ProgressBar
-                            android:id="@+id/url_test_progress_view"
-                            android:layout_width="@dimen/item_tailing_component_size"
-                            android:layout_height="@dimen/item_tailing_component_size"
-                            android:visibility="gone" />
                     </FrameLayout>
 
                     <ImageView
