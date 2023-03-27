@@ -62,8 +62,6 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
         binding.self = this
 
         binding.activityBarLayout.applyFrom(context)
-
-        binding.scrollRoot.bindAppBarElevation(binding.activityBarLayout)
     }
 
     fun inputName() {

@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import androidx.recyclerview.widget.RecyclerView
 import com.github.kr328.clash.design.R
 import com.github.kr328.clash.design.view.ActivityBarLayout
-import com.github.kr328.clash.design.view.ObservableScrollView
 
 private class AppBarElevationController(
     private val activityBar: ActivityBarLayout
@@ -48,12 +47,4 @@ fun RecyclerView.bindAppBarElevation(activityBar: ActivityBarLayout) {
             controller.elevated = !recyclerView.isTop
         }
     })
-}
-
-fun ObservableScrollView.bindAppBarElevation(activityBar: ActivityBarLayout) {
-    val controller = AppBarElevationController(activityBar)
-
-    addOnScrollChangedListener { view, _, _, _, _ ->
-        controller.elevated = !view.isTop
-    }
 }

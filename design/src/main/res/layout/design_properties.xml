@@ -22,12 +22,6 @@
         android:paddingStart="@{self.surface.insets.start}"
         android:paddingEnd="@{self.surface.insets.end}">
 
-        <com.github.kr328.clash.design.view.ObservableScrollView
-            android:id="@+id/scroll_root"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +65,6 @@
                     app:subtext="@string/browse_configuration_providers"
                     app:text="@string/browse_files" />
             </LinearLayout>
-        </com.github.kr328.clash.design.view.ObservableScrollView>
 
         <com.github.kr328.clash.design.view.ActivityBarLayout
             android:id="@+id/activity_bar_layout"
