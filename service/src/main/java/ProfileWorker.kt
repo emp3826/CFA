@@ -14,7 +14,6 @@ import com.github.kr328.clash.common.constants.Intents
 import com.github.kr328.clash.common.id.UndefinedIds
 import com.github.kr328.clash.common.util.setUUID
 import com.github.kr328.clash.common.util.uuid
-import com.github.kr328.clash.service.data.ImportedDao
 import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -52,23 +51,7 @@ class ProfileWorker : BaseService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
-        when (intent?.action) {
-            Intents.ACTION_PROFILE_REQUEST_UPDATE -> {
-                intent.uuid?.also {
-                    val job = launch {
-                        run(it)
-                    }
-
-                    jobs.add(job)
-                }
-            }
-        }
-
         return START_NOT_STICKY
-    }
-
-    private suspend fun run(uuid: UUID) {
-        val imported = ImportedDao().queryByUUID(uuid) ?: return
     }
 
     private fun createChannels() {
