@@ -1,6 +1,5 @@
 package com.github.kr328.clash.service
 
-import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.Intent
 import android.net.ProxyInfo
@@ -47,7 +46,7 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
                         true
                     }
                     network.onEvent { n ->
-                        if (Build.VERSION.SDK_INT in 22..28) @TargetApi(22) {
+                        if (Build.VERSION.SDK_INT in 22..28) {
                             setUnderlyingNetworks(n?.let { arrayOf(it) })
                         }
 
