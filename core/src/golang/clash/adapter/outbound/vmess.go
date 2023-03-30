@@ -53,11 +53,6 @@ type HTTPOptions struct {
 	Headers map[string][]string `proxy:"headers,omitempty"`
 }
 
-type HTTP2Options struct {
-	Host []string `proxy:"host,omitempty"`
-	Path string   `proxy:"path,omitempty"`
-}
-
 type GrpcOptions struct {
 	GrpcServiceName string `proxy:"grpc-service-name,omitempty"`
 }
@@ -102,24 +97,6 @@ func (v *Vmess) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 		}
 		c, err = vmess.StreamWebsocketConn(c, wsOpts)
 	case "http":
-		// readability first, so just copy default TLS logic
-		if v.option.TLS {
-			host, _, _ := net.SplitHostPort(v.addr)
-			tlsOpts := &vmess.TLSConfig{
-				Host:           host,
-				SkipCertVerify: v.option.SkipCertVerify,
-			}
-
-			if v.option.ServerName != "" {
-				tlsOpts.Host = v.option.ServerName
-			}
-
-			c, err = vmess.StreamTLSConn(c, tlsOpts)
-			if err != nil {
-				return nil, err
-			}
-		}
-
 		host, _, _ := net.SplitHostPort(v.addr)
 		httpOpts := &vmess.HTTPConfig{
 			Host:    host,
@@ -131,21 +108,6 @@ func (v *Vmess) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 		c = vmess.StreamHTTPConn(c, httpOpts)
 	case "grpc":
 		c, err = gun.StreamGunWithConn(c, v.gunTLSConfig, v.gunConfig)
-	default:
-		// handle TLS
-		if v.option.TLS {
-			host, _, _ := net.SplitHostPort(v.addr)
-			tlsOpts := &vmess.TLSConfig{
-				Host:           host,
-				SkipCertVerify: v.option.SkipCertVerify,
-			}
-
-			if v.option.ServerName != "" {
-				tlsOpts.Host = v.option.ServerName
-			}
-
-			c, err = vmess.StreamTLSConn(c, tlsOpts)
-		}
 	}
 
 	if err != nil {
