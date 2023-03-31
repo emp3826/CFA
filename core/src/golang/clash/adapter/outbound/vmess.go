@@ -14,8 +14,6 @@ import (
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/transport/gun"
 	"github.com/Dreamacro/clash/transport/vmess"
-
-	"golang.org/x/net/http2"
 )
 
 type Vmess struct {
@@ -26,7 +24,6 @@ type Vmess struct {
 	// for gun mux
 	gunTLSConfig *tls.Config
 	gunConfig    *gun.Config
-	transport    *http2.Transport
 }
 
 type VmessOption struct {
@@ -119,22 +116,6 @@ func (v *Vmess) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 
 // DialContext implements C.ProxyAdapter
 func (v *Vmess) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Conn, err error) {
-	// gun transport
-	if v.transport != nil {
-		c, err := gun.StreamGunWithTransport(v.transport, v.gunConfig)
-		if err != nil {
-			return nil, err
-		}
-		defer safeConnClose(c, err)
-
-		c, err = v.client.StreamConn(c, parseVmessAddr(metadata))
-		if err != nil {
-			return nil, err
-		}
-
-		return NewConn(c, v), nil
-	}
-
 	c, err := dialer.DialContext(ctx, "tcp", v.addr)
 	if err != nil {
 		return nil, err
@@ -157,24 +138,13 @@ func (v *Vmess) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (
 	}
 
 	var c net.Conn
-	// gun transport
-	if v.transport != nil {
-		c, err = gun.StreamGunWithTransport(v.transport, v.gunConfig)
-		if err != nil {
-			return nil, err
-		}
-		defer safeConnClose(c, err)
-
-		c, err = v.client.StreamConn(c, parseVmessAddr(metadata))
-	} else {
-		c, err = dialer.DialContext(ctx, "tcp", v.addr)
-		if err != nil {
-			return nil, err
-		}
-		defer safeConnClose(c, err)
-
-		c, err = v.StreamConn(c, metadata)
+	c, err = dialer.DialContext(ctx, "tcp", v.addr)
+	if err != nil {
+		return nil, err
 	}
+	defer safeConnClose(c, err)
+
+	c, err = v.StreamConn(c, metadata)
 
 	if err != nil {
 		return nil, err
@@ -213,36 +183,6 @@ func NewVmess(option VmessOption) (*Vmess, error) {
 		},
 		client: client,
 		option: &option,
-	}
-
-	switch option.Network {
-	case "grpc":
-		dialFn := func(network, addr string) (net.Conn, error) {
-			c, err := dialer.DialContext(context.Background(), "tcp", v.addr)
-			if err != nil {
-				return nil, err
-			}
-			return c, nil
-		}
-
-		gunConfig := &gun.Config{
-			ServiceName: v.option.GrpcOpts.GrpcServiceName,
-			Host:        v.option.ServerName,
-		}
-		tlsConfig := &tls.Config{
-			InsecureSkipVerify: v.option.SkipCertVerify,
-			ServerName:         v.option.ServerName,
-		}
-
-		if v.option.ServerName == "" {
-			host, _, _ := net.SplitHostPort(v.addr)
-			tlsConfig.ServerName = host
-			gunConfig.Host = host
-		}
-
-		v.gunTLSConfig = tlsConfig
-		v.gunConfig = gunConfig
-		v.transport = gun.NewHTTP2Client(dialFn, tlsConfig)
 	}
 
 	return v, nil
