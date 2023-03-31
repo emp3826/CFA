@@ -40,7 +40,7 @@ object Bridge {
 
     external fun nativeQueryConfiguration(): String
 
-    private external fun nativeInit(home: String, versionName: String, sdkVersion: Int)
+    private external fun nativeInit(home: String, versionName: String)
 
     init {
         System.loadLibrary("bridge")
@@ -52,8 +52,7 @@ object Bridge {
 
         val home = ctx.filesDir.resolve("clash").apply { mkdirs() }.absolutePath
         val versionName = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName
-        val sdkVersion = Build.VERSION.SDK_INT
 
-        nativeInit(home, versionName, sdkVersion)
+        nativeInit(home, versionName)
     }
 }
