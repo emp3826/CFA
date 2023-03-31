@@ -37,7 +37,6 @@ type TrojanOption struct {
 	SkipCertVerify bool        `proxy:"skip-cert-verify,omitempty"`
 	UDP            bool        `proxy:"udp,omitempty"`
 	Network        string      `proxy:"network,omitempty"`
-	GrpcOpts       GrpcOptions `proxy:"grpc-opts,omitempty"`
 	WSOpts         WSOptions   `proxy:"ws-opts,omitempty"`
 }
 
@@ -120,24 +119,14 @@ func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Con
 // ListenPacketContext implements C.ProxyAdapter
 func (t *Trojan) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (_ C.PacketConn, err error) {
 	var c net.Conn
-
-	// grpc transport
-	if t.transport != nil {
-		c, err = gun.StreamGunWithTransport(t.transport, t.gunConfig)
-		if err != nil {
-			return nil, err
-		}
-		defer safeConnClose(c, err)
-	} else {
-		c, err = dialer.DialContext(ctx, "tcp", t.addr)
-		if err != nil {
-			return nil, err
-		}
-		defer safeConnClose(c, err)
-		c, err = t.plainStream(c)
-		if err != nil {
-			return nil, err
-		}
+	c, err = dialer.DialContext(ctx, "tcp", t.addr)
+	if err != nil {
+		return nil, err
+	}
+	defer safeConnClose(c, err)
+	c, err = t.plainStream(c)
+	if err != nil {
+		return nil, err
 	}
 
 	err = t.instance.WriteHeader(c, trojan.CommandUDP, serializesSocksAddr(metadata))
@@ -172,30 +161,6 @@ func NewTrojan(option TrojanOption) (*Trojan, error) {
 		},
 		instance: trojan.New(tOption),
 		option:   &option,
-	}
-
-	if option.Network == "grpc" {
-		dialFn := func(network, addr string) (net.Conn, error) {
-			c, err := dialer.DialContext(context.Background(), "tcp", t.addr)
-			if err != nil {
-				return nil, err
-			}
-			return c, nil
-		}
-
-		tlsConfig := &tls.Config{
-			NextProtos:         option.ALPN,
-			MinVersion:         tls.VersionTLS12,
-			InsecureSkipVerify: tOption.SkipCertVerify,
-			ServerName:         tOption.ServerName,
-		}
-
-		t.transport = gun.NewHTTP2Client(dialFn, tlsConfig)
-		t.gunTLSConfig = tlsConfig
-		t.gunConfig = &gun.Config{
-			ServiceName: option.GrpcOpts.GrpcServiceName,
-			Host:        tOption.ServerName,
-		}
 	}
 
 	return t, nil

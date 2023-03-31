@@ -40,7 +40,6 @@ type VmessOption struct {
 	SkipCertVerify bool         `proxy:"skip-cert-verify,omitempty"`
 	ServerName     string       `proxy:"servername,omitempty"`
 	HTTPOpts       HTTPOptions  `proxy:"http-opts,omitempty"`
-	GrpcOpts       GrpcOptions  `proxy:"grpc-opts,omitempty"`
 	WSOpts         WSOptions    `proxy:"ws-opts,omitempty"`
 }
 
@@ -48,10 +47,6 @@ type HTTPOptions struct {
 	Method  string              `proxy:"method,omitempty"`
 	Path    []string            `proxy:"path,omitempty"`
 	Headers map[string][]string `proxy:"headers,omitempty"`
-}
-
-type GrpcOptions struct {
-	GrpcServiceName string `proxy:"grpc-service-name,omitempty"`
 }
 
 type WSOptions struct {
@@ -103,8 +98,6 @@ func (v *Vmess) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 		}
 
 		c = vmess.StreamHTTPConn(c, httpOpts)
-	case "grpc":
-		c, err = gun.StreamGunWithConn(c, v.gunTLSConfig, v.gunConfig)
 	}
 
 	if err != nil {
@@ -165,13 +158,6 @@ func NewVmess(option VmessOption) (*Vmess, error) {
 	})
 	if err != nil {
 		return nil, err
-	}
-
-	switch option.Network {
-	case "grpc":
-		if !option.TLS {
-			return nil, nil
-		}
 	}
 
 	v := &Vmess{
