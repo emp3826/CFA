@@ -57,14 +57,6 @@ const (
 	// payload contains a numeric code and text. Use the FormatCloseMessage
 	// function to format a close message payload.
 	CloseMessage = 8
-
-	// PingMessage denotes a ping control message. The optional message payload
-	// is UTF-8 encoded text.
-	PingMessage = 9
-
-	// PongMessage denotes a pong control message. The optional message payload
-	// is UTF-8 encoded text.
-	PongMessage = 10
 )
 
 // ErrCloseSent is returned when the application writes a message to the
@@ -115,7 +107,7 @@ func hideTempErr(err error) error {
 }
 
 func isControl(frameType int) bool {
-	return frameType == CloseMessage || frameType == PingMessage || frameType == PongMessage
+	return frameType == CloseMessage
 }
 
 func isData(frameType int) bool {
@@ -217,7 +209,6 @@ func newConn(conn net.Conn, isServer bool, readBufferSize, writeBufferSize int, 
 		writeBufSize:           writeBufferSize,
 	}
 	c.SetCloseHandler(nil)
-	c.SetPingHandler(nil)
 	c.SetPongHandler(nil)
 	return c
 }
@@ -671,7 +662,7 @@ func (c *Conn) advanceFrame() (int, error) {
 	}
 
 	switch frameType {
-	case CloseMessage, PingMessage, PongMessage:
+	case CloseMessage:
 		if c.readRemaining > maxControlFramePayloadSize {
 			errors = append(errors, "len > 125 for control")
 		}
@@ -755,25 +746,10 @@ func (c *Conn) advanceFrame() (int, error) {
 	}
 
 	// 6. Read control frame payload.
-
-	var payload []byte
 	if c.readRemaining > 0 {
-		payload, err = c.read(int(c.readRemaining))
+		_, err = c.read(int(c.readRemaining))
 		c.setReadRemaining(0)
 		if err != nil {
-			return noFrame, err
-		}
-	}
-
-	// 7. Process control frame payload.
-
-	switch frameType {
-	case PongMessage:
-		if err := c.handlePong(string(payload)); err != nil {
-			return noFrame, err
-		}
-	case PingMessage:
-		if err := c.handlePing(string(payload)); err != nil {
 			return noFrame, err
 		}
 	}
@@ -930,28 +906,6 @@ func (c *Conn) SetCloseHandler(h func(code int, text string) error) {
 // PingHandler returns the current ping handler
 func (c *Conn) PingHandler() func(appData string) error {
 	return c.handlePing
-}
-
-// SetPingHandler sets the handler for ping messages received from the peer.
-// The appData argument to h is the PING message application data. The default
-// ping handler sends a pong to the peer.
-//
-// The handler function is called from the NextReader, ReadMessage and message
-// reader Read methods. The application must read the connection to process
-// ping messages as described in the section on Control Messages above.
-func (c *Conn) SetPingHandler(h func(appData string) error) {
-	if h == nil {
-		h = func(message string) error {
-			err := c.WriteControl(PongMessage, []byte(message), time.Now().Add(writeWait))
-			if err == ErrCloseSent {
-				return nil
-			} else if e, ok := err.(net.Error); ok && e.Temporary() {
-				return nil
-			}
-			return err
-		}
-	}
-	c.handlePing = h
 }
 
 // PongHandler returns the current pong handler
