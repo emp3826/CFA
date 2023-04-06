@@ -168,8 +168,6 @@ type Conn struct {
 	readLimit     int64 // Maximum message size.
 	readMaskPos   int
 	readMaskKey   [4]byte
-	handlePong    func(string) error
-	handlePing    func(string) error
 	handleClose   func(int, string) error
 	readErrCount  int
 	messageReader *messageReader // the current low-level reader
@@ -209,7 +207,6 @@ func newConn(conn net.Conn, isServer bool, readBufferSize, writeBufferSize int, 
 		writeBufSize:           writeBufferSize,
 	}
 	c.SetCloseHandler(nil)
-	c.SetPongHandler(nil)
 	return c
 }
 
@@ -901,20 +898,6 @@ func (c *Conn) SetCloseHandler(h func(code int, text string) error) {
 		}
 	}
 	c.handleClose = h
-}
-
-// SetPongHandler sets the handler for pong messages received from the peer.
-// The appData argument to h is the PONG message application data. The default
-// pong handler does nothing.
-//
-// The handler function is called from the NextReader, ReadMessage and message
-// reader Read methods. The application must read the connection to process
-// pong messages as described in the section on Control Messages above.
-func (c *Conn) SetPongHandler(h func(appData string) error) {
-	if h == nil {
-		h = func(string) error { return nil }
-	}
-	c.handlePong = h
 }
 
 // NetConn returns the underlying connection that is wrapped by c.
