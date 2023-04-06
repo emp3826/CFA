@@ -903,16 +903,6 @@ func (c *Conn) SetCloseHandler(h func(code int, text string) error) {
 	c.handleClose = h
 }
 
-// PingHandler returns the current ping handler
-func (c *Conn) PingHandler() func(appData string) error {
-	return c.handlePing
-}
-
-// PongHandler returns the current pong handler
-func (c *Conn) PongHandler() func(appData string) error {
-	return c.handlePong
-}
-
 // SetPongHandler sets the handler for pong messages received from the peer.
 // The appData argument to h is the PONG message application data. The default
 // pong handler does nothing.
