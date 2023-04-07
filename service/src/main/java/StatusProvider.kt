@@ -65,18 +65,6 @@ class StatusProvider : ContentProvider() {
         var serviceRunning: Boolean = false
             set(value) {
                 field = value
-
-                shouldStartClashOnBoot = value
-            }
-        var shouldStartClashOnBoot: Boolean
-            get() = Global.application.filesDir.resolve(CLASH_SERVICE_RUNNING_FILE).exists()
-            set(value) {
-                Global.application.filesDir.resolve(CLASH_SERVICE_RUNNING_FILE).apply {
-                    if (value)
-                        createNewFile()
-                    else
-                        delete()
-                }
             }
         var currentProfile: String? = null
     }
