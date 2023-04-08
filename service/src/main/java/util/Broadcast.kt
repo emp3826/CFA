@@ -27,12 +27,6 @@ fun Context.sendProfileLoaded(uuid: UUID) {
     sendBroadcastSelf(intent)
 }
 
-fun Context.sendOverrideChanged() {
-    val intent = Intent(Intents.ACTION_OVERRIDE_CHANGED)
-
-    sendBroadcastSelf(intent)
-}
-
 fun Context.sendServiceRecreated() {
     sendBroadcastSelf(Intent(Intents.ACTION_SERVICE_RECREATED))
 }
