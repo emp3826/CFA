@@ -113,7 +113,6 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
             }
             FetchStatus.Action.FetchProviders -> {
                 isIndeterminate = false
-                max = status.max
                 progress = status.progress
             }
             else -> {}

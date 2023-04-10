@@ -11,7 +11,6 @@ interface ModelProgressBarConfigure {
     var isIndeterminate: Boolean
     var text: String?
     var progress: Int
-    var max: Int
 }
 
 interface ModelProgressBarScope {
@@ -41,12 +40,6 @@ suspend fun Context.withModelProgressBar(block: suspend ModelProgressBarScope.()
             set(value) {
                 view.progressIndicator.setProgressCompat(value, true)
             }
-        override var max: Int
-            get() = view.progressIndicator.max
-            set(value) {
-                view.progressIndicator.max = value
-            }
-
     }
 
     val scopeImpl = object : ModelProgressBarScope {
