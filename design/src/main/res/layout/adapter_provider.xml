@@ -7,9 +7,6 @@
         <variable
             name="state"
             type="com.github.kr328.clash.design.model.ProviderState" />
-        <variable
-            name="update"
-            type="android.view.View.OnClickListener" />
 
         <import type="com.github.kr328.clash.design.util.I18nKt" />
         <import type="android.view.View" />
