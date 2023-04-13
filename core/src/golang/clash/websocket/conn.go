@@ -403,7 +403,6 @@ func (c *Conn) NextWriter(messageType int) (io.WriteCloser, error) {
 
 type messageWriter struct {
 	c         *Conn
-	compress  bool // whether next call to flushFrame should set RSV1
 	pos       int  // end of data in writeBuf.
 	frameType int  // type of the current frame.
 	err       error
@@ -439,10 +438,6 @@ func (w *messageWriter) flushFrame(final bool, extra []byte) error {
 	if final {
 		b0 |= finalBit
 	}
-	if w.compress {
-		b0 |= rsv1Bit
-	}
-	w.compress = false
 
 	b1 := byte(0)
 	if !c.isServer {
@@ -476,16 +471,10 @@ func (w *messageWriter) flushFrame(final bool, extra []byte) error {
 	// concurrent writes. See the concurrency section in the package
 	// documentation for more info.
 
-	if c.isWriting {
-		panic("concurrent write to websocket connection")
-	}
 	c.isWriting = true
 
 	err := c.write(w.frameType, c.writeDeadline, c.writeBuf[framePos:w.pos], extra)
 
-	if !c.isWriting {
-		panic("concurrent write to websocket connection")
-	}
 	c.isWriting = false
 
 	if err != nil {
@@ -904,13 +893,6 @@ func (c *Conn) SetCloseHandler(h func(code int, text string) error) {
 // Note that writing to or reading from this connection directly will corrupt the
 // WebSocket connection.
 func (c *Conn) NetConn() net.Conn {
-	return c.conn
-}
-
-// UnderlyingConn returns the internal net.Conn. This can be used to further
-// modifications to connection specific flags.
-// Deprecated: Use the NetConn method.
-func (c *Conn) UnderlyingConn() net.Conn {
 	return c.conn
 }
 
