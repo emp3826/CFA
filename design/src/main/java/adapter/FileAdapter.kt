@@ -32,10 +32,6 @@ class FileAdapter(
             setOpen {
                 open(current)
             }
-
-            setMore {
-                more(current)
-            }
         }
     }
 

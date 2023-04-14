@@ -7,9 +7,6 @@
         <variable
             name="open"
             type="android.view.View.OnClickListener" />
-        <variable
-            name="more"
-            type="android.view.View.OnClickListener" />
 
         <import type="com.github.kr328.clash.design.util.I18nKt" />
         <import type="android.view.View" />
