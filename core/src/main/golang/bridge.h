@@ -18,7 +18,7 @@ extern void (*fetch_complete_func)(void *fetch_callback, const char *error);
 
 extern void (*release_object_func)(void *obj);
 
-extern int (*open_content_func)(const char *url, char *error, int error_length);
+extern int (*open_content_func)(const char *url);
 
 // cgo
 extern void mark_socket(void *interface, int fd);
@@ -33,4 +33,4 @@ extern void fetch_report(void *fetch_callback, char *status_json);
 
 extern void release_object(void *obj);
 
-extern int open_content(char *url, char *error, int error_length);
+extern int open_content(char *url);

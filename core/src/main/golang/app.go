@@ -13,7 +13,7 @@ func openRemoteContent(url string) (int, error) {
 
 	defer C.free(unsafe.Pointer(e))
 
-	fd := C.open_content(u, e, 1024)
+	fd := C.open_content(u)
 
 	return int(fd), nil
 }

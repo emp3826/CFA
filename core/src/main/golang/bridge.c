@@ -10,7 +10,7 @@ void (*fetch_report_func)(void *fetch_callback, const char *status_json);
 
 void (*fetch_complete_func)(void *fetch_callback, const char *error);
 
-int (*open_content_func)(const char *url, char *error, int error_length);
+int (*open_content_func)(const char *url);
 
 void (*release_object_func)(void *obj);
 
@@ -45,8 +45,8 @@ void fetch_report(void *fetch_callback, char *json_status) {
     free(json_status);
 }
 
-int open_content(char *url, char *error, int error_length) {
-    int result = open_content_func(url, error, error_length);
+int open_content(char *url) {
+    int result = open_content_func(url);
 
     free(url);
 
