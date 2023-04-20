@@ -20,9 +20,7 @@ data class Proxy(
 
         Shadowsocks(false),
         ShadowsocksR(false),
-        Snell(false),
         Socks5(false),
-        Http(false),
         Vmess(false),
         Trojan(false),
 
