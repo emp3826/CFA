@@ -13,7 +13,6 @@ import com.github.kr328.clash.common.util.grantPermissions
 import com.github.kr328.clash.common.util.ticker
 import com.github.kr328.clash.common.util.uuid
 import com.github.kr328.clash.design.FilesDesign
-import com.github.kr328.clash.design.util.showExceptionToast
 import com.github.kr328.clash.remote.FilesClient
 import com.github.kr328.clash.service.model.Profile
 import com.github.kr328.clash.util.fileName
@@ -112,7 +111,6 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                             }
                         }
                     } catch (e: Exception) {
-                        design.showExceptionToast(e)
                     }
 
                     design.fetch(client, stack, root)

@@ -14,7 +14,6 @@ import com.github.kr328.clash.design.store.UiStore
 import com.github.kr328.clash.design.ui.DayNight
 import com.github.kr328.clash.design.util.resolveThemedBoolean
 import com.github.kr328.clash.design.util.resolveThemedColor
-import com.github.kr328.clash.design.util.showExceptionToast
 import com.github.kr328.clash.remote.Broadcasts
 import com.github.kr328.clash.remote.Remote
 import com.github.kr328.clash.util.ActivityResultLifecycle

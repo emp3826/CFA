@@ -38,7 +38,6 @@ abstract class Design<R>(val context: Context) :
                 message,
                 when (duration) {
                     ToastDuration.Short -> Snackbar.LENGTH_SHORT
-                    ToastDuration.Long -> Snackbar.LENGTH_LONG
                     ToastDuration.Indefinite -> Snackbar.LENGTH_INDEFINITE
                 }
             ).apply(configure).show()
