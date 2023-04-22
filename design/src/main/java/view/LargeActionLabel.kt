@@ -34,18 +34,6 @@ class LargeActionLabel @JvmOverloads constructor(
             binding.textView.text = value
         }
 
-    var subtext: CharSequence?
-        get() = binding.subtextView.text
-        set(value) {
-            binding.subtextView.text = value
-
-            if (value == null) {
-                binding.subtextView.visibility = View.GONE
-            } else {
-                binding.subtextView.visibility = View.VISIBLE
-            }
-        }
-
     init {
         context.resolveClickableAttrs(
             attributeSet,
@@ -64,9 +52,7 @@ class LargeActionLabel @JvmOverloads constructor(
             defStyleRes
         ).apply {
             try {
-                icon = getDrawable(R.styleable.LargeActionLabel_icon)
                 text = getString(R.styleable.LargeActionLabel_text)
-                subtext = getString(R.styleable.LargeActionLabel_subtext)
             } finally {
                 recycle()
             }

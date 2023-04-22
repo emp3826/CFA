@@ -76,7 +76,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/main_card_margin_vertical"
                     android:onClick="@{() -> self.request(Request.ToggleStatus)}"
-                    android:theme="@style/AppThemeDark"
                     app:cardBackgroundColor="@{clashRunning ? colorClashStarted : colorClashStopped}"
                     app:text="@{clashRunning ? @string/running : @string/stopped}" />
 
@@ -85,8 +84,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/main_card_margin_vertical"
                     android:onClick="@{() -> self.request(Request.OpenProxy)}"
-                    android:visibility="@{clashRunning ? View.VISIBLE : View.GONE}"
-                    app:subtext="@{mode}"
                     app:text="@string/proxy" />
 
                 <com.github.kr328.clash.design.view.LargeActionCard
