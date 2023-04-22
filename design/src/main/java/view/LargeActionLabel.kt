@@ -22,12 +22,6 @@ class LargeActionLabel @JvmOverloads constructor(
     private val binding = ComponentLargeActionLabelBinding
         .inflate(context.layoutInflater, this, true)
 
-    var icon: Drawable?
-        get() = binding.iconView.background
-        set(value) {
-            binding.iconView.background = value
-        }
-
     var text: CharSequence?
         get() = binding.textView.text
         set(value) {
