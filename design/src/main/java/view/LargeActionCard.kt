@@ -23,18 +23,6 @@ class LargeActionCard @JvmOverloads constructor(
             binding.textView.text = value
         }
 
-    var subtext: CharSequence?
-        get() = binding.subtextView.text
-        set(value) {
-            binding.subtextView.text = value
-        }
-
-    var icon: Drawable?
-        get() = binding.iconView.background
-        set(value) {
-            binding.iconView.background = value
-        }
-
     init {
         context.resolveClickableAttrs(attributeSet, defStyleAttr) {
             isFocusable = focusable(true)
@@ -49,9 +37,7 @@ class LargeActionCard @JvmOverloads constructor(
             0
         ).apply {
             try {
-                icon = getDrawable(R.styleable.LargeActionCard_icon)
                 text = getString(R.styleable.LargeActionCard_text)
-                subtext = getString(R.styleable.LargeActionCard_subtext)
             } finally {
                 recycle()
             }
