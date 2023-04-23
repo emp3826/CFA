@@ -8,10 +8,6 @@ import com.github.kr328.clash.service.model.Profile
 import java.text.SimpleDateFormat
 import java.util.*
 
-private const val DATE_DATE_ONLY = "yyyy-MM-dd"
-private const val DATE_TIME_ONLY = "HH:mm:ss.SSS"
-private const val DATE_ALL = "$DATE_DATE_ONLY $DATE_TIME_ONLY"
-
 fun Profile.Type.toString(context: Context): String {
     return when (this) {
         Profile.Type.File -> context.getString(R.string.file)
@@ -23,25 +19,6 @@ fun Profile.Type.toString(context: Context): String {
 fun Provider.type(context: Context): String {
     val type = context.getString(R.string.proxy)
     return context.getString(R.string.format_provider_type, type)
-}
-
-@JvmOverloads
-fun Date.format(
-    context: Context,
-    includeDate: Boolean = true,
-    includeTime: Boolean = true,
-): String {
-    val locale = context.resources.configuration.preferredLocale
-
-    return when {
-        includeDate && includeTime ->
-            SimpleDateFormat(DATE_ALL, locale).format(this)
-        includeDate ->
-            SimpleDateFormat(DATE_DATE_ONLY, locale).format(this)
-        includeTime ->
-            SimpleDateFormat(DATE_TIME_ONLY, locale).format(this)
-        else -> ""
-    }
 }
 
 fun Long.toBytesString(): String {
