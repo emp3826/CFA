@@ -20,23 +20,10 @@ class ActionLabel @JvmOverloads constructor(
     private val binding = ComponentActionLabelBinding
         .inflate(context.layoutInflater, this, true)
 
-    var icon: Drawable?
-        get() = binding.iconView.background
-        set(value) {
-            binding.iconView.background = value
-        }
-
     var text: CharSequence?
         get() = binding.textView.text
         set(value) {
             binding.textView.text = value
-        }
-
-    var subtext: CharSequence?
-        get() = binding.subtextView.text
-        set(value) {
-            binding.subtextView.text = value
-            binding.subtextView.visibility = if (value == null) View.GONE else View.VISIBLE
         }
 
     override fun setOnClickListener(l: OnClickListener?) {
@@ -51,9 +38,7 @@ class ActionLabel @JvmOverloads constructor(
             defStyleRes
         ).apply {
             try {
-                icon = getDrawable(R.styleable.ActionLabel_icon)
                 text = getString(R.styleable.ActionLabel_text)
-                subtext = getString(R.styleable.ActionLabel_subtext)
             } finally {
                 recycle()
             }
