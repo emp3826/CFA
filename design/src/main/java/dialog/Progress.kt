@@ -9,7 +9,6 @@ import kotlinx.coroutines.withContext
 
 interface ModelProgressBarConfigure {
     var isIndeterminate: Boolean
-    var text: String?
     var progress: Int
 }
 
@@ -29,11 +28,6 @@ suspend fun Context.withModelProgressBar(block: suspend ModelProgressBarScope.()
             get() = view.progressIndicator.isIndeterminate
             set(value) {
                 view.progressIndicator.isIndeterminate = value
-            }
-        override var text: String?
-            get() = view.text.text?.toString()
-            set(value) {
-                view.text.text = value
             }
         override var progress: Int
             get() = view.progressIndicator.progress
