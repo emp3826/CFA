@@ -23,13 +23,11 @@
     <string name="profile_url">Profile URL</string>
 
     <string name="should_not_be_blank">Should not be blank</string>
-    <string name="detail">Detail</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="import_">Import</string>
     <string name="properties">Properties</string>
-    <string name="duplicate">Duplicate</string>
-
+    
     <string name="raw_cn" translatable="false">cn</string>
     <string name="unavailable">Unavailable</string>
     <string name="empty_name">Empty Name</string>
