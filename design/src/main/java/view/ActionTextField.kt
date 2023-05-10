@@ -36,8 +36,6 @@ class ActionTextField @JvmOverloads constructor(
         set(value) {
             if (isEnabled)
                 binding.textView.text = value
-            else
-                binding.textView.text = context.getText(R.string.unavailable)
         }
 
     var placeholder: CharSequence?

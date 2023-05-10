@@ -29,7 +29,6 @@
     <string name="properties">Properties</string>
     
     <string name="raw_cn" translatable="false">cn</string>
-    <string name="unavailable">Unavailable</string>
     <string name="empty_name">Empty Name</string>
     <string name="invalid_url">Invalid URL</string>
 
