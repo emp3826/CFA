@@ -19,12 +19,6 @@ class ActionTextField @JvmOverloads constructor(
     private val binding = ComponentActionTextFieldBinding
         .inflate(context.layoutInflater, this, true)
 
-    var icon: Drawable?
-        get() = binding.iconView.background
-        set(value) {
-            binding.iconView.background = value
-        }
-
     var title: CharSequence?
         get() = binding.titleView.text
         set(value) {
@@ -73,7 +67,6 @@ class ActionTextField @JvmOverloads constructor(
         ).apply {
             try {
                 isEnabled = getBoolean(R.styleable.ActionTextField_enabled, true)
-                icon = getDrawable(R.styleable.ActionTextField_icon)
                 title = getString(R.styleable.ActionTextField_title)
                 text = getString(R.styleable.ActionTextField_text)
                 placeholder = getString(R.styleable.ActionTextField_placeholder)
