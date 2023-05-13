@@ -44,7 +44,6 @@ class StaticNotificationModule(service: Service) : Module<Unit>(service) {
 
             val notification = builder
                 .setContentTitle(profileName)
-                .setContentText(service.getText(R.string.running))
                 .build()
 
             service.startForeground(R.id.nf_clash_status, notification)

@@ -29,8 +29,6 @@ class ProfileWorker : BaseService() {
 
         createChannels()
 
-        foreground()
-
         launch {
             delay(TimeUnit.SECONDS.toMillis(10))
 
@@ -71,18 +69,6 @@ class ProfileWorker : BaseService() {
                 ).setName(getString(R.string.profile_process_result)).build()
             )
         )
-    }
-
-    private fun foreground() {
-        val notification = NotificationCompat.Builder(this, SERVICE_CHANNEL)
-            .setContentText(getString(R.string.running))
-            .setColor(getColorCompat(R.color.color_clash))
-            .setSmallIcon(R.drawable.ic_logo_service)
-            .setOngoing(true)
-            .setOnlyAlertOnce(true)
-            .build()
-
-        startForeground(R.id.nf_profile_worker, notification)
     }
 
     private suspend inline fun processing(name: String, block: () -> Unit) {
