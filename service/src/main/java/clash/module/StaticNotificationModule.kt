@@ -58,7 +58,7 @@ class StaticNotificationModule(service: Service) : Module<Unit>(service) {
                 NotificationChannelCompat.Builder(
                     CHANNEL_ID,
                     NotificationManagerCompat.IMPORTANCE_LOW
-                ).setName(service.getText(R.string.clash_service_status_channel)).build()
+                ).build()
             )
         }
     }
