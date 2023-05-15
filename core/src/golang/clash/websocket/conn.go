@@ -63,10 +63,6 @@ const (
 // connection after sending a close message.
 var ErrCloseSent = errors.New("websocket: close sent")
 
-// ErrReadLimit is returned when reading a message that is larger than the
-// read limit set for the connection.
-var ErrReadLimit = errors.New("websocket: read limit exceeded")
-
 // netError satisfies the net Error interface.
 type netError struct {
 	msg       string
@@ -213,10 +209,6 @@ func newConn(conn net.Conn, isServer bool, readBufferSize, writeBufferSize int, 
 // setReadRemaining tracks the number of bytes remaining on the connection. If n
 // overflows, an ErrReadLimit is returned.
 func (c *Conn) setReadRemaining(n int64) error {
-	if n < 0 {
-		return ErrReadLimit
-	}
-
 	c.readRemaining = n
 	return nil
 }
@@ -722,11 +714,6 @@ func (c *Conn) advanceFrame() (int, error) {
 	if frameType == continuationFrame || frameType == TextMessage || frameType == BinaryMessage {
 
 		c.readLength += c.readRemaining
-		// Don't allow readLength to overflow in the presence of a large readRemaining
-		// counter.
-		if c.readLength < 0 {
-			return noFrame, ErrReadLimit
-		}
 
 		return frameType, nil
 	}
