@@ -9,7 +9,6 @@ import (
 
 	"github.com/Dreamacro/clash/component/dialer"
 	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/transport/gun"
 	"github.com/Dreamacro/clash/transport/trojan"
 
 	"golang.org/x/net/http2"
@@ -22,7 +21,6 @@ type Trojan struct {
 
 	// for gun mux
 	gunTLSConfig *tls.Config
-	gunConfig    *gun.Config
 	transport    *http2.Transport
 }
 
@@ -70,11 +68,7 @@ func (t *Trojan) plainStream(c net.Conn) (net.Conn, error) {
 // StreamConn implements C.ProxyAdapter
 func (t *Trojan) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 	var err error
-	if t.transport != nil {
-		c, err = gun.StreamGunWithConn(c, t.gunTLSConfig, t.gunConfig)
-	} else {
-		c, err = t.plainStream(c)
-	}
+	c, err = t.plainStream(c)
 
 	if err != nil {
 		return nil, err
@@ -86,21 +80,6 @@ func (t *Trojan) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) 
 
 // DialContext implements C.ProxyAdapter
 func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Conn, err error) {
-	// gun transport
-	if t.transport != nil {
-		c, err := gun.StreamGunWithTransport(t.transport, t.gunConfig)
-		if err != nil {
-			return nil, err
-		}
-
-		if err = t.instance.WriteHeader(c, trojan.CommandTCP, serializesSocksAddr(metadata)); err != nil {
-			c.Close()
-			return nil, err
-		}
-
-		return NewConn(c, t), nil
-	}
-
 	c, err := dialer.DialContext(ctx, "tcp", t.addr)
 	if err != nil {
 		return nil, err
