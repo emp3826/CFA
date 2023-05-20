@@ -2,7 +2,6 @@ package outbound
 
 import (
 	"context"
-	"crypto/tls"
 	"errors"
 	"net"
 	"net/http"
@@ -31,17 +30,8 @@ type VmessOption struct {
 	Cipher         string       `proxy:"cipher"`
 	UDP            bool         `proxy:"udp,omitempty"`
 	Network        string       `proxy:"network,omitempty"`
-	TLS            bool         `proxy:"tls,omitempty"`
-	SkipCertVerify bool         `proxy:"skip-cert-verify,omitempty"`
 	ServerName     string       `proxy:"servername,omitempty"`
-	HTTPOpts       HTTPOptions  `proxy:"http-opts,omitempty"`
 	WSOpts         WSOptions    `proxy:"ws-opts,omitempty"`
-}
-
-type HTTPOptions struct {
-	Method  string              `proxy:"method,omitempty"`
-	Path    []string            `proxy:"path,omitempty"`
-	Headers map[string][]string `proxy:"headers,omitempty"`
 }
 
 type WSOptions struct {
@@ -69,30 +59,7 @@ func (v *Vmess) StreamConn(c net.Conn, metadata *C.Metadata) (net.Conn, error) {
 			wsOpts.Headers = header
 		}
 
-		if v.option.TLS {
-			wsOpts.TLS = true
-			wsOpts.TLSConfig = &tls.Config{
-				ServerName:         host,
-				InsecureSkipVerify: v.option.SkipCertVerify,
-				NextProtos:         []string{"http/1.1"},
-			}
-			if v.option.ServerName != "" {
-				wsOpts.TLSConfig.ServerName = v.option.ServerName
-			} else if host := wsOpts.Headers.Get("Host"); host != "" {
-				wsOpts.TLSConfig.ServerName = host
-			}
-		}
 		c, err = vmess.StreamWebsocketConn(c, wsOpts)
-	case "http":
-		host, _, _ := net.SplitHostPort(v.addr)
-		httpOpts := &vmess.HTTPConfig{
-			Host:    host,
-			Method:  v.option.HTTPOpts.Method,
-			Path:    v.option.HTTPOpts.Path,
-			Headers: v.option.HTTPOpts.Headers,
-		}
-
-		c = vmess.StreamHTTPConn(c, httpOpts)
 	}
 
 	if err != nil {
