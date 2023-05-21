@@ -38,7 +38,6 @@
             android:onClick="@{() -> master.requestRename(self, file)}"
             android:padding="@dimen/bottom_sheet_menu_items_padding"
             android:visibility="@{!currentInBase ? View.VISIBLE : View.GONE}"
-            app:icon="@drawable/ic_baseline_edit"
             app:text="@string/rename" />
 
         <com.github.kr328.clash.design.view.LargeActionLabel

@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> master.requestEdit(self, profile)}"
             android:padding="@dimen/bottom_sheet_menu_items_padding"
-            app:icon="@drawable/ic_baseline_edit"
             app:text="@string/edit" />
 
         <com.github.kr328.clash.design.view.LargeActionLabel

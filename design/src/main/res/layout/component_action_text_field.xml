@@ -55,8 +55,7 @@
                 android:layout_gravity="bottom|end"
                 android:layout_marginBottom="@dimen/divider_size"
                 android:contentDescription="@string/edit"
-                android:padding="@dimen/toolbar_image_action_padding"
-                android:src="@drawable/ic_baseline_edit" />
+                android:padding="@dimen/toolbar_image_action_padding"/>
         </FrameLayout>
     </LinearLayout>
 </layout>
