@@ -5,7 +5,6 @@
     <string name="clash_service_status_channel">Clash Status</string>
     <string name="profile_service_status">Profile Service Status</string>
     <string name="profile_process_status">Profile Processing Status</string>
-    <string name="profile_process_result">Profile Process Result</string>
     <string name="loading">Loading</string>
     <string name="clash">Clash</string>
     <string name="profiles_and_providers">Profiles and Providers</string>

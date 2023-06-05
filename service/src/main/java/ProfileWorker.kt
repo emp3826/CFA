@@ -62,11 +62,7 @@ class ProfileWorker : BaseService() {
                 NotificationChannelCompat.Builder(
                     STATUS_CHANNEL,
                     NotificationManagerCompat.IMPORTANCE_LOW
-                ).setName(getString(R.string.profile_process_status)).build(),
-                NotificationChannelCompat.Builder(
-                    RESULT_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT
-                ).setName(getString(R.string.profile_process_result)).build()
+                ).setName(getString(R.string.profile_process_status)).build()
             )
         )
     }
