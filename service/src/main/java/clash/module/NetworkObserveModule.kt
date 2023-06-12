@@ -1,7 +1,10 @@
 package com.github.kr328.clash.service.clash.module
 
 import android.app.Service
-import android.net.*
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
+import android.net.NerworkCapabilities
 import android.os.Build
 import androidx.core.content.getSystemService
 import com.github.kr328.clash.core.Clash
