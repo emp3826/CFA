@@ -4,7 +4,7 @@ import android.app.Service
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
-import android.net.NerworkCapabilities
+import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.core.content.getSystemService
 import com.github.kr328.clash.core.Clash
