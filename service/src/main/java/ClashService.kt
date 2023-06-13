@@ -22,7 +22,6 @@ class ClashService : BaseService() {
     private val runtime = clashRuntime {
         val close = install(CloseModule(self))
         val config = install(ConfigurationModule(self))
-        val network = install(NetworkObserveModule(self))
 
         install(DynamicNotificationModule(self))
 
@@ -38,9 +37,6 @@ class ClashService : BaseService() {
                         reason = it.message
 
                         true
-                    }
-                    network.onEvent {
-                        false
                     }
                 }
 
