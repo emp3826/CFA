@@ -10,7 +10,7 @@ import com.github.kr328.clash.service.model.Profile
 import com.github.kr328.clash.service.util.importedDir
 import com.github.kr328.clash.service.util.pendingDir
 import java.io.FileNotFoundException
-import java.util.*
+import java.util.UUID
 
 class Picker(private val context: Context) {
     suspend fun list(path: Path): List<Document> {
