@@ -91,10 +91,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
     }
 
     override suspend fun delete(uuid: UUID) {
-        ImportedDao().queryByUUID(uuid)?.also {
-            ProfileReceiver.cancelNext(context, it)
-        }
-
         ProfileProcessor.delete(context, uuid)
     }
 

@@ -1,6 +1,5 @@
 package com.github.kr328.clash.service
 
-import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -41,12 +40,6 @@ class ProfileReceiver : BroadcastReceiver() {
     companion object {
         private val lock = Mutex()
         private var initialized: Boolean = false
-
-        fun cancelNext(context: Context, imported: Imported) {
-            val intent = pendingIntentOf(context, imported)
-
-            context.getSystemService<AlarmManager>()?.cancel(intent)
-        }
 
         private suspend fun reset() = lock.withLock {
             initialized = false
