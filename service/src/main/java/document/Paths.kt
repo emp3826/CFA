@@ -1,6 +1,6 @@
 package com.github.kr328.clash.service.document
 
-import java.util.*
+import java.util.UUID
 
 object Paths {
     const val CONFIGURATION_ID = "config.yaml"
