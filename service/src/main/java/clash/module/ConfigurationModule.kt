@@ -11,7 +11,7 @@ import com.github.kr328.clash.service.util.importedDir
 import com.github.kr328.clash.service.util.sendProfileLoaded
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.selects.select
-import java.util.*
+import java.util.UUID
 
 class ConfigurationModule(service: Service) : Module<ConfigurationModule.LoadException>(service) {
     data class LoadException(val message: String)
