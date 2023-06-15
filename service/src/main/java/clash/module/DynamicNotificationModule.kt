@@ -3,7 +3,6 @@ package com.github.kr328.clash.service.clash.module
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.github.kr328.clash.common.compat.getColorCompat
@@ -68,13 +67,6 @@ class DynamicNotificationModule(service: Service) : Module<Unit>(service) {
     }
 
     override suspend fun run() = coroutineScope {
-        var shouldUpdate = service.getSystemService<PowerManager>()?.isInteractive ?: true
-
-        val screenToggle = receiveBroadcast(false, Channel.CONFLATED) {
-            addAction(Intent.ACTION_SCREEN_ON)
-            addAction(Intent.ACTION_SCREEN_OFF)
-        }
-
         val profileLoaded = receiveBroadcast(capacity = Channel.CONFLATED) {
             addAction(Intents.ACTION_PROFILE_LOADED)
         }
@@ -83,21 +75,11 @@ class DynamicNotificationModule(service: Service) : Module<Unit>(service) {
 
         while (true) {
             select<Unit> {
-                screenToggle.onReceive {
-                    when (it.action) {
-                        Intent.ACTION_SCREEN_ON ->
-                            shouldUpdate = true
-                        Intent.ACTION_SCREEN_OFF ->
-                            shouldUpdate = false
-                    }
-                }
                 profileLoaded.onReceive {
                     builder.setContentTitle(StatusProvider.currentProfile ?: "Not selected")
                 }
-                if (shouldUpdate) {
-                    ticker.onReceive {
-                        update()
-                    }
+                ticker.onReceive {
+                    update()
                 }
             }
         }
