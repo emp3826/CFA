@@ -8,7 +8,7 @@ import com.github.kr328.clash.core.util.Parcelizer
 import com.github.kr328.clash.service.util.UUIDSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import java.util.*
+import java.util.UUID
 
 @Serializable
 data class Profile(
