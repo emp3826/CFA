@@ -128,8 +128,7 @@ class Picker(private val context: Context) {
                 imported.uuid,
                 imported.name,
                 imported.type,
-                imported.source,
-                imported.interval
+                imported.source
             )
         )
 

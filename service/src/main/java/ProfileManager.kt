@@ -36,7 +36,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
             name = name,
             type = type,
             source = source,
-            interval = 0,
         )
 
         PendingDao().insert(pending)
@@ -68,14 +67,12 @@ class ProfileManager(private val context: Context) : IProfileManager,
                     name = name,
                     type = imported.type,
                     source = source,
-                    interval = interval,
                 )
             )
         } else {
             val newPending = pending.copy(
                 name = name,
-                source = source,
-                interval = interval
+                source = source
             )
 
             PendingDao().update(newPending)
@@ -118,8 +115,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
         val name = pending?.name ?: imported?.name ?: return null
         val type = pending?.type ?: imported?.type ?: return null
         val source = pending?.source ?: imported?.source ?: return null
-        val interval = pending?.interval ?: imported?.interval ?: return null
-
         return Profile(
             uuid,
             name,

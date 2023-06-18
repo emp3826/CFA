@@ -44,7 +44,7 @@ private suspend fun migrationFromLegacy234(
 ) {
     legacy.query(
         "profiles",
-        arrayOf("id", "name", "type", "uri", if (version == 2) "update_interval" else "interval"),
+        arrayOf("id", "name", "type", "uri"),
         null,
         null,
         null,
@@ -55,8 +55,6 @@ private suspend fun migrationFromLegacy234(
         val name = cursor.getColumnIndex("name")
         val type = cursor.getColumnIndex("type")
         val uri = cursor.getColumnIndex("uri")
-        val interval = cursor.getColumnIndex(if (version == 2) "update_interval" else "interval")
-
         if (!cursor.moveToFirst())
             return
 
@@ -77,14 +75,12 @@ private suspend fun migrationFromLegacy234(
             }
 
             val idValue = cursor.getInt(id)
-            val intervalValue = cursor.getLong(interval)
 
             val pending = Pending(
                 uuid = generateProfileUUID(),
                 name = cursor.getString(name),
                 type = newType,
                 source = if (newType != Profile.Type.File) cursor.getString(uri) else "",
-                interval = if (version == 2) intervalValue * 1000 else intervalValue,
             )
 
             val base = context.pendingDir.resolve(pending.uuid.toString())
@@ -155,8 +151,7 @@ private suspend fun migrationFromLegacy1(context: Context, legacy: SQLiteDatabas
                 uuid = generateProfileUUID(),
                 name = cursor.getString(name),
                 type = newType,
-                source = source,
-                interval = 0,
+                source = source
             )
 
             val base = context.pendingDir.resolve(pending.uuid.toString())

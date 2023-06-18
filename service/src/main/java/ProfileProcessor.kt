@@ -18,8 +18,8 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.util.Locale
+import java.util.UUID
 
 object ProfileProcessor {
     private val profileLock = Mutex()
@@ -68,7 +68,6 @@ object ProfileProcessor {
                             snapshot.name,
                             snapshot.type,
                             snapshot.source,
-                            snapshot.interval,
                             old?.createdAt ?: System.currentTimeMillis()
                         )
 
@@ -141,8 +140,6 @@ object ProfileProcessor {
                 throw IllegalArgumentException("Invalid url")
             source.isNotEmpty() && scheme != "https" && scheme != "http" && scheme != "content" ->
                 throw IllegalArgumentException("Unsupported url $source")
-            interval != 0L && TimeUnit.MILLISECONDS.toMinutes(interval) < 15 ->
-                throw IllegalArgumentException("Invalid interval")
         }
     }
 }
