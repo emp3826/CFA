@@ -126,7 +126,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
             type,
             source,
             active != null && imported?.uuid == active,
-            interval,
             imported != null,
             pending != null
         )
