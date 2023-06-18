@@ -208,7 +208,7 @@ static void call_fetch_callback_complete_impl(void *fetch_callback, const char *
                            (jstring) _error);
 }
 
-static int open_content_impl(const char *url, char *error, int error_length) {
+static int open_content_impl(const char *url) {
     ATTACH_JNI();
     int fd = (*env)->CallStaticIntMethod(env, c_content, m_open, new_string(url));
     if ((*env)->ExceptionCheck(env)) {
@@ -220,10 +220,8 @@ static int open_content_impl(const char *url, char *error, int error_length) {
                 (jmethodID) m_get_message
         );
         if (message == NULL) {
-            strncpy(error, "unknown", error_length - 1);
         } else {
             scoped_string _message = get_string(message);
-            strncpy(error, _message, error_length - 1);
         }
         return -1;
     }
