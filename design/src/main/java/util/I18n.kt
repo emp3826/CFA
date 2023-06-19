@@ -1,7 +1,6 @@
 package com.github.kr328.clash.design.util
 
 import android.content.Context
-import com.github.kr328.clash.common.compat.preferredLocale
 import com.github.kr328.clash.core.model.Provider
 import com.github.kr328.clash.design.R
 import com.github.kr328.clash.service.model.Profile
