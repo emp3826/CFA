@@ -5,8 +5,6 @@ import com.github.kr328.clash.common.compat.preferredLocale
 import com.github.kr328.clash.core.model.Provider
 import com.github.kr328.clash.design.R
 import com.github.kr328.clash.service.model.Profile
-import java.text.SimpleDateFormat
-import java.util.*
 
 fun Profile.Type.toString(context: Context): String {
     return when (this) {
