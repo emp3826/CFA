@@ -32,7 +32,7 @@ class ExternalImportActivity : Activity(), CoroutineScope by MainScope() {
                 val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
 
                 create(type, name).also {
-                    patch(it, name, url, 0)
+                    patch(it, name, url)
                 }
             }
 

@@ -52,7 +52,7 @@ class ProfileManager(private val context: Context) : IProfileManager,
         return uuid
     }
 
-    override suspend fun patch(uuid: UUID, name: String, source: String, interval: Long) {
+    override suspend fun patch(uuid: UUID, name: String, source: String) {
         val pending = PendingDao().queryByUUID(uuid)
 
         if (pending == null) {
