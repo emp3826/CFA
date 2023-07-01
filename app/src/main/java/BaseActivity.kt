@@ -1,7 +1,6 @@
 package com.github.kr328.clash
 
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
@@ -18,11 +17,18 @@ import com.github.kr328.clash.remote.Broadcasts
 import com.github.kr328.clash.remote.Remote
 import com.github.kr328.clash.util.ActivityResultLifecycle
 import com.github.kr328.clash.util.ApplicationObserver
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.channels.Channel
+import java.util.concurrent.atomic.AtomicInteger
 
 abstract class BaseActivity<D : Design<*>> :
     AppCompatActivity(),
@@ -198,15 +204,9 @@ abstract class BaseActivity<D : Design<*>> :
         window.statusBarColor = resolveThemedColor(android.R.attr.statusBarColor)
         window.navigationBarColor = resolveThemedColor(android.R.attr.navigationBarColor)
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            window.isLightStatusBarsCompat =
-                resolveThemedBoolean(android.R.attr.windowLightStatusBar)
-        }
+        window.isLightStatusBarsCompat = resolveThemedBoolean(android.R.attr.windowLightStatusBar)
 
-        if (Build.VERSION.SDK_INT >= 27) {
-            window.isLightNavigationBarCompat =
-                resolveThemedBoolean(android.R.attr.windowLightNavigationBar)
-        }
+        window.isLightNavigationBarCompat = resolveThemedBoolean(android.R.attr.windowLightNavigationBar)
 
         this.dayNight = dayNight
     }
