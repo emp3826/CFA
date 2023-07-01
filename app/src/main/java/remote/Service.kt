@@ -10,7 +10,6 @@ import com.github.kr328.clash.service.RemoteService
 import com.github.kr328.clash.service.remote.IRemoteService
 import com.github.kr328.clash.service.remote.unwrap
 import com.github.kr328.clash.util.unbindServiceSilent
-import java.util.concurrent.TimeUnit
 
 class Service(private val context: Application, val crashed: () -> Unit) {
     val remote = Resource<IRemoteService>()
