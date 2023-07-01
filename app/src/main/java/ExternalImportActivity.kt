@@ -10,7 +10,7 @@ import com.github.kr328.clash.util.withProfile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 
 class ExternalImportActivity : Activity(), CoroutineScope by MainScope() {
     override fun onCreate(savedInstanceState: Bundle?) {
