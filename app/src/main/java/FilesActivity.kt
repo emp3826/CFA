@@ -6,7 +6,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.github.kr328.clash.common.util.grantPermissions
@@ -77,23 +76,21 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                 client.renameDocument(it.file.id, newName)
                             }
                             is FilesDesign.Request.ImportFile -> {
-                                if (Build.VERSION.SDK_INT >= 23) {
-                                    val hasPermission = ContextCompat.checkSelfPermission(
-                                        this@FilesActivity,
-                                        Manifest.permission.READ_EXTERNAL_STORAGE
-                                    ) == PackageManager.PERMISSION_GRANTED
+                                val hasPermission = ContextCompat.checkSelfPermission(
+                                      this@FilesActivity,
+                                      Manifest.permission.READ_EXTERNAL_STORAGE
+                                ) == PackageManager.PERMISSION_GRANTED
 
-                                    if (!hasPermission) {
-                                        val granted = startActivityForResult(
-                                            ActivityResultContracts.RequestPermission(),
-                                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                                        )
+                                if (!hasPermission) {
+                                    val granted = startActivityForResult(
+                                         ActivityResultContracts.RequestPermission(),
+                                           Manifest.permission.READ_EXTERNAL_STORAGE,
+                                     )
 
-                                        if (!granted) {
-                                            return@onReceive
-                                        }
-                                    }
-                                }
+                                     if (!granted) {
+                                        return@onReceive
+                                     }
+                                 }
 
                                 val uri: Uri? = startActivityForResult(
                                     ActivityResultContracts.GetContent(),
