@@ -37,11 +37,7 @@ internal suspend fun migrationFromLegacy(context: Context) {
     context.deleteDatabase("clash-config")
 }
 
-private suspend fun migrationFromLegacy234(
-    context: Context,
-    legacy: SQLiteDatabase,
-    version: Int,
-) {
+private suspend fun migrationFromLegacy234(context: Context, legacy: SQLiteDatabase) {
     legacy.query(
         "profiles",
         arrayOf("id", "name", "type", "uri"),
