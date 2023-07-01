@@ -19,8 +19,7 @@ import com.github.kr328.clash.util.fileName
 import com.github.kr328.clash.util.withProfile
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.util.Stack
 
 class FilesActivity : BaseActivity<FilesDesign>() {
     override suspend fun main() {
