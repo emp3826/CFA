@@ -42,7 +42,6 @@ class TileService : TileService() {
                 addAction(Intents.ACTION_CLASH_STARTED)
                 addAction(Intents.ACTION_CLASH_STOPPED)
                 addAction(Intents.ACTION_PROFILE_LOADED)
-                addAction(Intents.ACTION_SERVICE_RECREATED)
             },
             Permissions.RECEIVE_SELF_BROADCASTS,
             null
@@ -88,7 +87,7 @@ class TileService : TileService() {
 
                     currentProfile = ""
                 }
-                Intents.ACTION_CLASH_STOPPED, Intents.ACTION_SERVICE_RECREATED -> {
+                Intents.ACTION_CLASH_STOPPED -> {
                     clashRunning = false
 
                     currentProfile = ""

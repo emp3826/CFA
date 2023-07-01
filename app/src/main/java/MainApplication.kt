@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.github.kr328.clash.common.Global
 import com.github.kr328.clash.remote.Remote
-import com.github.kr328.clash.service.util.sendServiceRecreated
 
 @Suppress("unused")
 class MainApplication : Application() {

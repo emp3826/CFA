@@ -27,10 +27,6 @@ fun Context.sendProfileLoaded(uuid: UUID) {
     sendBroadcastSelf(intent)
 }
 
-fun Context.sendServiceRecreated() {
-    sendBroadcastSelf(Intent(Intents.ACTION_SERVICE_RECREATED))
-}
-
 fun Context.sendClashStarted() {
     sendBroadcastSelf(Intent(Intents.ACTION_CLASH_STARTED))
 }

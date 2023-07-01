@@ -66,7 +66,6 @@ class Broadcasts(private val context: Application) {
 
         try {
             context.registerReceiver(broadcastReceiver, IntentFilter().apply {
-                addAction(Intents.ACTION_SERVICE_RECREATED)
                 addAction(Intents.ACTION_CLASH_STARTED)
                 addAction(Intents.ACTION_CLASH_STOPPED)
                 addAction(Intents.ACTION_PROFILE_CHANGED)
