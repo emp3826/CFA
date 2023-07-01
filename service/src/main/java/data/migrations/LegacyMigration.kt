@@ -27,7 +27,7 @@ internal suspend fun migrationFromLegacy(context: Context) {
 
                 when (v) {
                     1 -> migrationFromLegacy1(context, db)
-                    2, 3, 4 -> migrationFromLegacy234(context, db, v)
+                    2, 3, 4 -> migrationFromLegacy234(context, db)
                 }
             }
     } catch (e: Exception) {
