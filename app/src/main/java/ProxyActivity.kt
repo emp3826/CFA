@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
-import java.util.concurrent.TimeUnit
 
 class ProxyActivity : BaseActivity<ProxyDesign>() {
     override suspend fun main() {
