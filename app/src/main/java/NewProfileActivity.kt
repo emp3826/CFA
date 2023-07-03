@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
-import java.util.*
+import java.util.UUID
 
 class NewProfileActivity : BaseActivity<NewProfileDesign>() {
     private val self: NewProfileActivity
@@ -67,23 +67,11 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
                                     launchProperties(uuid)
                             }
                         }
-                        is NewProfileDesign.Request.OpenDetail -> {
-                            launchAppDetailed(it.provider)
-                        }
+                        else -> {}
                     }
                 }
             }
         }
-    }
-
-    private fun launchAppDetailed(provider: ProfileProvider.External) {
-        val data = Uri.fromParts(
-            "package",
-            provider.intent.component?.packageName ?: return,
-            null
-        )
-
-        startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(data))
     }
 
     private suspend fun launchProperties(uuid: UUID) {
