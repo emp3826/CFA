@@ -22,7 +22,7 @@ sealed class ProfileProvider {
         override val summary: String
             get() = context.getString(R.string.import_from_url)
         override val icon: Drawable?
-            get() = context.getDrawableCompat(R.drawable.ic_baseline_cloud_download)
+            get() = null
     }
 
     class External(
