@@ -17,12 +17,7 @@ func DialContext(ctx context.Context, network, address string) (net.Conn, error)
 		}
 
 		var ip net.IP
-		switch network {
-		case "tcp4", "udp4":
-			ip, err = resolver.ResolveIPv4(host)
-		default:
-			ip, err = resolver.ResolveIPv6(host)
-		}
+		ip, err = resolver.ResolveIPv4(host)
 		if err != nil {
 			return nil, err
 		}
@@ -87,11 +82,7 @@ func dualStackDialContext(ctx context.Context, network, address string) (net.Con
 		}()
 
 		var ip net.IP
-		if ipv6 {
-			ip, result.error = resolver.ResolveIPv6(host)
-		} else {
-			ip, result.error = resolver.ResolveIPv4(host)
-		}
+		ip, result.error = resolver.ResolveIPv4(host)
 		if result.error != nil {
 			return
 		}

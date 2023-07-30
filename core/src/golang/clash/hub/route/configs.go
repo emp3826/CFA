@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/Dreamacro/clash/component/resolver"
 	"github.com/Dreamacro/clash/config"
 	"github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/hub/executor"
@@ -50,10 +49,6 @@ func patchConfigs(w http.ResponseWriter, r *http.Request) {
 
 	if general.Mode != nil {
 		tunnel.SetMode(*general.Mode)
-	}
-
-	if general.IPv6 != nil {
-		resolver.DisableIPv6 = !*general.IPv6
 	}
 
 	render.NoContent(w, r)
