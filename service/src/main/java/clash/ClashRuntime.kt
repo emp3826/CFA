@@ -2,7 +2,12 @@ package com.github.kr328.clash.service.clash
 
 import com.github.kr328.clash.core.Clash
 import com.github.kr328.clash.service.clash.module.Module
-import kotlinx.coroutines.*
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withLock
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
