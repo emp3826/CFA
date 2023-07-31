@@ -2,7 +2,11 @@ package com.github.kr328.clash.service
 
 import android.content.Context
 import com.github.kr328.clash.core.Clash
-import com.github.kr328.clash.core.model.*
+import com.github.kr328.clash.core.model.Provider
+import com.github.kr328.clash.core.model.ProviderList
+import com.github.kr328.clash.core.model.ProxyGroup
+import com.github.kr328.clash.core.model.ProxySort
+import com.github.kr328.clash.core.model.TunnelState
 import com.github.kr328.clash.service.data.Selection
 import com.github.kr328.clash.service.data.SelectionDao
 import com.github.kr328.clash.service.remote.IClashManager
