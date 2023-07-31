@@ -13,7 +13,10 @@ import com.github.kr328.clash.service.util.cancelAndJoinBlocking
 import com.github.kr328.clash.service.util.parseCIDR
 import com.github.kr328.clash.service.util.sendClashStarted
 import com.github.kr328.clash.service.util.sendClashStopped
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.selects.select
 
 class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
