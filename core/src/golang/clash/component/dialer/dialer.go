@@ -9,25 +9,7 @@ import (
 )
 
 func DialContext(ctx context.Context, network, address string) (net.Conn, error) {
-	switch network {
-	case "tcp4", "tcp6", "udp4", "udp6":
-		host, port, err := net.SplitHostPort(address)
-		if err != nil {
-			return nil, err
-		}
-
-		var ip net.IP
-		ip, err = resolver.ResolveIPv4(host)
-		if err != nil {
-			return nil, err
-		}
-
-		return dialContext(ctx, network, ip, port)
-	case "tcp", "udp":
-		return dualStackDialContext(ctx, network, address)
-	default:
-		return nil, errors.New("network invalid")
-	}
+	return dualStackDialContext(ctx, network, address)
 }
 
 func ListenPacket(ctx context.Context, network, address string) (net.PacketConn, error) {
