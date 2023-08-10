@@ -25,10 +25,7 @@ internal suspend fun migrationFromLegacy(context: Context) {
             .use { db ->
                 val v = db.version
 
-                when (v) {
-                    1 -> migrationFromLegacy1(context, db)
-                    2, 3, 4 -> migrationFromLegacy234(context, db)
-                }
+                migrationFromLegacy234(context, db)
             }
     } catch (e: Exception) {
         return
@@ -108,70 +105,5 @@ private suspend fun migrationFromLegacy234(context: Context, legacy: SQLiteDatab
         if (it.name.isDigitsOnly()) {
             it.deleteRecursively()
         }
-    }
-}
-
-private suspend fun migrationFromLegacy1(context: Context, legacy: SQLiteDatabase) {
-    legacy.query(
-        "profiles",
-        arrayOf("name", "token", "id", "file"),
-        null,
-        null,
-        null,
-        null,
-        "id",
-    ).use { cursor ->
-        val name = cursor.getColumnIndex("name")
-        val token = cursor.getColumnIndex("token")
-        val file = cursor.getColumnIndex("file")
-
-        if (!cursor.moveToFirst())
-            return
-
-        do {
-            val legacyToken = cursor.getString(token)
-
-            val newType = when {
-                legacyToken.startsWith("file|") -> Profile.Type.File
-                legacyToken.startsWith("url|") -> Profile.Type.Url
-                else -> continue
-            }
-
-            val source = if (newType == Profile.Type.Url) {
-                legacyToken.removePrefix("url|")
-            } else {
-                ""
-            }
-
-            val pending = Pending(
-                uuid = generateProfileUUID(),
-                name = cursor.getString(name),
-                type = newType,
-                source = source
-            )
-
-            val base = context.pendingDir.resolve(pending.uuid.toString())
-
-            base.apply {
-                mkdirs()
-
-                resolve("config.yaml").createNewFile()
-                resolve("providers").mkdir()
-            }
-
-            val legacyFile = File(cursor.getString(file))
-
-            if (newType == Profile.Type.File) {
-                if (legacyFile.isFile) {
-                    legacyFile.copyTo(base.resolve("config.yaml"), overwrite = true)
-                }
-            }
-
-            legacyFile.delete()
-
-            PendingDao().insert(pending)
-
-            context.sendProfileChanged(pending.uuid)
-        } while (cursor.moveToNext())
     }
 }
