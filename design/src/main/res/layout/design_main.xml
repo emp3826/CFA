@@ -18,12 +18,6 @@
             name="profileName"
             type="String" />
         <variable
-            name="colorClashStarted"
-            type="int" />
-        <variable
-            name="colorClashStopped"
-            type="int" />
-        <variable
             name="hasProviders"
             type="boolean" />
 
@@ -76,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/main_card_margin_vertical"
                     android:onClick="@{() -> self.request(Request.ToggleStatus)}"
-                    app:cardBackgroundColor="@{clashRunning ? colorClashStarted : colorClashStopped}"
                     app:text="@{clashRunning ? @string/running : @string/stopped}" />
 
                 <com.github.kr328.clash.design.view.LargeActionCard

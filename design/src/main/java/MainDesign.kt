@@ -53,9 +53,6 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
     init {
         binding.self = this
-
-        binding.colorClashStarted = context.resolveThemedColor(R.attr.colorPrimary)
-        binding.colorClashStopped = context.resolveThemedColor(R.attr.colorClashStopped)
     }
 
     fun request(request: Request) {
