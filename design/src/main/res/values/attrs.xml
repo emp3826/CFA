@@ -3,8 +3,6 @@
     <attr name="fullScreenDialogTheme" format="reference" />
 
     <attr name="colorControlDisabled" format="color" />
-    <attr name="colorLogo" format="color" />
-
     <attr name="enabled" format="boolean" />
     <attr name="text" format="string" />
     <attr name="subtext" format="string" />
@@ -16,27 +14,23 @@
     <declare-styleable name="LargeActionCard">
         <attr name="text" />
         <attr name="subtext" />
-        <attr name="icon" />
     </declare-styleable>
 
     <declare-styleable name="LargeActionLabel">
         <attr name="text" />
         <attr name="subtext" />
-        <attr name="icon" />
     </declare-styleable>
 
     <declare-styleable name="ActionLabel">
         <attr name="enabled" />
         <attr name="text" />
         <attr name="subtext" />
-        <attr name="icon" />
     </declare-styleable>
 
     <declare-styleable name="ActionTextField">
         <attr name="enabled" />
         <attr name="icon" />
         <attr name="title" />
-        <attr name="text" />
         <attr name="placeholder" />
     </declare-styleable>
 

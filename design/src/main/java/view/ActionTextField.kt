@@ -68,7 +68,6 @@ class ActionTextField @JvmOverloads constructor(
             try {
                 isEnabled = getBoolean(R.styleable.ActionTextField_enabled, true)
                 title = getString(R.styleable.ActionTextField_title)
-                text = getString(R.styleable.ActionTextField_text)
                 placeholder = getString(R.styleable.ActionTextField_placeholder)
             } finally {
                 recycle()

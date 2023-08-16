@@ -122,7 +122,6 @@
         <item name="colorSecondary">?attr/colorPrimary</item>
         <item name="colorOnSecondary">?attr/colorOnPrimary</item>
         <item name="colorControlActivated">?attr/colorPrimary</item>
-        <item name="colorLogo">?attr/colorControlActivated</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
 
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogLight</item>
@@ -144,7 +143,6 @@
         <item name="colorSecondary">?attr/colorPrimary</item>
         <item name="colorOnSecondary">?attr/colorOnPrimary</item>
         <item name="colorControlActivated">?attr/colorPrimary</item>
-        <item name="colorLogo">?attr/colorControlNormal</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
 
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogDark</item>
