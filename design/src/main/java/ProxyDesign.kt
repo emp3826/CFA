@@ -3,7 +3,6 @@ package com.github.kr328.clash.design
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
-import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import com.github.kr328.clash.core.model.Proxy
 import com.github.kr328.clash.core.model.TunnelState
