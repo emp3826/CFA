@@ -49,10 +49,6 @@
     <dimen name="large_action_card_elevation">5dp</dimen>
     <dimen name="large_action_card_min_height">85dp</dimen>
 
-    <!-- Tips -->
-    <dimen name="tips_icon_size">25dp</dimen>
-    <dimen name="tips_icon_margin">20dp</dimen>
-
     <!-- Preference -->
     <dimen name="preference_fullscreen_button_padding">20dp</dimen>
 
