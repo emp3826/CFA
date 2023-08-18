@@ -24,7 +24,6 @@
     <string name="running">运行中</string>
     <string name="stopped">已停止</string>
     <string name="url">URL</string>
-    <string name="clash">Clash</string>
     <string name="no_profile_selected">没有选择配置文件</string>
     <string name="providers">外部资源</string>
     <string name="_new">新建</string>
