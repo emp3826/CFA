@@ -94,12 +94,3 @@ func (rt RuleType) String() string {
 		return "Unknown"
 	}
 }
-
-// RuleProvider interface
-type RuleProvider interface {
-	Provider
-	Behavior() RuleType
-	Match(*constant.Metadata) bool
-	ShouldResolveIP() bool
-	AsRule(adaptor string) constant.Rule
-}
