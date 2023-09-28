@@ -55,10 +55,3 @@ func parseHTTPAddr(request *http.Request) *C.Metadata {
 
 	return metadata
 }
-
-func parseAddr(addr string) (net.IP, string) {
-	host, port, _ := net.SplitHostPort(addr)
-
-	ip := net.ParseIP(host)
-	return ip, port
-}

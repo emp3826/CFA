@@ -12,7 +12,8 @@ import (
 func NewHTTPS(request *http.Request, conn net.Conn) *context.ConnContext {
 	metadata := parseHTTPAddr(request)
 	metadata.Type = C.HTTPCONNECT
-	ip, port := parseAddr(conn.RemoteAddr().String())
+	host, port, _ := net.SplitHostPort(conn.RemoteAddr().String())
+	ip := net.ParseIP(host)
 	metadata.SrcIP = ip
 	metadata.SrcPort = port
 
