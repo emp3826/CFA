@@ -106,7 +106,6 @@ func (v *Vmess) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (
 			c.Close()
 		}
 	}(c, err)
-}
 
 	c, err = v.StreamConn(c, metadata)
 
