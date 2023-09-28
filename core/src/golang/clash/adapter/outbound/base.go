@@ -16,12 +16,10 @@ type Base struct {
 	udp   bool
 	rmark int
 }
-
 // Name implements C.ProxyAdapter
 func (b *Base) Name() string {
 	return b.name
 }
-
 // Type implements C.ProxyAdapter
 func (b *Base) Type() C.AdapterType {
 	return b.tp

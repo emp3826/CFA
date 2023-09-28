@@ -142,7 +142,7 @@ func resolveMetadata(ctx C.PlainContext, metadata *C.Metadata) (proxy C.Proxy, r
 }
 
 func handleUDPConn(packet *inbound.PacketAdapter) {
-	metadata := packet.Metadata()
+	metadata := packet.Metadata
 	if !metadata.Valid() {
 		return
 	}

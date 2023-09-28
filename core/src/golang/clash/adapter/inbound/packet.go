@@ -11,12 +11,7 @@ import (
 // PacketAdapter is a UDP Packet adapter for socks/redir/tun
 type PacketAdapter struct {
 	C.UDPPacket
-	metadata *C.Metadata
-}
-
-// Metadata returns destination metadata
-func (s *PacketAdapter) Metadata() *C.Metadata {
-	return s.metadata
+	Metadata *C.Metadata
 }
 
 // NewPacket is PacketAdapter generator
@@ -36,6 +31,6 @@ func NewPacket(target socks5.Addr, packet C.UDPPacket, source C.Type) *PacketAda
 
 	return &PacketAdapter{
 		UDPPacket: packet,
-		metadata:  metadata,
+		Metadata:  metadata,
 	}
 }

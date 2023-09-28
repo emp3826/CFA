@@ -30,10 +30,6 @@ type fetcher struct {
 	parser    parser
 }
 
-func (f *fetcher) Name() string {
-	return f.name
-}
-
 func (f *fetcher) VehicleType() types.VehicleType {
 	return f.vehicle.Type()
 }

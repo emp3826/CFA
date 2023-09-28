@@ -48,7 +48,7 @@ func withHosts(hosts *trie.DomainTrie) middleware {
 				return next(ctx, r)
 			}
 
-			ctx.SetType(context.DNSTypeHost)
+			ctx.Tp = context.DNSTypeHost
 			msg.SetRcode(r, D.RcodeSuccess)
 			msg.Authoritative = true
 			msg.RecursionAvailable = true
@@ -60,7 +60,7 @@ func withHosts(hosts *trie.DomainTrie) middleware {
 
 func withResolver(resolver *Resolver) handler {
 	return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
-		ctx.SetType(context.DNSTypeRaw)
+		ctx.Tp = context.DNSTypeRaw
 		q := r.Question[0]
 
 		// return a empty AAAA msg when ipv6 disabled

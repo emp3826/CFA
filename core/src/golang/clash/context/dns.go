@@ -13,7 +13,7 @@ const (
 type DNSContext struct {
 	id  uuid.UUID
 	msg *dns.Msg
-	tp  string
+	Tp  string
 }
 
 func NewDNSContext(msg *dns.Msg) *DNSContext {
@@ -22,19 +22,4 @@ func NewDNSContext(msg *dns.Msg) *DNSContext {
 		id:  id,
 		msg: msg,
 	}
-}
-
-// ID implement C.PlainContext ID
-func (c *DNSContext) ID() uuid.UUID {
-	return c.id
-}
-
-// SetType set type of response
-func (c *DNSContext) SetType(tp string) {
-	c.tp = tp
-}
-
-// Type return type of response
-func (c *DNSContext) Type() string {
-	return c.tp
 }
