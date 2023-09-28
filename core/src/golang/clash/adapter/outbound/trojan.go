@@ -85,7 +85,11 @@ func (t *Trojan) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Con
 		return nil, err
 	}
 
-	defer safeConnClose(c, err)
+	defer func(c net.Conn, err error) {
+		if err != nil {
+			c.Close()
+		}
+	}(c, err)
 
 	c, err = t.StreamConn(c, metadata)
 	if err != nil {
@@ -102,7 +106,11 @@ func (t *Trojan) ListenPacketContext(ctx context.Context, metadata *C.Metadata) 
 	if err != nil {
 		return nil, err
 	}
-	defer safeConnClose(c, err)
+	defer func(c net.Conn, err error) {
+		if err != nil {
+			c.Close()
+		}
+	}(c, err)
 	c, err = t.plainStream(c)
 	if err != nil {
 		return nil, err

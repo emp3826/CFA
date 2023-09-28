@@ -70,7 +70,11 @@ func (ss *ShadowSocks) DialContext(ctx context.Context, metadata *C.Metadata) (_
 		return nil, err
 	}
 
-	defer safeConnClose(c, err)
+	defer func(c net.Conn, err error) {
+		if err != nil {
+			c.Close()
+		}
+	}(c, err)
 
 	c, err = ss.StreamConn(c, metadata)
 	return NewConn(c, ss), err

@@ -75,7 +75,11 @@ func (v *Vmess) DialContext(ctx context.Context, metadata *C.Metadata) (_ C.Conn
 	if err != nil {
 		return nil, err
 	}
-	defer safeConnClose(c, err)
+	defer func(c net.Conn, err error) {
+		if err != nil {
+			c.Close()
+		}
+	}(c, err)
 
 	c, err = v.StreamConn(c, metadata)
 	return NewConn(c, v), err
@@ -97,7 +101,12 @@ func (v *Vmess) ListenPacketContext(ctx context.Context, metadata *C.Metadata) (
 	if err != nil {
 		return nil, err
 	}
-	defer safeConnClose(c, err)
+	defer func(c net.Conn, err error) {
+		if err != nil {
+			c.Close()
+		}
+	}(c, err)
+}
 
 	c, err = v.StreamConn(c, metadata)
 
