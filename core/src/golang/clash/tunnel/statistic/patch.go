@@ -9,7 +9,7 @@ func (m *Manager) Total() (up, down int64) {
 }
 
 func (tt *tcpTracker) RawConn() (net.Conn, bool) {
-	if tt.Chain.Last() == "DIRECT" {
+	if tt.Chain[0] == "DIRECT" {
 		return tt.Conn, true
 	}
 
@@ -17,7 +17,7 @@ func (tt *tcpTracker) RawConn() (net.Conn, bool) {
 }
 
 func (ut *udpTracker) RawPacketConn() (net.PacketConn, bool) {
-	if ut.Chain.Last() == "DIRECT" {
+	if ut.Chain[0] == "DIRECT" {
 		return ut.PacketConn, true
 	}
 
